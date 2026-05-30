@@ -1,0 +1,109 @@
+/* ==========================================================================
+   العربية التفاعلية — Design Tokens
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* ── Brand Colors ── */
+  --color-primary:        #0F766E;
+  --color-primary-hover:  #115E59;
+  --color-secondary:      #14B8A6;
+  --color-accent:         #F59E0B;
+
+  /* ── Semantic Colors ── */
+  --color-success: #22C55E;
+  --color-warning: #F97316;
+  --color-error:   #EF4444;
+
+  /* ── Surfaces ── */
+  --color-bg:      #F8FAFC;
+  --color-surface: #FFFFFF;
+
+  /* ── Text ── */
+  --color-text-primary:    #1E293B;
+  --color-text-secondary:  #64748B;
+  --color-text-light:      #94A3B8;
+  --color-text-on-primary: #FFFFFF;
+
+  /* ── Tints ── */
+  --color-primary-50:   #F0FDFA;
+  --color-primary-100:  #CCFBF1;
+  --color-accent-50:    #FFFBEB;
+  --color-accent-100:   #FEF3C7;
+  --color-success-50:   #F0FDF4;
+  --color-error-50:     #FEF2F2;
+  --color-border:       #E2E8F0;
+  --color-border-strong:#CBD5E1;
+
+  /* ── Typography: Families ── */
+  --font-arabic: "Noto Naskh Arabic", "Amiri", "Traditional Arabic", serif;
+  --font-latin:  "Poppins", "Segoe UI", Arial, sans-serif;
+
+  /* ── Typography: Sizes ── */
+  --fs-page-title:    40px;
+  --fs-section-title: 32px;
+  --fs-card-title:    24px;
+  --fs-body:          18px;
+  --fs-small:         14px;
+
+  --fs-arabic-display: 56px;
+  --fs-arabic-title:   40px;
+  --fs-arabic-body:    24px;
+  --fs-arabic-small:   18px;
+
+  /* ── Typography: Weights ── */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* ── Spacing (8pt grid) ── */
+  --space-sm:      8px;
+  --space-md:      16px;
+  --space-lg:      24px;
+  --space-xl:      32px;
+  --space-section: 64px;
+
+  /* ── Border Radii ── */
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --radius-lg:     16px;
+  --radius-card:   20px;
+  --radius-button: 12px;
+  --radius-modal:  24px;
+  --radius-pill:   999px;
+
+  /* ── Shadows ── */
+  --shadow-card:  0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 12px 32px rgba(0, 0, 0, 0.15);
+  --shadow-focus: 0 0 0 4px rgba(20, 184, 166, 0.25);
+
+  /* ── Layout ── */
+  --layout-max:    1200px;
+  --layout-tablet: 768px;
+  --layout-mobile: 375px;
+  --navbar-h:      72px;
+
+  /* ── Motion ── */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;
+  --dur-med:  240ms;
+  --dur-slow: 400ms;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --fs-page-title:     28px;
+    --fs-section-title:  24px;
+    --fs-card-title:     20px;
+    --fs-body:           16px;
+    --fs-small:          13px;
+    --fs-arabic-display: 40px;
+    --fs-arabic-title:   30px;
+    --fs-arabic-body:    20px;
+    --fs-arabic-small:   16px;
+  }
+}

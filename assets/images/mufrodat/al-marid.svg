@@ -1,0 +1,30 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#F0FDFA"></rect>
+  
+  <rect x="18" y="100" width="14" height="80" rx="4" fill="#0F766E"></rect>
+  <rect x="168" y="118" width="14" height="62" rx="4" fill="#14B8A6"></rect>
+  <rect x="22" y="130" width="156" height="44" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"></rect>
+  
+  <rect x="30" y="116" width="56" height="22" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"></rect>
+  
+  <rect x="86" y="140" width="86" height="30" rx="4" fill="#FCD34D"></rect>
+  <line x1="92" y1="150" x2="166" y2="150" stroke="#D97706" stroke-width="2" opacity="0.5"></line>
+  <line x1="92" y1="160" x2="166" y2="160" stroke="#D97706" stroke-width="2" opacity="0.5"></line>
+  
+  <circle cx="58" cy="120" r="22" fill="#FDE68A"></circle>
+  <path d="M36 118 q22 -28 44 0 z" fill="#0F766E"></path>
+  
+  <path d="M48 122 q4 -4 8 0" stroke="#1E293B" stroke-width="2" stroke-linecap="round" fill="none"></path>
+  <path d="M62 122 q4 -4 8 0" stroke="#1E293B" stroke-width="2" stroke-linecap="round" fill="none"></path>
+  
+  <circle cx="48" cy="128" r="3" fill="#F87171" opacity="0.5"></circle>
+  <circle cx="70" cy="128" r="3" fill="#F87171" opacity="0.5"></circle>
+  
+  <rect x="88" y="92" width="8" height="34" rx="4" fill="#fff" stroke="#1E293B" stroke-width="2" transform="rotate(20 92 109)"></rect>
+  <circle cx="84" cy="129" r="7" fill="#EF4444"></circle>
+  
+  <text x="105" y="60" font-family="Arial" font-size="22" font-weight="700" fill="#94A3B8">z</text>
+  <text x="120" y="48" font-family="Arial" font-size="28" font-weight="700" fill="#94A3B8">z</text>
+  <text x="140" y="34" font-family="Arial" font-size="34" font-weight="700" fill="#94A3B8">z</text>
+</svg>
