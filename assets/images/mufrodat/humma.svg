@@ -1,0 +1,28 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#FEF2F2"></rect>
+  
+  <g stroke="#EF4444" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5">
+    <path d="M50 50 q5 -10 10 0 q5 10 10 0"></path>
+    <path d="M140 60 q5 -10 10 0 q5 10 10 0"></path>
+    <path d="M150 110 q5 -10 10 0 q5 10 10 0"></path>
+  </g>
+  
+  <g transform="translate(100 100)">
+    <rect x="-12" y="-66" width="24" height="116" rx="12" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"></rect>
+    <circle cx="0" cy="56" r="24" fill="#EF4444" stroke="#1E293B" stroke-width="3"></circle>
+    
+    <rect x="-6" y="-58" width="12" height="110" rx="6" fill="#EF4444"></rect>
+    
+    <g stroke="#1E293B" stroke-width="2" stroke-linecap="round">
+      <line x1="-14" y1="-50" x2="-8" y2="-50"></line>
+      <line x1="-14" y1="-30" x2="-8" y2="-30"></line>
+      <line x1="-14" y1="-10" x2="-8" y2="-10"></line>
+      <line x1="-14" y1="10" x2="-8" y2="10"></line>
+      <line x1="-14" y1="30" x2="-8" y2="30"></line>
+    </g>
+  </g>
+  
+  <rect x="130" y="74" width="44" height="22" rx="6" fill="#EF4444"></rect>
+  <text x="152" y="89" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="13" fill="#fff">40°</text>
+</svg>

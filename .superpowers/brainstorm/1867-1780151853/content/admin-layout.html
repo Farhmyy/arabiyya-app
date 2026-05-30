@@ -1,0 +1,145 @@
+<h2>Pilih layout Dashboard Admin</h2>
+<p class="subtitle">Tampilan yang guru lihat setelah login sebagai admin</p>
+
+<div class="cards">
+
+  <!-- Option A: Table-first -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:12px;min-height:220px;border-radius:8px;font-size:10px">
+      <!-- Header stats -->
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <div style="flex:1;background:#0f766e;color:white;border-radius:6px;padding:6px;text-align:center">
+          <div style="font-size:16px;font-weight:700">28</div>
+          <div style="opacity:0.8;font-size:9px">Siswa</div>
+        </div>
+        <div style="flex:1;background:#f59e0b;color:white;border-radius:6px;padding:6px;text-align:center">
+          <div style="font-size:16px;font-weight:700">18</div>
+          <div style="opacity:0.8;font-size:9px">Aktif Hari Ini</div>
+        </div>
+        <div style="flex:1;background:#22c55e;color:white;border-radius:6px;padding:6px;text-align:center">
+          <div style="font-size:16px;font-weight:700">64%</div>
+          <div style="opacity:0.8;font-size:9px">Rata-rata</div>
+        </div>
+      </div>
+      <!-- Table -->
+      <div style="background:white;border-radius:6px;border:1px solid #e2e8f0;overflow:hidden">
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:#f1f5f9;padding:5px 8px;font-weight:600;color:#64748b;font-size:9px;gap:4px">
+          <div>Nama</div><div>XP</div><div>Hiwar</div><div>Tadribat</div><div>%</div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;padding:5px 8px;border-top:1px solid #f1f5f9;gap:4px;color:#1e293b">
+          <div>Ahmad R.</div><div style="color:#0f766e">420</div><div>✅</div><div>✅</div><div>85%</div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;padding:5px 8px;border-top:1px solid #f1f5f9;gap:4px;color:#1e293b">
+          <div>Siti N.</div><div style="color:#0f766e">310</div><div>✅</div><div>🔄</div><div>62%</div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;padding:5px 8px;border-top:1px solid #f1f5f9;gap:4px;color:#94a3b8">
+          <div>Budi S.</div><div>80</div><div>🔄</div><div>—</div><div>20%</div>
+        </div>
+        <div style="padding:5px 8px;text-align:center;color:#94a3b8;border-top:1px solid #f1f5f9;font-size:9px">+ 25 siswa lainnya...</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Stats + Tabel Besar</h3>
+      <p>Statistik ringkas di atas, tabel lengkap di bawah. Bisa diurutkan/filter. Cocok untuk melihat semua siswa sekaligus.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Card per student -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:12px;min-height:220px;border-radius:8px;font-size:10px">
+      <div style="font-size:11px;font-weight:600;color:#1e293b;margin-bottom:8px">👥 Progres Siswa — Kelas 8A</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <!-- Student card 1 -->
+        <div style="background:white;border-radius:8px;border:1px solid #e2e8f0;padding:8px">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <div style="width:24px;height:24px;background:#0f766e;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700">A</div>
+            <div>
+              <div style="font-weight:600;color:#1e293b;font-size:10px">Ahmad R.</div>
+              <div style="color:#64748b;font-size:9px">⚡ 420 XP · 🔥 5 hari</div>
+            </div>
+          </div>
+          <div style="background:#f1f5f9;border-radius:4px;height:6px;overflow:hidden">
+            <div style="background:#0f766e;height:100%;width:85%"></div>
+          </div>
+          <div style="text-align:right;color:#0f766e;font-size:9px;margin-top:2px">85%</div>
+          <div style="display:flex;gap:3px;margin-top:4px">
+            <div style="flex:1;background:#ccfbf1;color:#0f766e;border-radius:3px;padding:2px;text-align:center;font-size:8px">✅ H</div>
+            <div style="flex:1;background:#ccfbf1;color:#0f766e;border-radius:3px;padding:2px;text-align:center;font-size:8px">✅ M</div>
+            <div style="flex:1;background:#ccfbf1;color:#0f766e;border-radius:3px;padding:2px;text-align:center;font-size:8px">✅ T1</div>
+            <div style="flex:1;background:#fef3c7;color:#92400e;border-radius:3px;padding:2px;text-align:center;font-size:8px">🔄 Q</div>
+          </div>
+        </div>
+        <!-- Student card 2 -->
+        <div style="background:white;border-radius:8px;border:1px solid #e2e8f0;padding:8px">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <div style="width:24px;height:24px;background:#14b8a6;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700">S</div>
+            <div>
+              <div style="font-weight:600;color:#1e293b;font-size:10px">Siti N.</div>
+              <div style="color:#64748b;font-size:9px">⚡ 310 XP · 🔥 3 hari</div>
+            </div>
+          </div>
+          <div style="background:#f1f5f9;border-radius:4px;height:6px;overflow:hidden">
+            <div style="background:#14b8a6;height:100%;width:62%"></div>
+          </div>
+          <div style="text-align:right;color:#14b8a6;font-size:9px;margin-top:2px">62%</div>
+          <div style="display:flex;gap:3px;margin-top:4px">
+            <div style="flex:1;background:#ccfbf1;color:#0f766e;border-radius:3px;padding:2px;text-align:center;font-size:8px">✅ H</div>
+            <div style="flex:1;background:#fef3c7;color:#92400e;border-radius:3px;padding:2px;text-align:center;font-size:8px">🔄 M</div>
+            <div style="flex:1;background:#f1f5f9;color:#94a3b8;border-radius:3px;padding:2px;text-align:center;font-size:8px">— T1</div>
+            <div style="flex:1;background:#f1f5f9;color:#94a3b8;border-radius:3px;padding:2px;text-align:center;font-size:8px">— Q</div>
+          </div>
+        </div>
+        <div style="background:white;border-radius:8px;border:1px dashed #e2e8f0;padding:8px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:9px">+ 26 siswa lagi...</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Kartu per Siswa</h3>
+      <p>Setiap siswa ditampilkan sebagai kartu dengan progress bar dan status tiap bagian. Lebih visual, tapi membutuhkan scroll lebih.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Hybrid -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:12px;min-height:220px;border-radius:8px;font-size:10px">
+      <!-- Tab nav -->
+      <div style="display:flex;gap:4px;margin-bottom:8px">
+        <div style="background:#0f766e;color:white;border-radius:5px;padding:4px 8px;font-size:9px">📊 Ringkasan</div>
+        <div style="background:white;border:1px solid #e2e8f0;color:#64748b;border-radius:5px;padding:4px 8px;font-size:9px">👥 Semua Siswa</div>
+        <div style="background:white;border:1px solid #e2e8f0;color:#64748b;border-radius:5px;padding:4px 8px;font-size:9px">⚠️ Perlu Perhatian</div>
+      </div>
+      <!-- Summary tab content -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <div style="background:white;border-radius:6px;border:1px solid #e2e8f0;padding:8px">
+          <div style="color:#64748b;font-size:9px;margin-bottom:4px">Penyelesaian Per Bagian</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:30px;font-size:8px;color:#64748b">Hiwar</div><div style="flex:1;background:#f1f5f9;border-radius:3px;height:5px;overflow:hidden"><div style="background:#0f766e;height:100%;width:75%"></div></div><div style="font-size:8px;color:#0f766e;width:20px;text-align:right">75%</div></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:30px;font-size:8px;color:#64748b">Mufrd</div><div style="flex:1;background:#f1f5f9;border-radius:3px;height:5px;overflow:hidden"><div style="background:#14b8a6;height:100%;width:60%"></div></div><div style="font-size:8px;color:#14b8a6;width:20px;text-align:right">60%</div></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:30px;font-size:8px;color:#64748b">T1</div><div style="flex:1;background:#f1f5f9;border-radius:3px;height:5px;overflow:hidden"><div style="background:#f59e0b;height:100%;width:45%"></div></div><div style="font-size:8px;color:#f59e0b;width:20px;text-align:right">45%</div></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:30px;font-size:8px;color:#64748b">Qwaid</div><div style="flex:1;background:#f1f5f9;border-radius:3px;height:5px;overflow:hidden"><div style="background:#ef4444;height:100%;width:30%"></div></div><div style="font-size:8px;color:#ef4444;width:20px;text-align:right">30%</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="background:#fef3c7;border-radius:6px;padding:8px">
+            <div style="font-size:9px;font-weight:600;color:#92400e">⚠️ Belum mulai (5)</div>
+            <div style="font-size:8px;color:#92400e">Budi S., Rina W., +3</div>
+          </div>
+          <div style="background:#f0fdf4;border-radius:6px;padding:8px">
+            <div style="font-size:9px;font-weight:600;color:#166534">🏆 Selesai semua (3)</div>
+            <div style="font-size:8px;color:#166534">Ahmad R., Siti N., +1</div>
+          </div>
+          <div style="background:#f0fdfa;border-radius:6px;padding:8px">
+            <div style="font-size:9px;font-weight:600;color:#0f766e">📊 Rata-rata kelas</div>
+            <div style="font-size:13px;font-weight:700;color:#0f766e">64%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Tab Hybrid (Ringkasan + Detail)</h3>
+      <p>Tab "Ringkasan" menampilkan statistik kelas, tab "Semua Siswa" menampilkan tabel, tab "Perlu Perhatian" highlight siswa yang tertinggal.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px">Klik kartu untuk memilih, lalu beritahu saya di terminal.</p>

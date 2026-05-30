@@ -1,0 +1,131 @@
+<h2>Desain Sistem — Arabiyya App v2</h2>
+<p class="subtitle">Arsitektur keseluruhan dengan Firebase, Auth, CMS, mobile, dan dark mode</p>
+
+<div class="section">
+  <div class="label">Alur Pengguna</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px">
+
+    <!-- Student flow -->
+    <div style="background:#f0fdfa;border-radius:10px;padding:14px;border:2px solid #99f6e4">
+      <div style="font-weight:700;color:#0f766e;margin-bottom:10px;font-size:13px">👨‍🎓 Alur Siswa</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #0f766e">🌐 Buka website</div>
+        <div style="text-align:center;color:#94a3b8;font-size:10px">▼</div>
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #14b8a6">🔐 Login Google <span style="color:#94a3b8;font-size:10px">atau tamu</span></div>
+        <div style="text-align:center;color:#94a3b8;font-size:10px">▼ (pertama kali)</div>
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #f59e0b">✏️ Isi nickname</div>
+        <div style="text-align:center;color:#94a3b8;font-size:10px">▼</div>
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #22c55e">📚 Belajar (progres tersimpan di cloud)</div>
+      </div>
+    </div>
+
+    <!-- Admin flow -->
+    <div style="background:#fff7ed;border-radius:10px;padding:14px;border:2px solid #fed7aa">
+      <div style="font-weight:700;color:#c2410c;margin-bottom:10px;font-size:13px">👩‍🏫 Alur Admin/Guru</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #f97316">🔐 Login Google (email guru)</div>
+        <div style="text-align:center;color:#94a3b8;font-size:10px">▼ terdeteksi sebagai admin</div>
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #f97316">📊 Dashboard Admin</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:2px">
+          <div style="background:#fff7ed;border-radius:4px;padding:5px;font-size:10px;text-align:center;border:1px solid #fed7aa">📈 Progres<br>Siswa</div>
+          <div style="background:#fff7ed;border-radius:4px;padding:5px;font-size:10px;text-align:center;border:1px solid #fed7aa">✏️ Kelola<br>Konten</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guest flow -->
+    <div style="background:#f8fafc;border-radius:10px;padding:14px;border:2px solid #e2e8f0">
+      <div style="font-weight:700;color:#64748b;margin-bottom:10px;font-size:13px">👤 Mode Tamu</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #94a3b8">⏭️ Skip login</div>
+        <div style="text-align:center;color:#94a3b8;font-size:10px">▼</div>
+        <div style="background:white;border-radius:6px;padding:8px;border-left:3px solid #94a3b8">📚 Belajar (progres di localStorage)</div>
+        <div style="background:#fef2f2;border-radius:6px;padding:8px;border-left:3px solid #ef4444;font-size:11px;color:#991b1b">⚠️ Progres tidak terlacak guru & tidak sinkron antar device</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">Struktur Data Firebase</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;font-size:11px">
+    <div style="background:#f0fdfa;border-radius:8px;padding:12px">
+      <div style="font-weight:700;color:#0f766e;margin-bottom:8px">🗄️ Firestore — users/{uid}</div>
+      <div style="font-family:monospace;font-size:10px;background:white;border-radius:6px;padding:8px;color:#1e293b">
+        email: "siswa@gmail.com"<br>
+        nickname: "Ahmad Rajin"<br>
+        role: "student"<br>
+        createdAt: timestamp<br>
+        progress: {<br>
+        &nbsp;&nbsp;xp: 420,<br>
+        &nbsp;&nbsp;streak: 5,<br>
+        &nbsp;&nbsp;chapters: { "3": {...} }<br>
+        }
+      </div>
+    </div>
+    <div style="background:#fff7ed;border-radius:8px;padding:12px">
+      <div style="font-weight:700;color:#c2410c;margin-bottom:8px">🗄️ Firestore — content/</div>
+      <div style="font-family:monospace;font-size:10px;background:white;border-radius:6px;padding:8px;color:#1e293b">
+        mufrodat/words: [{<br>
+        &nbsp;&nbsp;arabic, meaning,<br>
+        &nbsp;&nbsp;example, image_url<br>
+        }]<br><br>
+        tadribat1/questions: [...]<br>
+        tadribat2/questions: [...]<br><br>
+        <span style="color:#94a3b8">// Phase 2: hiwar, qawaid</span>
+      </div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:12px">
+      <div style="font-weight:700;color:#64748b;margin-bottom:8px">🗄️ Firestore — admins/</div>
+      <div style="font-family:monospace;font-size:10px;background:white;border-radius:6px;padding:8px;color:#1e293b">
+        config: {<br>
+        &nbsp;&nbsp;emails: [<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"guru@gmail.com"<br>
+        &nbsp;&nbsp;]<br>
+        }
+      </div>
+      <div style="font-size:10px;color:#64748b;margin-top:6px">Email admin diatur sekali di Firebase Console</div>
+    </div>
+    <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+      <div style="font-weight:700;color:#166534;margin-bottom:8px">🖼️ Firebase Storage</div>
+      <div style="font-family:monospace;font-size:10px;background:white;border-radius:6px;padding:8px;color:#1e293b">
+        /mufrodat/{word_id}.jpg<br>
+        /mufrodat/{word_id}.png<br>
+        <br>
+        <span style="color:#94a3b8">// Gambar diupload admin,<br>// URL disimpan di Firestore</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">File Baru yang Ditambahkan</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;font-size:11px">
+    <div style="background:white;border-radius:8px;padding:10px;border:1px solid #e2e8f0">
+      <div style="font-weight:600;color:#0f766e;margin-bottom:6px">🔧 Core</div>
+      <div style="font-family:monospace;font-size:10px;line-height:1.8;color:#1e293b">
+        js/firebase.js<br>
+        js/hooks/useAuth.js<br>
+        js/hooks/useCloudProgress.js
+      </div>
+    </div>
+    <div style="background:white;border-radius:8px;padding:10px;border:1px solid #e2e8f0">
+      <div style="font-weight:600;color:#f97316;margin-bottom:6px">📱 Screens Baru</div>
+      <div style="font-family:monospace;font-size:10px;line-height:1.8;color:#1e293b">
+        js/screens/LoginScreen.jsx<br>
+        js/screens/NicknameScreen.jsx<br>
+        js/screens/AdminScreen.jsx
+      </div>
+    </div>
+    <div style="background:white;border-radius:8px;padding:10px;border:1px solid #e2e8f0">
+      <div style="font-weight:600;color:#7c3aed;margin-bottom:6px">🎨 Styling</div>
+      <div style="font-family:monospace;font-size:10px;line-height:1.8;color:#1e293b">
+        css/dark.css<br>
+        + update tokens.css<br>
+        + update base.css (mobile)
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:20px">Apakah arsitektur ini sudah sesuai? Beritahu saya di terminal.</p>
