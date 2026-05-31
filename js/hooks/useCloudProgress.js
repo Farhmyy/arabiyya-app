@@ -6,7 +6,13 @@ function useCloudProgress(uid) {
   const DEFAULT = {
     xp: 0, streak: 1,
     lastActiveDate: new Date().toISOString().slice(0, 10),
-    chapters: window.DEFAULT_PROGRESS,
+    chapters: window.DEFAULT_PROGRESS || { '3': {
+      hiwar:      { completed: false, score: 0, maxScore: 6 },
+      mufrodat:   { completed: false, score: 0, maxScore: 6 },
+      tadribat_1: { completed: false, score: 0, maxScore: 5 },
+      qawaid:     { completed: false, score: 0, maxScore: 6 },
+      tadribat_2: { completed: false, score: 0, maxScore: 5 },
+    }},
   };
 
   const [state, setState] = useState(DEFAULT);
@@ -60,14 +66,14 @@ function useCloudProgress(uid) {
   }, [persist]);
 
   const chapterProgress = useCallback((chapterId) => {
-    const ch = state.chapters[chapterId];
+    const ch = state.chapters?.[chapterId];
     if (!ch) return 0;
     const sections = Object.values(ch);
     return sections.length ? Math.round(sections.filter(s => s.completed).length / sections.length * 100) : 0;
   }, [state]);
 
   const sectionStatus = useCallback((chapterId, sectionId) => {
-    const ch = state.chapters[chapterId];
+    const ch = state.chapters?.[chapterId];
     if (!ch || !ch[sectionId]) return 'open';
     return ch[sectionId].completed ? 'done' : 'open';
   }, [state]);
