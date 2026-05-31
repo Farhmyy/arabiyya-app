@@ -17,14 +17,14 @@ function HomeScreen({ navigate, xp, streak }) {
 
       {/* ── HERO ── */}
       <section style={{
-        background: 'linear-gradient(135deg, #F0FDFA 0%, #FFFFFF 60%, #FFFBEB 100%)',
+        background: 'linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-surface) 60%, var(--color-accent-50) 100%)',
         borderRadius: 28, padding: '48px 48px',
         display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 32,
         alignItems: 'center', position: 'relative', overflow: 'hidden',
         marginBottom: 64,
       }} className="hero-grid">
-        <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: 999, background: 'rgba(20,184,166,.08)' }} />
-        <div style={{ position: 'absolute', bottom: -30, left: 200, width: 80, height: 80, borderRadius: 999, background: 'rgba(245,158,11,.12)' }} />
+        <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: 999, background: 'var(--color-secondary-glow, rgba(20,184,166,.08))' }} />
+        <div style={{ position: 'absolute', bottom: -30, left: 200, width: 80, height: 80, borderRadius: 999, background: 'var(--color-accent-glow, rgba(245,158,11,.12))' }} />
 
         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 18 }}>
           <Badge tone="primary" icon="sparkles">{ui.hero.badge}</Badge>
@@ -55,7 +55,7 @@ function HomeScreen({ navigate, xp, streak }) {
         </div>
 
         <div style={{ position: 'relative' }}>
-          <img src="assets/images/illustration-hero.svg" alt="" style={{ width: '100%', display: 'block' }} />
+          <img src="assets/images/illustration-hero.svg" alt="" className="hero-illustration" style={{ width: '100%', display: 'block' }} />
         </div>
       </section>
 
