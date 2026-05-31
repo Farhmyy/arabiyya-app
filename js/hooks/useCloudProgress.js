@@ -1,4 +1,4 @@
-/* useCloudProgress — Firestore-backed progress for logged-in students */
+/* useCloudProgress — Supabase PostgreSQL progress for logged-in students */
 
 function useCloudProgress(uid) {
   const { useState, useEffect, useCallback, useRef } = React;
@@ -18,25 +18,29 @@ function useCloudProgress(uid) {
   const [state, setState] = useState(DEFAULT);
   const saveTimeout = useRef(null);
 
+  /* Load from Supabase on mount */
   useEffect(() => {
     if (!uid) return;
-    fbDb.collection('users').doc(uid).get().then(doc => {
-      if (doc.exists && doc.data().progress) {
-        const saved = doc.data().progress;
-        const today = new Date().toISOString().slice(0, 10);
-        const diff = (new Date(today) - new Date(saved.lastActiveDate || today)) / 86400000;
-        if (diff > 1) saved.streak = 0;
-        setState(saved);
-      }
-    }).catch(() => {});
+    sbClient.from('users').select('progress').eq('id', uid).maybeSingle()
+      .then(({ data }) => {
+        if (data?.progress && Object.keys(data.progress).length > 0) {
+          const saved = data.progress;
+          const today = new Date().toISOString().slice(0, 10);
+          const diff = (new Date(today) - new Date(saved.lastActiveDate || today)) / 86400000;
+          if (diff > 1) saved.streak = 0;
+          setState(saved);
+        }
+      })
+      .catch(() => {});
   }, [uid]);
 
+  /* Debounced save (500ms) */
   const persist = useCallback((updater) => {
     setState(prev => {
       const next = updater(prev);
       clearTimeout(saveTimeout.current);
       saveTimeout.current = setTimeout(() => {
-        fbDb.collection('users').doc(uid).update({ progress: next }).catch(() => {});
+        sbClient.from('users').update({ progress: next }).eq('id', uid).then(() => {});
       }, 500);
       return next;
     });
@@ -65,8 +69,7 @@ function useCloudProgress(uid) {
     const ch = state.chapters[chapterId];
     if (!ch) return 0;
     const sections = Object.values(ch);
-    if (!sections.length) return 0;
-    return Math.round((sections.filter(s => s.completed).length / sections.length) * 100);
+    return sections.length ? Math.round(sections.filter(s => s.completed).length / sections.length * 100) : 0;
   }, [state]);
 
   const sectionStatus = useCallback((chapterId, sectionId) => {
@@ -75,9 +78,7 @@ function useCloudProgress(uid) {
     return ch[sectionId].completed ? 'done' : 'open';
   }, [state]);
 
-  const resetProgress = useCallback(() => {
-    persist(() => ({ ...DEFAULT }));
-  }, [persist]);
+  const resetProgress = useCallback(() => persist(() => ({ ...DEFAULT })), [persist]);
 
   return { xp: state.xp, streak: state.streak, chapters: state.chapters,
     addXP, completeSection, chapterProgress, sectionStatus, resetProgress };
