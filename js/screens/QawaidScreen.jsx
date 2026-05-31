@@ -17,7 +17,7 @@ function ConjugationExplorer({ topic }) {
   const row = active !== null ? rows[active] : null;
 
   return (
-    <div style={{ background: '#F0FDFA', borderRadius: 16, padding: '18px 16px' }}>
+    <div style={{ background: 'var(--color-primary-50)', borderRadius: 16, padding: '18px 16px' }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: 10 }}>
         🕹️ Penjelajah Tashrif — klik dhamir untuk lihat bentuknya
       </div>
@@ -28,9 +28,9 @@ function ConjugationExplorer({ topic }) {
           <button key={i} onClick={() => pick(i)}
             style={{
               padding: '8px 16px', borderRadius: 999, border: 'none', cursor: 'pointer', fontWeight: 700,
-              background: active === i ? 'var(--color-primary)' : '#fff',
+              background: active === i ? 'var(--color-primary)' : 'var(--color-surface)',
               color: active === i ? '#fff' : 'var(--color-primary)',
-              border: `1.5px solid ${active === i ? 'var(--color-primary)' : '#CCFBF1'}`,
+              border: `1.5px solid ${active === i ? 'var(--color-primary)' : 'var(--color-primary-100)'}`,
               fontFamily: 'var(--font-arabic)', fontSize: 18,
               transition: 'all var(--dur-fast)',
             }}>
@@ -49,8 +49,8 @@ function ConjugationExplorer({ topic }) {
 
       {/* Display area */}
       <div style={{
-        background: '#fff', borderRadius: 14, padding: '18px 16px', textAlign: 'center',
-        border: '1.5px solid #CCFBF1', minHeight: 110,
+        background: 'var(--color-surface)', borderRadius: 14, padding: '18px 16px', textAlign: 'center',
+        border: '1.5px solid var(--color-primary-100)', minHeight: 110,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
         {row ? (
@@ -101,7 +101,7 @@ function VerbTransformer({ topic }) {
   };
 
   return (
-    <div style={{ background: '#F0FDFA', borderRadius: 16, padding: '18px 16px' }}>
+    <div style={{ background: 'var(--color-primary-50)', borderRadius: 16, padding: '18px 16px' }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: 12 }}>
         ⏱️ Mesin Waktu — pilih kata kerja & toggle waktu
       </div>
@@ -112,7 +112,7 @@ function VerbTransformer({ topic }) {
           style={{
             width: '100%', padding: '10px 14px', borderRadius: 12,
             border: '1.5px solid var(--color-border)', fontSize: 15, fontWeight: 600,
-            background: '#fff', cursor: 'pointer', fontFamily: 'var(--font-arabic)',
+            background: 'var(--color-surface)', cursor: 'pointer', fontFamily: 'var(--font-arabic)',
             direction: 'rtl',
           }}>
           {topic.verb_pairs.map((p, i) => (
@@ -126,9 +126,9 @@ function VerbTransformer({ topic }) {
         <button onClick={() => toggleMode('madhi')}
           style={{
             flex: 1, padding: '10px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
-            background: mode === 'madhi' ? '#92400E' : '#fff',
+            background: mode === 'madhi' ? '#92400E' : 'var(--color-surface)',
             color: mode === 'madhi' ? '#fff' : '#92400E',
-            border: `1.5px solid ${mode === 'madhi' ? '#92400E' : '#FDE68A'}`,
+            border: `1.5px solid ${mode === 'madhi' ? '#92400E' : 'var(--color-accent-100)'}`,
             fontWeight: 700, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
           }}>
           ⏪ مَاضِي <span style={{ fontSize: 12, opacity: 0.8 }}>(sudah)</span>
@@ -136,9 +136,9 @@ function VerbTransformer({ topic }) {
         <button onClick={() => toggleMode('mudhari')}
           style={{
             flex: 1, padding: '10px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
-            background: mode === 'mudhari' ? 'var(--color-primary)' : '#fff',
+            background: mode === 'mudhari' ? 'var(--color-primary)' : 'var(--color-surface)',
             color: mode === 'mudhari' ? '#fff' : 'var(--color-primary)',
-            border: `1.5px solid ${mode === 'mudhari' ? 'var(--color-primary)' : '#CCFBF1'}`,
+            border: `1.5px solid ${mode === 'mudhari' ? 'var(--color-primary)' : 'var(--color-primary-100)'}`,
             fontWeight: 700, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
           }}>
           ▶️ مُضَارِع <span style={{ fontSize: 12, opacity: 0.8 }}>(sedang/akan)</span>
@@ -147,8 +147,8 @@ function VerbTransformer({ topic }) {
 
       {/* Display form */}
       <div style={{
-        background: '#fff', borderRadius: 14, padding: '20px 16px', textAlign: 'center',
-        border: `2px solid ${mode === 'madhi' ? '#FDE68A' : '#CCFBF1'}`,
+        background: 'var(--color-surface)', borderRadius: 14, padding: '20px 16px', textAlign: 'center',
+        border: `2px solid ${mode === 'madhi' ? 'var(--color-accent-100)' : 'var(--color-primary-100)'}`,
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
       }}>
         <div className="anim-in" key={displayForm} lang="ar" style={{
@@ -228,7 +228,7 @@ function SentenceBuilder({ topic }) {
   };
 
   return (
-    <div style={{ background: '#F0FDFA', borderRadius: 16, padding: '18px 16px' }}>
+    <div style={{ background: 'var(--color-primary-50)', borderRadius: 16, padding: '18px 16px' }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: 8 }}>
         🧩 Bina Jumlah — susun kata menjadi kalimat (RTL: fi'il di sebelah kanan)
       </div>
@@ -259,7 +259,7 @@ function SentenceBuilder({ topic }) {
 
       {/* Drop zone — placed tokens (RTL sentence) */}
       <div style={{
-        minHeight: 60, background: '#fff', borderRadius: 14, padding: '12px 14px',
+        minHeight: 60, background: 'var(--color-surface)', borderRadius: 14, padding: '12px 14px',
         border: `2px dashed ${result === 'correct' ? 'var(--color-success)' : result === 'wrong' ? 'var(--color-error)' : 'var(--color-border)'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
         flexWrap: 'wrap', gap: 8, direction: 'rtl',
@@ -286,7 +286,7 @@ function SentenceBuilder({ topic }) {
       {result && (
         <div className="anim-in" style={{
           padding: '10px 14px', borderRadius: 12, marginBottom: 12,
-          background: result === 'correct' ? '#F0FDF4' : '#FEF2F2',
+          background: result === 'correct' ? 'var(--color-success-50)' : 'var(--color-error-50)',
           color: result === 'correct' ? '#15803D' : '#B91C1C', fontWeight: 600, fontSize: 14,
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
@@ -311,14 +311,14 @@ function SentenceBuilder({ topic }) {
         <button onClick={reset}
           style={{
             padding: '10px 16px', borderRadius: 12, border: '1.5px solid var(--color-border)',
-            background: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer',
+            background: 'var(--color-surface)', fontWeight: 600, fontSize: 14, cursor: 'pointer',
           }}>
           Reset
         </button>
         <button onClick={nextSet}
           style={{
             padding: '10px 16px', borderRadius: 12, border: '1.5px solid var(--color-border)',
-            background: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer',
+            background: 'var(--color-surface)', fontWeight: 600, fontSize: 14, cursor: 'pointer',
           }}>
           Set Baru →
         </button>
@@ -408,7 +408,7 @@ function QawaidScreen({ navigate, progress }) {
           <button key={i} onClick={() => setActiveTab(i)}
             style={{
               flex: 1, padding: '10px 12px', borderRadius: 10, border: 'none', cursor: 'pointer',
-              background: activeTab === i ? '#fff' : 'transparent',
+              background: activeTab === i ? 'var(--color-surface)' : 'transparent',
               boxShadow: activeTab === i ? 'var(--shadow-card)' : 'none',
               transition: 'all var(--dur-med) var(--ease-out)',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
@@ -447,7 +447,7 @@ function QawaidScreen({ navigate, progress }) {
               <div style={{ fontWeight: 600, fontSize: 16, color: 'var(--color-text-primary)' }}>{topic.title_id}</div>
             </div>
           </div>
-          <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', lineHeight: 1.7, padding: '12px 16px', background: '#F8FAFC', borderRadius: 12, borderLeft: `4px solid ${tabColors[activeTab]}` }}>
+          <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', lineHeight: 1.7, padding: '12px 16px', background: 'var(--color-bg)', borderRadius: 12, borderLeft: `4px solid ${tabColors[activeTab]}` }}>
             {topic.explanation}
           </p>
         </div>
@@ -471,7 +471,7 @@ function QawaidScreen({ navigate, progress }) {
                       display: 'grid', gridTemplateColumns: '72px 1fr auto',
                       gap: 10, alignItems: 'center',
                       padding: '10px 12px', borderRadius: 10,
-                      background: '#F0FDFA', border: '1px solid #CCFBF1',
+                      background: 'var(--color-primary-50)', border: '1px solid var(--color-primary-100)',
                     }}>
                       <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 18, fontWeight: 700, color: 'var(--color-text-secondary)', direction: 'rtl', textAlign: 'center' }}>
                         {row.pronoun_ar}
@@ -499,7 +499,7 @@ function QawaidScreen({ navigate, progress }) {
                   {topic.mudharaah.map((m, i) => (
                     <div key={i} style={{
                       padding: '10px 14px', borderRadius: 10,
-                      background: '#FFFBEB', border: '1px solid #FDE68A',
+                      background: 'var(--color-accent-50)', border: '1px solid var(--color-accent-100)',
                       textAlign: 'center',
                     }}>
                       <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 28, fontWeight: 700, color: '#92400E' }}>{m.huruf}</div>
@@ -532,7 +532,7 @@ function QawaidScreen({ navigate, progress }) {
                   ))}
                 </div>
                 {topic.rule_note && (
-                  <div style={{ padding: '10px 14px', borderRadius: 10, background: '#FEF2F2', border: '1px solid #FECACA', fontSize: 13, color: '#B91C1C', fontWeight: 600 }}>
+                  <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--color-error-50)', border: '1px solid #FECACA', fontSize: 13, color: '#B91C1C', fontWeight: 600 }}>
                     ⚠️ {topic.rule_note}
                   </div>
                 )}
@@ -549,7 +549,7 @@ function QawaidScreen({ navigate, progress }) {
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {topic.examples.map((ex, i) => (
-                  <div key={i} style={{ padding: '12px 14px', borderRadius: 12, background: '#F0FDFA', border: '1px solid #CCFBF1' }}>
+                  <div key={i} style={{ padding: '12px 14px', borderRadius: 12, background: 'var(--color-primary-50)', border: '1px solid var(--color-primary-100)' }}>
                     {topic.structure ? (
                       /* Colored parts for jumlah filiyyah */
                       <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 20, fontWeight: 600, direction: 'rtl', textAlign: 'right', lineHeight: 1.8, marginBottom: 4 }}>
@@ -585,7 +585,7 @@ function QawaidScreen({ navigate, progress }) {
                 </h3>
                 {topic.key_points.map((kp, i) => (
                   <div key={i} style={{
-                    padding: '8px 12px', borderRadius: 10, background: '#FFFBEB', border: '1px solid #FDE68A',
+                    padding: '8px 12px', borderRadius: 10, background: 'var(--color-accent-50)', border: '1px solid var(--color-accent-100)',
                     fontSize: 13, fontWeight: 600, color: '#92400E', marginBottom: i < topic.key_points.length - 1 ? 8 : 0,
                   }}>
                     {kp}
