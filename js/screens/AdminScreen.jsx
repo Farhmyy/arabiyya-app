@@ -15,13 +15,18 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
       .finally(() => setLoadingStudents(false));
   }, []);
 
-  const SECTIONS = ['hiwar','mufrodat','tadribat_1','qawaid','tadribat_2'];
-  const SECTION_LABELS = { hiwar:'Hiwar', mufrodat:'Mufrodat', tadribat_1:'Tadribat 1', qawaid:'Qawaid', tadribat_2:'Tadribat 2' };
+  const SECTIONS = [
+    { id: 'hiwar',      label: 'Hiwar' },
+    { id: 'mufrodat',   label: 'Mufrodat' },
+    { id: 'tadribat_1', label: 'Tadribat 1' },
+    { id: 'qawaid',     label: 'Qawaid' },
+    { id: 'tadribat_2', label: 'Tadribat 2' },
+  ];
 
   const getOverall = (student) => {
     const ch = student.progress?.chapters?.['3'];
     if (!ch) return 0;
-    const done = SECTIONS.filter(s => ch[s]?.completed).length;
+    const done = SECTIONS.filter(s => ch[s.id]?.completed).length;
     return Math.round((done / SECTIONS.length) * 100);
   };
 
@@ -100,15 +105,15 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
               <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 16 }}>Penyelesaian Per Bagian — Kelas</h3>
               {SECTIONS.map(s => {
                 const pct = students.length === 0 ? 0 :
-                  Math.round(students.filter(st => st.progress?.chapters?.['3']?.[s]?.completed).length / students.length * 100);
+                  Math.round(students.filter(st => st.progress?.chapters?.['3']?.[s.id]?.completed).length / students.length * 100);
                 const colors = { hiwar:'#0f766e', mufrodat:'#14b8a6', tadribat_1:'#f59e0b', qawaid:'#7c3aed', tadribat_2:'#ef4444' };
                 return (
-                  <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                    <div style={{ width: 100, fontSize: 13, color: 'var(--color-text-secondary)', flexShrink: 0 }}>{SECTION_LABELS[s]}</div>
+                  <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                    <div style={{ width: 100, fontSize: 13, color: 'var(--color-text-secondary)', flexShrink: 0 }}>{s.label}</div>
                     <div style={{ flex: 1, background: 'var(--color-border)', borderRadius: 4, height: 10, overflow: 'hidden' }}>
-                      <div style={{ background: colors[s], height: '100%', width: pct + '%', transition: 'width 600ms' }} />
+                      <div style={{ background: colors[s.id], height: '100%', width: pct + '%', transition: 'width 600ms' }} />
                     </div>
-                    <div style={{ width: 40, textAlign: 'right', fontWeight: 600, color: colors[s], fontSize: 14 }}>{pct}%</div>
+                    <div style={{ width: 40, textAlign: 'right', fontWeight: 600, color: colors[s.id], fontSize: 14 }}>{pct}%</div>
                   </div>
                 );
               })}
@@ -126,7 +131,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                     <th style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 700 }}>Email</th>
                     <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 700 }}>XP</th>
                     <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 700 }}>Streak</th>
-                    {SECTIONS.map(s => <th key={s} style={{ padding: '12px 8px', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>{SECTION_LABELS[s]}</th>)}
+                    {SECTIONS.map(s => <th key={s.id} style={{ padding: '12px 8px', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>{s.label}</th>)}
                     <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 700 }}>%</th>
                   </tr>
                 </thead>
@@ -141,8 +146,8 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                       <td style={{ padding: '10px 16px', textAlign: 'center', color: 'var(--color-primary)', fontWeight: 700 }}>{s.progress?.xp || 0}</td>
                       <td style={{ padding: '10px 16px', textAlign: 'center' }}>🔥 {s.progress?.streak || 0}</td>
                       {SECTIONS.map(sec => {
-                        const done = s.progress?.chapters?.['3']?.[sec]?.completed;
-                        return <td key={sec} style={{ padding: '10px 8px', textAlign: 'center' }}>{done ? '✅' : '—'}</td>;
+                        const done = s.progress?.chapters?.['3']?.[sec.id]?.completed;
+                        return <td key={sec.id} style={{ padding: '10px 8px', textAlign: 'center' }}>{done ? '✅' : '—'}</td>;
                       })}
                       <td style={{ padding: '10px 16px', textAlign: 'center', fontWeight: 700, color: getOverall(s) >= 80 ? 'var(--color-success)' : getOverall(s) >= 40 ? 'var(--color-accent)' : 'var(--color-error)' }}>{getOverall(s)}%</td>
                     </tr>

@@ -1,16 +1,7 @@
 /* Tadribat2Screen — Practice: Qawaid (final exercise) */
 
 function useTadribat2Content() {
-  const { useState, useEffect } = React;
-  const [questions, setQuestions] = useState(null);
-  useEffect(() => {
-    sbClient.from('content').select('data').eq('id', 'tadribat2').maybeSingle()
-      .then(({ data }) => {
-        if (data?.data?.questions?.length > 0) setQuestions(data.data.questions);
-      })
-      .catch(() => {});
-  }, []);
-  return questions || DATA.tadribat2.questions;
+  return useCloudContent('tadribat2', DATA.tadribat2.questions, raw => raw.questions || []);
 }
 
 function Tadribat2Screen({ navigate, progress }) {

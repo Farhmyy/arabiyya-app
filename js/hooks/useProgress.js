@@ -19,6 +19,8 @@ const DEFAULT_STATE = {
   },
 };
 
+window.DEFAULT_PROGRESS = DEFAULT_STATE.chapters;
+
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
