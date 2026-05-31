@@ -7,10 +7,9 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
   const [loadingStudents, setLoadingStudents] = useState(true);
 
   useEffect(() => {
-    fbDb.collection('users').where('role', '==', 'student').get()
-      .then(snap => {
-        const docs = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
-        setStudents(docs);
+    sbClient.from('users').select('*').eq('role', 'student')
+      .then(({ data }) => {
+        setStudents(data || []);
       })
       .catch(() => {})
       .finally(() => setLoadingStudents(false));
@@ -200,8 +199,8 @@ function AdminCMSPanel() {
 
   const loadWords = () => {
     setLoadingWords(true);
-    fbDb.collection('content').doc('mufrodat').get()
-      .then(doc => setWords(doc.exists ? (doc.data().words || []) : []))
+    sbClient.from('content').select('data').eq('id', 'mufrodat').maybeSingle()
+      .then(({ data }) => setWords(data?.data?.words || []))
       .catch(() => setWords([]))
       .finally(() => setLoadingWords(false));
   };
@@ -210,7 +209,7 @@ function AdminCMSPanel() {
   const saveWords = async (newWords) => {
     setSaving(true);
     try {
-      await fbDb.collection('content').doc('mufrodat').set({ words: newWords });
+      await sbClient.from('content').upsert({ id: 'mufrodat', data: { words: newWords } });
       setWords(newWords);
     } catch { alert('Gagal menyimpan.'); }
     finally { setSaving(false); }
@@ -219,15 +218,14 @@ function AdminCMSPanel() {
   const handleImageUpload = async (file, wordId) => {
     if (!file) return null;
     setUploadProgress(0);
-    const ref = fbStorage.ref(`mufrodat/${wordId}_${Date.now()}.${file.name.split('.').pop()}`);
-    const task = ref.put(file);
-    return new Promise((resolve, reject) => {
-      task.on('state_changed',
-        snap => setUploadProgress(Math.round(snap.bytesTransferred / snap.totalBytes * 100)),
-        err => { setUploadProgress(null); reject(err); },
-        async () => { const url = await ref.getDownloadURL(); setUploadProgress(null); resolve(url); }
-      );
-    });
+    const ext = file.name.split('.').pop();
+    const path = `${wordId}_${Date.now()}.${ext}`;
+    const { error } = await sbClient.storage.from('mufrodat').upload(path, file, { upsert: true });
+    if (error) { setUploadProgress(null); throw error; }
+    setUploadProgress(100);
+    const { data: { publicUrl } } = sbClient.storage.from('mufrodat').getPublicUrl(path);
+    setUploadProgress(null);
+    return publicUrl;
   };
 
   const handleSaveWord = async (formData) => {
@@ -412,8 +410,8 @@ function TadribatCMSPanel({ collectionId, title }) {
 
   const loadQuestions = () => {
     setLoading(true);
-    fbDb.collection('content').doc(collectionId).get()
-      .then(doc => setQuestions(doc.exists ? (doc.data().questions || []) : []))
+    sbClient.from('content').select('data').eq('id', collectionId).maybeSingle()
+      .then(({ data }) => setQuestions(data?.data?.questions || []))
       .catch(() => setQuestions([]))
       .finally(() => setLoading(false));
   };
@@ -422,7 +420,7 @@ function TadribatCMSPanel({ collectionId, title }) {
   const saveQuestions = async (newQs) => {
     setSaving(true);
     try {
-      await fbDb.collection('content').doc(collectionId).set({ questions: newQs });
+      await sbClient.from('content').upsert({ id: collectionId, data: { questions: newQs } });
       setQuestions(newQs);
     } catch { alert('Gagal menyimpan.'); }
     finally { setSaving(false); }

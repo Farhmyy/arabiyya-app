@@ -4,11 +4,9 @@ function useTadribat1Content() {
   const { useState, useEffect } = React;
   const [questions, setQuestions] = useState(null);
   useEffect(() => {
-    fbDb.collection('content').doc('tadribat1').get()
-      .then(doc => {
-        if (doc.exists && doc.data().questions && doc.data().questions.length > 0) {
-          setQuestions(doc.data().questions);
-        }
+    sbClient.from('content').select('data').eq('id', 'tadribat1').maybeSingle()
+      .then(({ data }) => {
+        if (data?.data?.questions?.length > 0) setQuestions(data.data.questions);
       })
       .catch(() => {});
   }, []);
