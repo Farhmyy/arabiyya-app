@@ -93,7 +93,7 @@ function MufrodatScreen({ navigate, progress }) {
                       aria-label="Putar audio"
                       style={{
                         width: 36, height: 36, borderRadius: 999, border: 'none', cursor: 'pointer',
-                        background: isPlayingW ? 'var(--color-primary)' : 'linear-gradient(180deg, #F0FDFA, #CCFBF1)',
+                        background: isPlayingW ? 'var(--color-primary)' : 'linear-gradient(180deg, var(--color-primary-50), var(--color-primary-100))',
                         color: isPlayingW ? '#fff' : 'var(--color-primary)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
@@ -119,7 +119,7 @@ function MufrodatScreen({ navigate, progress }) {
                   border: '2px solid var(--color-primary)',
                 }}>
                   {/* Image / icon area */}
-                  <div style={{ flex: 1, background: '#F0FDFA', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: 8, position: 'relative', minHeight: 80 }}>
+                  <div style={{ flex: 1, background: 'var(--color-primary-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: 8, position: 'relative', minHeight: 80 }}>
                     <img
                       src={card.image_ref}
                       alt={card.meaning_id}
@@ -140,7 +140,7 @@ function MufrodatScreen({ navigate, progress }) {
                   </div>
 
                   {/* Example sentence */}
-                  <div style={{ padding: '8px 12px', background: '#FAFFFE' }}>
+                  <div style={{ padding: '8px 12px', background: 'var(--color-surface)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 6 }}>
                       <div style={{ flex: 1 }}>
                         <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 14, color: 'var(--color-text-primary)', direction: 'rtl', lineHeight: 1.7 }}>{card.example_ar}</div>
@@ -150,7 +150,7 @@ function MufrodatScreen({ navigate, progress }) {
                         aria-label="Putar contoh"
                         style={{
                           width: 28, height: 28, borderRadius: 999, border: 'none', cursor: 'pointer', flexShrink: 0,
-                          background: isPlayingEx ? 'var(--color-primary)' : '#E2E8F0',
+                          background: isPlayingEx ? 'var(--color-primary)' : 'var(--color-border)',
                           color: isPlayingEx ? '#fff' : 'var(--color-text-secondary)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
@@ -171,7 +171,7 @@ function MufrodatScreen({ navigate, progress }) {
           style={{
             display: 'flex', alignItems: 'center', gap: 10, width: '100%',
             padding: '14px 18px', borderRadius: 14, border: '1.5px solid var(--color-border)',
-            background: showExtra ? '#F0FDFA' : 'var(--color-surface)',
+            background: showExtra ? 'var(--color-primary-50)' : 'var(--color-surface)',
             cursor: 'pointer', textAlign: 'left', fontWeight: 700, fontSize: 16,
           }}>
           <Icon name="help-circle" size={20} color="var(--color-accent)" />
@@ -181,7 +181,7 @@ function MufrodatScreen({ navigate, progress }) {
         {showExtra && (
           <div className="anim-in" style={{
             marginTop: 8, padding: '16px 20px', borderRadius: 14,
-            background: '#FFFBEB', border: '1px solid #FDE68A',
+            background: 'var(--color-accent-50)', border: '1px solid var(--color-accent-100)',
           }}>
             <p style={{ fontSize: 13, color: '#92400E', marginBottom: 12, fontWeight: 600 }}>
               Kosakata tambahan seputar penyakit — untuk referensi, tidak masuk kuis.
@@ -191,7 +191,7 @@ function MufrodatScreen({ navigate, progress }) {
                 <div key={i} style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '8px 14px', borderRadius: 999,
-                  background: '#fff', border: '1px solid #FDE68A',
+                  background: 'var(--color-surface)', border: '1px solid var(--color-accent-100)',
                 }}>
                   <span lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 18, fontWeight: 600, color: '#92400E', direction: 'rtl' }}>{w.ar}</span>
                   <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{w.id}</span>
