@@ -11,7 +11,7 @@ function DialogueBubble({ side = 'left', speaker, ar, id, playing, highlighted, 
     }}>
       <div style={{
         width: 40, height: 40, borderRadius: 999, flexShrink: 0,
-        background: isLeft ? '#CCFBF1' : 'var(--color-primary-hover)',
+        background: isLeft ? 'var(--color-primary-100)' : 'var(--color-primary-hover)',
         color: isLeft ? 'var(--color-primary)' : '#fff',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 18,
