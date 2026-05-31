@@ -24,12 +24,6 @@
   mix-blend-mode: luminosity;
 }
 
-/* Primary color di dark mode — sedikit lebih kalem dari neon */
-[data-theme="dark"] {
-  --color-primary: #2DD4BF;
-  --color-primary-hover: #5EEAD4;
-}
-
 /* Cards di dark mode — tambah border tipis agar terlihat */
 [data-theme="dark"] .card {
   border: 1px solid var(--color-border);

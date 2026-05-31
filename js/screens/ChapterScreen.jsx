@@ -65,7 +65,7 @@ function ChapterScreen({ navigate, progress }) {
               <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <span style={{
                   width: 24, height: 24, borderRadius: 999,
-                  background: '#F0FDFA', color: 'var(--color-primary)',
+                  background: 'var(--color-primary-50)', color: 'var(--color-primary)',
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0, marginTop: 2,
                 }}>

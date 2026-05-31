@@ -13,8 +13,8 @@ function ChapterCard({ num, status, titleAr, titleId, summary, progress = 0, onC
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div style={{
             width: 64, height: 64, borderRadius: 16,
-            background: avail ? 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))' : '#F1F5F9',
-            color: avail ? '#fff' : '#94A3B8',
+            background: avail ? 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))' : 'var(--color-bg)',
+            color: avail ? '#fff' : 'var(--color-text-light)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'var(--font-arabic)', fontSize: 36, fontWeight: 700,
           }}>
