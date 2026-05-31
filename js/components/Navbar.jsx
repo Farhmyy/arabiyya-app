@@ -26,40 +26,40 @@ function LogoMenu({ navigate, route, variant = 'inline' }) {
         style={{
           display: 'inline-flex', alignItems: 'center', gap: 10,
           height: 48, padding: '0 14px 0 6px',
-          background: isFloating ? '#fff' : 'transparent',
+          background: isFloating ? 'var(--color-surface)' : 'transparent',
           border: isFloating ? '1px solid var(--color-border)' : 'none',
           borderRadius: 14, cursor: 'pointer',
           boxShadow: isFloating ? '0 8px 22px -8px rgba(15,118,110,.25)' : 'none',
           transition: 'background 160ms, box-shadow 160ms',
         }}
-        onMouseEnter={e => { if (!isFloating) e.currentTarget.style.background = '#F0FDFA'; }}
+        onMouseEnter={e => { if (!isFloating) e.currentTarget.style.background = 'var(--color-primary-50)'; }}
         onMouseLeave={e => { if (!isFloating) e.currentTarget.style.background = 'transparent'; }}
       >
         <img src="assets/images/logo-mark.svg" width="40" height="40" alt="" style={{ display: 'block', borderRadius: 10 }} />
         <span style={{ fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 19, color: 'var(--color-primary)', lineHeight: 1 }}>
           العربية التفاعلية
         </span>
-        <Icon name="chevron-right" size={16} color="#94A3B8" style={{ transform: open ? 'rotate(270deg)' : 'rotate(90deg)', transition: 'transform 200ms' }} />
+        <Icon name="chevron-right" size={16} color="var(--color-text-light)" style={{ transform: open ? 'rotate(270deg)' : 'rotate(90deg)', transition: 'transform 200ms' }} />
       </button>
 
       {open && (
         <div className="anim-in" style={{
           position: 'absolute', top: 'calc(100% + 8px)', left: 0,
-          minWidth: 360, background: '#fff', borderRadius: 16,
+          minWidth: 360, background: 'var(--color-surface)', borderRadius: 16,
           boxShadow: 'var(--shadow-modal)', border: '1px solid var(--color-border)',
           padding: 8, zIndex: 40,
         }}>
           <button onClick={() => { setOpen(false); navigate('home'); }}
             style={{
               width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer',
-              background: route === 'home' ? '#F0FDFA' : 'transparent',
+              background: route === 'home' ? 'var(--color-primary-50)' : 'transparent',
               padding: '12px 14px', borderRadius: 10,
               display: 'flex', alignItems: 'center', gap: 12,
               fontFamily: 'var(--font-latin)', fontWeight: 600, fontSize: 14,
               color: route === 'home' ? 'var(--color-primary)' : 'var(--color-text-primary)',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = '#F0FDFA'}
-            onMouseLeave={e => e.currentTarget.style.background = route === 'home' ? '#F0FDFA' : 'transparent'}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--color-primary-50)'}
+            onMouseLeave={e => e.currentTarget.style.background = route === 'home' ? 'var(--color-primary-50)' : 'transparent'}
           >
             <Icon name="home" size={18} /><span>Beranda</span>
           </button>
@@ -78,18 +78,18 @@ function LogoMenu({ navigate, route, variant = 'inline' }) {
                 style={{
                   width: '100%', textAlign: 'left', border: 'none',
                   cursor: locked ? 'not-allowed' : 'pointer',
-                  background: active ? '#F0FDFA' : 'transparent',
+                  background: active ? 'var(--color-primary-50)' : 'transparent',
                   padding: '10px 14px', borderRadius: 10,
                   display: 'flex', alignItems: 'center', gap: 12,
                   opacity: locked ? 0.55 : 1, fontFamily: 'var(--font-latin)',
                 }}
-                onMouseEnter={e => { if (!locked) e.currentTarget.style.background = '#F0FDFA'; }}
-                onMouseLeave={e => { if (!locked) e.currentTarget.style.background = active ? '#F0FDFA' : 'transparent'; }}
+                onMouseEnter={e => { if (!locked) e.currentTarget.style.background = 'var(--color-primary-50)'; }}
+                onMouseLeave={e => { if (!locked) e.currentTarget.style.background = active ? 'var(--color-primary-50)' : 'transparent'; }}
               >
                 <div style={{
                   width: 36, height: 36, borderRadius: 10,
-                  background: active ? 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))' : '#F1F5F9',
-                  color: active ? '#fff' : '#94A3B8',
+                  background: active ? 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))' : 'var(--color-bg)',
+                  color: active ? '#fff' : 'var(--color-text-light)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 18, flexShrink: 0,
                 }}>
@@ -101,7 +101,7 @@ function LogoMenu({ navigate, route, variant = 'inline' }) {
                 </div>
                 {locked ? <Badge tone="locked" icon="lock">Soon</Badge>
                   : active ? <Icon name="check-circle" size={18} color="var(--color-success)" />
-                  : <Icon name="chevron-right" size={16} color="#94A3B8" />}
+                  : <Icon name="chevron-right" size={16} color="var(--color-text-light)" />}
               </button>
             );
           })}
@@ -113,21 +113,21 @@ function LogoMenu({ navigate, route, variant = 'inline' }) {
 
 function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDark = null, user = null, nickname = null, onLogout = null }) {
   const chipStyle = floating
-    ? { height: 40, padding: '0 14px', background: '#fff', border: '1px solid var(--color-border)', boxShadow: '0 4px 12px -3px rgba(0,0,0,.06)' }
+    ? { height: 40, padding: '0 14px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', boxShadow: '0 4px 12px -3px rgba(0,0,0,.06)' }
     : { height: 36, padding: '0 12px' };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
       <span style={{
         display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 999,
-        ...chipStyle, background: floating ? '#fff' : '#FFFBEB', color: '#92400E',
+        ...chipStyle, background: floating ? 'var(--color-surface)' : 'var(--color-accent-50)', color: '#92400E',
         fontFamily: 'var(--font-latin)', fontWeight: 700, fontSize: floating ? 14 : 13,
       }}>
-        <Icon name="trophy" size={floating ? 15 : 14} color="#F59E0B" /> {xp}&nbsp;XP
+        <Icon name="trophy" size={floating ? 15 : 14} color="var(--color-accent)" /> {xp}&nbsp;XP
       </span>
       <span style={{
         display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 999,
-        ...chipStyle, background: floating ? '#fff' : '#FFF7ED', color: '#9A3412',
+        ...chipStyle, background: floating ? 'var(--color-surface)' : '#FFF7ED', color: '#9A3412',
         fontFamily: 'var(--font-latin)', fontWeight: 700, fontSize: floating ? 14 : 13,
       }}>
         <Icon name="flame" size={floating ? 15 : 14} color="#F97316" /> {streak}
@@ -138,7 +138,7 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             width: floating ? 40 : 36, height: floating ? 40 : 36,
             borderRadius: 999, border: '1px solid var(--color-border)',
-            background: floating ? '#fff' : 'var(--color-surface)',
+            background: floating ? 'var(--color-surface)' : 'var(--color-surface)',
             cursor: 'pointer', fontSize: 16,
             color: 'var(--color-text-secondary)',
           }}>
@@ -149,7 +149,7 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           height: floating ? 40 : 36, padding: '0 12px',
-          borderRadius: 999, background: floating ? '#fff' : 'var(--color-primary-50)',
+          borderRadius: 999, background: floating ? 'var(--color-surface)' : 'var(--color-primary-50)',
           border: floating ? '1px solid var(--color-border)' : 'none',
           color: 'var(--color-primary)', fontFamily: 'var(--font-latin)',
           fontWeight: 600, fontSize: floating ? 14 : 13,
@@ -218,11 +218,11 @@ function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark, user,
                   fontFamily: 'var(--font-latin)', fontSize: 14,
                   fontWeight: active ? 600 : 500,
                   color: active ? 'var(--color-primary)' : 'var(--color-text-secondary)',
-                  background: active ? '#F0FDFA' : 'transparent',
+                  background: active ? 'var(--color-primary-50)' : 'transparent',
                   cursor: 'pointer', whiteSpace: 'nowrap',
                   transition: 'all 160ms', flexShrink: 0,
                 }}
-                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.color = 'var(--color-primary)'; }}}
+                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = 'var(--color-bg)'; e.currentTarget.style.color = 'var(--color-primary)'; }}}
                 onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--color-text-secondary)'; }}}
               >
                 <Icon name={s.icon} size={16} />{s.label}

@@ -6,8 +6,8 @@ function AudioButton({ playing = false, onClick, size = 'md', variant = 'primary
 
   const palettes = {
     primary:      { bg: 'var(--color-secondary)', fg: '#fff',                 shadow: '0 4px 12px rgba(20,184,166,.35)' },
-    secondary:    { bg: '#F0FDFA',                fg: 'var(--color-primary)', shadow: 'none' },
-    'on-primary': { bg: '#fff',                   fg: 'var(--color-primary)', shadow: 'none' },
+    secondary:    { bg: 'var(--color-primary-50)',fg: 'var(--color-primary)', shadow: 'none' },
+    'on-primary': { bg: 'var(--color-surface)',   fg: 'var(--color-primary)', shadow: 'none' },
   };
   const p = palettes[variant] || palettes.primary;
 
