@@ -102,7 +102,7 @@ function Tadribat1Screen({ navigate, progress }) {
           {q.type === 'audio' && (
             <div style={{ textAlign: 'center', marginBottom: 24 }}>
               <div style={{
-                background: '#F0FDFA', borderRadius: 20, padding: '28px 20px',
+                background: 'var(--color-primary-50)', borderRadius: 20, padding: '28px 20px',
                 border: '2px dashed var(--color-secondary)',
               }}>
                 <button onClick={speakQuestion}
@@ -132,7 +132,7 @@ function Tadribat1Screen({ navigate, progress }) {
 
           {/* Text question: show Arabic display */}
           {q.type === 'text' && q.arabic_display && (
-            <div style={{ background: '#F0FDFA', borderRadius: 16, padding: 24, marginBottom: 24, textAlign: 'center' }}>
+            <div style={{ background: 'var(--color-primary-50)', borderRadius: 16, padding: 24, marginBottom: 24, textAlign: 'center' }}>
               <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 56, fontWeight: 700, color: 'var(--color-primary)', textAlign: 'center', direction: 'rtl' }}>
                 {q.arabic_display}
               </div>
@@ -151,8 +151,8 @@ function Tadribat1Screen({ navigate, progress }) {
                   style={{
                     padding: '16px 18px', borderRadius: 14,
                     border: `2px solid ${isRight ? 'var(--color-success)' : isWrong ? 'var(--color-error)' : isSel ? 'var(--color-primary)' : 'var(--color-border)'}`,
-                    background: isRight ? '#F0FDF4' : isWrong ? '#FEF2F2' : isSel ? '#F0FDFA' : 'var(--color-surface)',
-                    color: isRight ? '#15803D' : isWrong ? '#B91C1C' : 'var(--color-text-primary)',
+                    background: isRight ? 'var(--color-success-50)' : isWrong ? 'var(--color-error-50)' : isSel ? 'var(--color-primary-50)' : 'var(--color-surface)',
+                    color: isRight ? 'var(--color-success-text)' : isWrong ? 'var(--color-error-text)' : 'var(--color-text-primary)',
                     fontFamily: isAr ? 'var(--font-arabic)' : 'var(--font-latin)',
                     fontSize: isAr ? 22 : 16,
                     fontWeight: 600, textAlign: 'left', cursor: revealed ? 'default' : 'pointer',
@@ -176,8 +176,8 @@ function Tadribat1Screen({ navigate, progress }) {
           {revealed && (
             <div className="anim-in" style={{
               padding: 16, borderRadius: 12, marginBottom: 16,
-              background: isCorrect ? '#F0FDF4' : '#FEF2F2',
-              color: isCorrect ? '#15803D' : '#B91C1C', fontWeight: 600,
+              background: isCorrect ? 'var(--color-success-50)' : 'var(--color-error-50)',
+              color: isCorrect ? 'var(--color-success-text)' : 'var(--color-error-text)', fontWeight: 600,
               display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
             }}>
               <div>
@@ -222,8 +222,8 @@ function Tadribat1Screen({ navigate, progress }) {
             {answers.map((a, i) => (
               <div key={i} style={{
                 display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12,
-                background: a.isCorrect ? '#F0FDF4' : '#FEF2F2',
-                border: `1px solid ${a.isCorrect ? '#BBF7D0' : '#FECACA'}`,
+                background: a.isCorrect ? 'var(--color-success-50)' : 'var(--color-error-50)',
+                border: `1px solid ${a.isCorrect ? 'var(--color-success-border)' : 'var(--color-error-border)'}`,
               }}>
                 <Icon name={a.isCorrect ? 'check-circle' : 'x-circle'} size={18} color={a.isCorrect ? 'var(--color-success)' : 'var(--color-error)'} />
                 <Badge tone={questions[i].type === 'audio' ? 'gold' : 'primary'} style={{ flexShrink: 0 }}>
@@ -233,7 +233,7 @@ function Tadribat1Screen({ navigate, progress }) {
                 <span style={{ fontSize: 13, color: 'var(--color-text-secondary)', flex: 1 }}>
                   {questions[i].options[a.selectedOption]}
                 </span>
-                {!a.isCorrect && <span style={{ fontSize: 12, color: '#15803D' }}>✓ {questions[i].options[a.correctOption]}</span>}
+                {!a.isCorrect && <span style={{ fontSize: 12, color: 'var(--color-success-text)' }}>✓ {questions[i].options[a.correctOption]}</span>}
               </div>
             ))}
           </div>
