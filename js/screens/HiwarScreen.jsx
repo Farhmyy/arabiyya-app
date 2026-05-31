@@ -106,8 +106,8 @@ function HiwarScreen({ navigate, progress }) {
                   {/* Top: header band */}
                   <div style={{
                     background: isActive
-                      ? 'linear-gradient(135deg, #0F766E 0%, #115E59 100%)'
-                      : 'linear-gradient(135deg, #F0FDFA 0%, #E2E8F0 100%)',
+                      ? 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%)'
+                      : 'linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-border) 100%)',
                     padding: '16px 20px',
                     transition: 'background var(--dur-med) var(--ease-out)',
                   }}>
@@ -132,7 +132,7 @@ function HiwarScreen({ navigate, progress }) {
                   {/* Dialogue bubbles */}
                   <div style={{
                     padding: '20px 22px',
-                    background: isActive ? '#FAFFFE' : 'var(--color-surface)',
+                    background: isActive ? 'var(--color-surface)' : 'var(--color-surface)',
                     transition: 'background var(--dur-med) var(--ease-out)',
                   }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -159,8 +159,8 @@ function HiwarScreen({ navigate, progress }) {
                             {/* Bubble */}
                             <div style={{
                               background: isPlaying
-                                ? (isLeft ? '#CCFBF1' : '#FEF3C7')
-                                : (isLeft ? '#F0FDFA'  : '#FFFBEB'),
+                                ? (isLeft ? 'var(--color-primary-100)' : 'var(--color-accent-100)')
+                                : (isLeft ? 'var(--color-primary-50)'  : 'var(--color-accent-50)'),
                               border: `1.5px solid ${isPlaying ? (isLeft ? 'var(--color-secondary)' : 'var(--color-accent)') : 'var(--color-border)'}`,
                               borderRadius: isLeft ? '4px 18px 18px 18px' : '18px 4px 18px 18px',
                               padding: '12px 14px', maxWidth: '80%',
@@ -184,7 +184,7 @@ function HiwarScreen({ navigate, progress }) {
                               style={{
                                 width: 34, height: 34, borderRadius: 999, flexShrink: 0,
                                 border: 'none', cursor: 'pointer',
-                                background: isPlaying ? 'var(--color-primary)' : '#E2E8F0',
+                                background: isPlaying ? 'var(--color-primary)' : 'var(--color-border)',
                                 color: isPlaying ? '#fff' : 'var(--color-text-secondary)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 transition: 'all var(--dur-fast)',
@@ -214,7 +214,7 @@ function HiwarScreen({ navigate, progress }) {
                   style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '8px 10px', borderRadius: 10, border: 'none',
-                    background: activeScene === si ? '#F0FDFA' : 'transparent',
+                    background: activeScene === si ? 'var(--color-primary-50)' : 'transparent',
                     cursor: 'pointer', textAlign: 'left', width: '100%',
                   }}
                 >
