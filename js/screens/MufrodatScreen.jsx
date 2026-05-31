@@ -1,24 +1,12 @@
 /* MufrodatScreen — Vocabulary grid (الْمُفْرَدَات) */
 
 function useMufrodatContent() {
-  const { useState, useEffect } = React;
-  const [words, setWords] = useState(null);
-  useEffect(() => {
-    sbClient.from('content').select('data').eq('id', 'mufrodat').maybeSingle()
-      .then(({ data }) => {
-        if (data?.data?.words?.length > 0) setWords(data.data.words);
-      })
-      .catch(() => {});
-  }, []);
-  return words ? words.map(w => ({
-    ar: w.arabic,
-    meaning_id: w.meaning,
-    example_ar: w.example,
-    image_ref: w.image_url || null,
-    audio_text: w.arabic,
-    audio_ref: null,
-    transliteration: '',
-  })) : DATA.mufrodat;
+  const transform = (raw) => (raw.words || []).map(w => ({
+    ar: w.arabic, meaning_id: w.meaning, example_ar: w.example,
+    image_ref: w.image_url || null, audio_text: w.arabic,
+    audio_ref: null, transliteration: '',
+  }));
+  return useCloudContent('mufrodat', DATA.mufrodat, transform);
 }
 
 function MufrodatScreen({ navigate, progress }) {

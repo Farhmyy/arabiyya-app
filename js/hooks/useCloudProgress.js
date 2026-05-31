@@ -6,13 +6,7 @@ function useCloudProgress(uid) {
   const DEFAULT = {
     xp: 0, streak: 1,
     lastActiveDate: new Date().toISOString().slice(0, 10),
-    chapters: { '3': {
-      hiwar:      { completed: false, score: 0, maxScore: 6 },
-      mufrodat:   { completed: false, score: 0, maxScore: 6 },
-      tadribat_1: { completed: false, score: 0, maxScore: 5 },
-      qawaid:     { completed: false, score: 0, maxScore: 6 },
-      tadribat_2: { completed: false, score: 0, maxScore: 5 },
-    }},
+    chapters: window.DEFAULT_PROGRESS,
   };
 
   const [state, setState] = useState(DEFAULT);
