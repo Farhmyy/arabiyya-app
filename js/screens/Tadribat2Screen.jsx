@@ -95,13 +95,13 @@ function Tadribat2Screen({ navigate, progress }) {
 
           {/* Order type: show token chips as hint */}
           {q.type === 'order' && q.tokens && (
-            <div style={{ background: '#FFFBEB', borderRadius: 14, padding: '14px 16px', marginBottom: 20, border: '1px solid #FDE68A' }}>
+            <div style={{ background: 'var(--color-accent-50)', borderRadius: 14, padding: '14px 16px', marginBottom: 20, border: '1px solid var(--color-accent-100)' }}>
               <div style={{ fontSize: 12, color: '#92400E', fontWeight: 600, marginBottom: 8 }}>Kata-kata yang harus disusun:</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', direction: 'rtl', justifyContent: 'flex-end' }}>
                 {q.tokens.map((token, i) => (
                   <div key={i} style={{
                     padding: '8px 14px', borderRadius: 999,
-                    background: '#fff', border: '1.5px solid #FDE68A',
+                    background: 'var(--color-surface)', border: '1.5px solid var(--color-accent-100)',
                     fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 20, color: '#92400E',
                   }}>{token}</div>
                 ))}
@@ -111,7 +111,7 @@ function Tadribat2Screen({ navigate, progress }) {
 
           {/* Arabic display (for identify, transform, mcq with arabic) */}
           {q.arabic_display && q.type !== 'order' && (
-            <div style={{ background: '#FFFBEB', borderRadius: 16, padding: 24, marginBottom: 24, textAlign: 'center', border: '1px solid #FDE68A' }}>
+            <div style={{ background: 'var(--color-accent-50)', borderRadius: 16, padding: 24, marginBottom: 24, textAlign: 'center', border: '1px solid var(--color-accent-100)' }}>
               <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 40, fontWeight: 700, color: '#92400E', textAlign: 'center', direction: 'rtl', lineHeight: 1.6 }}>
                 {q.arabic_display}
               </div>
@@ -133,7 +133,7 @@ function Tadribat2Screen({ navigate, progress }) {
                     padding: isOrderOpt ? '14px 16px' : '16px 18px',
                     borderRadius: 14,
                     border: `2px solid ${isRight ? 'var(--color-success)' : isWrong ? 'var(--color-error)' : isSel ? 'var(--color-primary)' : 'var(--color-border)'}`,
-                    background: isRight ? '#F0FDF4' : isWrong ? '#FEF2F2' : isSel ? '#F0FDFA' : 'var(--color-surface)',
+                    background: isRight ? 'var(--color-success-50)' : isWrong ? 'var(--color-error-50)' : isSel ? 'var(--color-primary-50)' : 'var(--color-surface)',
                     color: isRight ? '#15803D' : isWrong ? '#B91C1C' : 'var(--color-text-primary)',
                     fontFamily: isAr ? 'var(--font-arabic)' : 'var(--font-latin)',
                     fontSize: isOrderOpt ? 16 : isAr ? 22 : 15,
@@ -161,7 +161,7 @@ function Tadribat2Screen({ navigate, progress }) {
           {revealed && (
             <div className="anim-in" style={{
               padding: 16, borderRadius: 12, marginBottom: 16,
-              background: isCorrect ? '#F0FDF4' : '#FEF2F2',
+              background: isCorrect ? 'var(--color-success-50)' : 'var(--color-error-50)',
               color: isCorrect ? '#15803D' : '#B91C1C', fontWeight: 600,
               display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
             }}>
@@ -217,7 +217,7 @@ function Tadribat2Screen({ navigate, progress }) {
               return (
                 <div key={i} style={{
                   display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12,
-                  background: a.isCorrect ? '#F0FDF4' : '#FEF2F2',
+                  background: a.isCorrect ? 'var(--color-success-50)' : 'var(--color-error-50)',
                   border: `1px solid ${a.isCorrect ? '#BBF7D0' : '#FECACA'}`,
                 }}>
                   <Icon name={a.isCorrect ? 'check-circle' : 'x-circle'} size={18} color={a.isCorrect ? 'var(--color-success)' : 'var(--color-error)'} />
