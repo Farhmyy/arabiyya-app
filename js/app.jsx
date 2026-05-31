@@ -32,9 +32,9 @@ function App() {
   useEffect(() => {
     if (!user) return;
     setNicknameLoading(true);
-    fbDb.collection('users').doc(user.uid).get().then(doc => {
-      setNickname(doc.exists ? doc.data().nickname : null);
-    }).catch(() => setNickname(null))
+    sbClient.from('users').select('nickname').eq('id', user.id).maybeSingle()
+      .then(({ data }) => setNickname(data?.nickname || null))
+      .catch(() => setNickname(null))
       .finally(() => setNicknameLoading(false));
   }, [user]);
 
