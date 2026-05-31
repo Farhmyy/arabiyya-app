@@ -4,11 +4,9 @@ function useMufrodatContent() {
   const { useState, useEffect } = React;
   const [words, setWords] = useState(null);
   useEffect(() => {
-    fbDb.collection('content').doc('mufrodat').get()
-      .then(doc => {
-        if (doc.exists && doc.data().words && doc.data().words.length > 0) {
-          setWords(doc.data().words);
-        }
+    sbClient.from('content').select('data').eq('id', 'mufrodat').maybeSingle()
+      .then(({ data }) => {
+        if (data?.data?.words?.length > 0) setWords(data.data.words);
       })
       .catch(() => {});
   }, []);

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Seed Firestore — Arabiyya App</title>
+  <title>Seed Supabase — Arabiyya App</title>
   <style>
     body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
     button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 8px 4px; border-radius: 8px; border: none; background: #0f766e; color: #fff; }
@@ -10,17 +10,16 @@
   </style>
 </head>
 <body>
-  <h2>🌱 Seed Firestore dari data.js</h2>
-  <p>Jalankan ini <strong>SEKALI SAJA</strong> setelah Firebase dikonfigurasi. Akan menimpa <code>content/mufrodat</code>, <code>content/tadribat1</code>, <code>content/tadribat2</code>.</p>
+  <h2>🌱 Seed Supabase dari data.js</h2>
+  <p>Jalankan ini <strong>SEKALI SAJA</strong> setelah Supabase dikonfigurasi dan schema sudah dibuat. Akan mengisi tabel <code>content</code>.</p>
   <button onclick="seedMufrodat()">Seed Mufrodat (12 kata)</button>
   <button onclick="seedTadribat1()">Seed Tadribat 1 (10 soal)</button>
   <button onclick="seedTadribat2()">Seed Tadribat 2 (10 soal)</button>
   <button onclick="seedAll()" style="background:#134e4a">Seed Semua</button>
   <div id="log" class="log">Klik tombol untuk mulai...</div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="../js/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/data.js"></script>
   <script>
     const logEl = document.getElementById('log');
@@ -36,7 +35,8 @@
           example: w.example_ar,
           image_url: null,
         }));
-        await fbDb.collection('content').doc('mufrodat').set({ words });
+        const { error } = await sbClient.from('content').upsert({ id: 'mufrodat', data: { words } });
+        if (error) throw error;
         log('✅ Mufrodat seeded: ' + words.length + ' kata');
       } catch (e) { log('❌ Error: ' + e.message); }
     }
@@ -44,7 +44,8 @@
     async function seedTadribat1() {
       log('Seeding tadribat1...');
       try {
-        await fbDb.collection('content').doc('tadribat1').set({ questions: DATA.tadribat1.questions });
+        const { error } = await sbClient.from('content').upsert({ id: 'tadribat1', data: { questions: DATA.tadribat1.questions } });
+        if (error) throw error;
         log('✅ Tadribat 1 seeded: ' + DATA.tadribat1.questions.length + ' soal');
       } catch (e) { log('❌ Error: ' + e.message); }
     }
@@ -52,7 +53,8 @@
     async function seedTadribat2() {
       log('Seeding tadribat2...');
       try {
-        await fbDb.collection('content').doc('tadribat2').set({ questions: DATA.tadribat2.questions });
+        const { error } = await sbClient.from('content').upsert({ id: 'tadribat2', data: { questions: DATA.tadribat2.questions } });
+        if (error) throw error;
         log('✅ Tadribat 2 seeded: ' + DATA.tadribat2.questions.length + ' soal');
       } catch (e) { log('❌ Error: ' + e.message); }
     }

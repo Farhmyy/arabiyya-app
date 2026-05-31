@@ -15,12 +15,12 @@ function NicknameScreen({ user, onComplete }) {
     setSaving(true);
     setError(null);
     try {
-      await fbDb.collection('users').doc(user.uid).set({
+      const { error: insertError } = await sbClient.from('users').insert({
+        id: user.id,
         email: user.email,
         nickname: trimmed,
         role: 'student',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        lastActiveDate: new Date().toISOString().slice(0, 10),
+        last_active_date: new Date().toISOString().slice(0, 10),
         progress: { xp: 0, streak: 1, chapters: { '3': {
           hiwar:      { completed: false, score: 0, maxScore: 6 },
           mufrodat:   { completed: false, score: 0, maxScore: 6 },
@@ -29,6 +29,7 @@ function NicknameScreen({ user, onComplete }) {
           tadribat_2: { completed: false, score: 0, maxScore: 5 },
         }}},
       });
+      if (insertError) throw insertError;
       onComplete(trimmed);
     } catch {
       setError('Gagal menyimpan. Coba lagi.');
