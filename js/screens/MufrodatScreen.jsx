@@ -1,8 +1,32 @@
 /* MufrodatScreen — Vocabulary grid (الْمُفْرَدَات) */
 
+function useMufrodatContent() {
+  const { useState, useEffect } = React;
+  const [words, setWords] = useState(null);
+  useEffect(() => {
+    fbDb.collection('content').doc('mufrodat').get()
+      .then(doc => {
+        if (doc.exists && doc.data().words && doc.data().words.length > 0) {
+          setWords(doc.data().words);
+        }
+      })
+      .catch(() => {});
+  }, []);
+  return words ? words.map(w => ({
+    ar: w.arabic,
+    meaning_id: w.meaning,
+    example_ar: w.example,
+    image_ref: w.image_url || null,
+    audio_text: w.arabic,
+    audio_ref: null,
+    transliteration: '',
+  })) : DATA.mufrodat;
+}
+
 function MufrodatScreen({ navigate, progress }) {
   const { useState, useEffect } = React;
-  const { mufrodat, mufrodat_extra } = DATA;
+  const mufrodat = useMufrodatContent();
+  const { mufrodat_extra } = DATA;
 
   const [flipped,     setFlipped]     = useState(() => new Set());
   const [playingKey,  setPlayingKey]  = useState(null);

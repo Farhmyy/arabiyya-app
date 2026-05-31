@@ -1,9 +1,24 @@
 /* Tadribat1Screen — Practice: Hiwar & Mufrodat */
 
+function useTadribat1Content() {
+  const { useState, useEffect } = React;
+  const [questions, setQuestions] = useState(null);
+  useEffect(() => {
+    fbDb.collection('content').doc('tadribat1').get()
+      .then(doc => {
+        if (doc.exists && doc.data().questions && doc.data().questions.length > 0) {
+          setQuestions(doc.data().questions);
+        }
+      })
+      .catch(() => {});
+  }, []);
+  return questions || DATA.tadribat1.questions;
+}
+
 function Tadribat1Screen({ navigate, progress }) {
   const { useState, useEffect } = React;
   const { tadribat1, ui } = DATA;
-  const questions = tadribat1.questions;
+  const questions = useTadribat1Content();
 
   const [idx,      setIdx]      = useState(0);
   const [selected, setSelected] = useState(null);

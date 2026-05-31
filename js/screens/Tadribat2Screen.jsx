@@ -1,9 +1,24 @@
 /* Tadribat2Screen — Practice: Qawaid (final exercise) */
 
+function useTadribat2Content() {
+  const { useState, useEffect } = React;
+  const [questions, setQuestions] = useState(null);
+  useEffect(() => {
+    fbDb.collection('content').doc('tadribat2').get()
+      .then(doc => {
+        if (doc.exists && doc.data().questions && doc.data().questions.length > 0) {
+          setQuestions(doc.data().questions);
+        }
+      })
+      .catch(() => {});
+  }, []);
+  return questions || DATA.tadribat2.questions;
+}
+
 function Tadribat2Screen({ navigate, progress }) {
   const { useState } = React;
   const { tadribat2, ui } = DATA;
-  const questions = tadribat2.questions;
+  const questions = useTadribat2Content();
 
   const [idx,      setIdx]      = useState(0);
   const [selected, setSelected] = useState(null);

@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <title>Seed Firestore — Arabiyya App</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 8px 4px; border-radius: 8px; border: none; background: #0f766e; color: #fff; }
+    button:hover { background: #0d6460; }
+    .log { background: #f1f5f9; border-radius: 8px; padding: 16px; margin-top: 16px; white-space: pre-wrap; font-size: 13px; font-family: monospace; max-height: 400px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h2>🌱 Seed Firestore dari data.js</h2>
+  <p>Jalankan ini <strong>SEKALI SAJA</strong> setelah Firebase dikonfigurasi. Akan menimpa <code>content/mufrodat</code>, <code>content/tadribat1</code>, <code>content/tadribat2</code>.</p>
+  <button onclick="seedMufrodat()">Seed Mufrodat (12 kata)</button>
+  <button onclick="seedTadribat1()">Seed Tadribat 1 (10 soal)</button>
+  <button onclick="seedTadribat2()">Seed Tadribat 2 (10 soal)</button>
+  <button onclick="seedAll()" style="background:#134e4a">Seed Semua</button>
+  <div id="log" class="log">Klik tombol untuk mulai...</div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase.js"></script>
+  <script src="../js/data.js"></script>
+  <script>
+    const logEl = document.getElementById('log');
+    const log = (msg) => { logEl.textContent += '\n' + msg; logEl.scrollTop = logEl.scrollHeight; };
+
+    async function seedMufrodat() {
+      log('Seeding mufrodat...');
+      try {
+        const words = DATA.mufrodat.map((w, i) => ({
+          id: 'word_' + i,
+          arabic: w.ar,
+          meaning: w.meaning_id,
+          example: w.example_ar,
+          image_url: null,
+        }));
+        await fbDb.collection('content').doc('mufrodat').set({ words });
+        log('✅ Mufrodat seeded: ' + words.length + ' kata');
+      } catch (e) { log('❌ Error: ' + e.message); }
+    }
+
+    async function seedTadribat1() {
+      log('Seeding tadribat1...');
+      try {
+        await fbDb.collection('content').doc('tadribat1').set({ questions: DATA.tadribat1.questions });
+        log('✅ Tadribat 1 seeded: ' + DATA.tadribat1.questions.length + ' soal');
+      } catch (e) { log('❌ Error: ' + e.message); }
+    }
+
+    async function seedTadribat2() {
+      log('Seeding tadribat2...');
+      try {
+        await fbDb.collection('content').doc('tadribat2').set({ questions: DATA.tadribat2.questions });
+        log('✅ Tadribat 2 seeded: ' + DATA.tadribat2.questions.length + ' soal');
+      } catch (e) { log('❌ Error: ' + e.message); }
+    }
+
+    async function seedAll() {
+      log('=== Seeding semua konten ===');
+      await seedMufrodat();
+      await seedTadribat1();
+      await seedTadribat2();
+      log('\n🎉 Semua data berhasil di-seed!');
+    }
+  </script>
+</body>
+</html>
