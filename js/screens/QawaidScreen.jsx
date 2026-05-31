@@ -126,9 +126,9 @@ function VerbTransformer({ topic }) {
         <button onClick={() => toggleMode('madhi')}
           style={{
             flex: 1, padding: '10px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
-            background: mode === 'madhi' ? '#92400E' : 'var(--color-surface)',
-            color: mode === 'madhi' ? '#fff' : '#92400E',
-            border: `1.5px solid ${mode === 'madhi' ? '#92400E' : 'var(--color-accent-100)'}`,
+            background: mode === 'madhi' ? 'var(--color-amber-text)' : 'var(--color-surface)',
+            color: mode === 'madhi' ? '#fff' : 'var(--color-amber-text)',
+            border: `1.5px solid ${mode === 'madhi' ? 'var(--color-amber-text)' : 'var(--color-accent-100)'}`,
             fontWeight: 700, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
           }}>
           ⏪ مَاضِي <span style={{ fontSize: 12, opacity: 0.8 }}>(sudah)</span>
@@ -153,7 +153,7 @@ function VerbTransformer({ topic }) {
       }}>
         <div className="anim-in" key={displayForm} lang="ar" style={{
           fontFamily: 'var(--font-arabic)', fontSize: 52, fontWeight: 700,
-          color: mode === 'madhi' ? '#92400E' : 'var(--color-primary)',
+          color: mode === 'madhi' ? 'var(--color-amber-text)' : 'var(--color-primary)',
           direction: 'rtl', lineHeight: 1.4,
         }}>
           {displayForm}
@@ -287,7 +287,7 @@ function SentenceBuilder({ topic }) {
         <div className="anim-in" style={{
           padding: '10px 14px', borderRadius: 12, marginBottom: 12,
           background: result === 'correct' ? 'var(--color-success-50)' : 'var(--color-error-50)',
-          color: result === 'correct' ? '#15803D' : '#B91C1C', fontWeight: 600, fontSize: 14,
+          color: result === 'correct' ? 'var(--color-success-text)' : 'var(--color-error-text)', fontWeight: 600, fontSize: 14,
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
           <Icon name={result === 'correct' ? 'check-circle' : 'x-circle'} size={20} />
@@ -357,7 +357,7 @@ function QawaidScreen({ navigate, progress }) {
   const allUnderstood = understoodTabs.size === qawaid.topics.length;
 
   const tabIcons = ['history', 'play', 'layout'];
-  const tabColors = ['#92400E', '#0F766E', '#4338CA'];
+  const tabColors = ['var(--color-amber-text)', '#0F766E', '#4338CA'];
 
   return (
     <div className="page anim-in">
@@ -502,8 +502,8 @@ function QawaidScreen({ navigate, progress }) {
                       background: 'var(--color-accent-50)', border: '1px solid var(--color-accent-100)',
                       textAlign: 'center',
                     }}>
-                      <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 28, fontWeight: 700, color: '#92400E' }}>{m.huruf}</div>
-                      <div style={{ fontSize: 12, color: '#92400E', marginTop: 2 }}>untuk <span lang="ar" style={{ fontFamily: 'var(--font-arabic)' }}>{m.for}</span></div>
+                      <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 28, fontWeight: 700, color: 'var(--color-amber-text)' }}>{m.huruf}</div>
+                      <div style={{ fontSize: 12, color: 'var(--color-amber-text)', marginTop: 2 }}>untuk <span lang="ar" style={{ fontFamily: 'var(--font-arabic)' }}>{m.for}</span></div>
                       <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 18, color: 'var(--color-primary)', marginTop: 4 }}>{m.example}</div>
                     </div>
                   ))}
@@ -532,7 +532,7 @@ function QawaidScreen({ navigate, progress }) {
                   ))}
                 </div>
                 {topic.rule_note && (
-                  <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--color-error-50)', border: '1px solid #FECACA', fontSize: 13, color: '#B91C1C', fontWeight: 600 }}>
+                  <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--color-error-50)', border: '1px solid var(--color-error-border)', fontSize: 13, color: 'var(--color-error-text)', fontWeight: 600 }}>
                     ⚠️ {topic.rule_note}
                   </div>
                 )}
@@ -586,7 +586,7 @@ function QawaidScreen({ navigate, progress }) {
                 {topic.key_points.map((kp, i) => (
                   <div key={i} style={{
                     padding: '8px 12px', borderRadius: 10, background: 'var(--color-accent-50)', border: '1px solid var(--color-accent-100)',
-                    fontSize: 13, fontWeight: 600, color: '#92400E', marginBottom: i < topic.key_points.length - 1 ? 8 : 0,
+                    fontSize: 13, fontWeight: 600, color: 'var(--color-amber-text)', marginBottom: i < topic.key_points.length - 1 ? 8 : 0,
                   }}>
                     {kp}
                   </div>

@@ -183,7 +183,7 @@ function MufrodatScreen({ navigate, progress }) {
             marginTop: 8, padding: '16px 20px', borderRadius: 14,
             background: 'var(--color-accent-50)', border: '1px solid var(--color-accent-100)',
           }}>
-            <p style={{ fontSize: 13, color: '#92400E', marginBottom: 12, fontWeight: 600 }}>
+            <p style={{ fontSize: 13, color: 'var(--color-amber-text)', marginBottom: 12, fontWeight: 600 }}>
               Kosakata tambahan seputar penyakit — untuk referensi, tidak masuk kuis.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
@@ -193,7 +193,7 @@ function MufrodatScreen({ navigate, progress }) {
                   padding: '8px 14px', borderRadius: 999,
                   background: 'var(--color-surface)', border: '1px solid var(--color-accent-100)',
                 }}>
-                  <span lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 18, fontWeight: 600, color: '#92400E', direction: 'rtl' }}>{w.ar}</span>
+                  <span lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 18, fontWeight: 600, color: 'var(--color-amber-text)', direction: 'rtl' }}>{w.ar}</span>
                   <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{w.id}</span>
                 </div>
               ))}

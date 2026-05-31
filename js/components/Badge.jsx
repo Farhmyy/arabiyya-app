@@ -4,7 +4,7 @@ function Badge({ tone = 'neutral', children, icon, style }) {
   const palettes = {
     neutral: { bg: 'var(--color-border)', fg: '#475569' },
     primary: { bg: 'var(--color-primary-100)', fg: 'var(--color-primary)' },
-    gold:    { bg: 'var(--color-accent-100)', fg: '#92400E' },
+    gold:    { bg: 'var(--color-accent-100)', fg: 'var(--color-amber-text)' },
     success: { bg: 'var(--color-success)', fg: '#fff' },
     warning: { bg: 'var(--color-warning)', fg: '#fff' },
     error:   { bg: 'var(--color-error)',   fg: '#fff' },
