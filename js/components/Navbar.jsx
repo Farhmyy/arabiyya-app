@@ -111,7 +111,7 @@ function LogoMenu({ navigate, route, variant = 'inline' }) {
   );
 }
 
-function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDark = null }) {
+function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDark = null, user = null, nickname = null, onLogout = null }) {
   const chipStyle = floating
     ? { height: 40, padding: '0 14px', background: '#fff', border: '1px solid var(--color-border)', boxShadow: '0 4px 12px -3px rgba(0,0,0,.06)' }
     : { height: 36, padding: '0 12px' };
@@ -145,11 +145,38 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
           {darkMode ? '☀️' : '🌙'}
         </button>
       )}
+      {user && nickname && (
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          height: floating ? 40 : 36, padding: '0 12px',
+          borderRadius: 999, background: floating ? '#fff' : 'var(--color-primary-50)',
+          border: floating ? '1px solid var(--color-border)' : 'none',
+          color: 'var(--color-primary)', fontFamily: 'var(--font-latin)',
+          fontWeight: 600, fontSize: floating ? 14 : 13,
+        }}>
+          {user.photoURL
+            ? <img src={user.photoURL} width="22" height="22" style={{ borderRadius: '50%' }} alt="" />
+            : <span style={{ fontSize: 16 }}>👤</span>}
+          {nickname}
+        </div>
+      )}
+      {onLogout && user && (
+        <button onClick={onLogout} title="Logout"
+          style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: floating ? 40 : 36, height: floating ? 40 : 36,
+            borderRadius: 999, border: '1px solid var(--color-border)',
+            background: 'transparent', cursor: 'pointer', fontSize: 14,
+            color: 'var(--color-text-secondary)',
+          }}>
+          ⏏️
+        </button>
+      )}
     </div>
   );
 }
 
-function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark }) {
+function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark, user, nickname, onLogout }) {
   const m = route.match(/^chapter\/(\d+)(?:\/(.+))?$/);
   if (!m) return null;
   const chapterNum = m[1];
@@ -204,13 +231,13 @@ function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark }) {
           })}
         </nav>
 
-        <StatChips xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} />
+        <StatChips xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} user={user} nickname={nickname} onLogout={onLogout} />
       </div>
     </header>
   );
 }
 
-function FloatingTop({ route, navigate, xp, streak, darkMode, onToggleDark }) {
+function FloatingTop({ route, navigate, xp, streak, darkMode, onToggleDark, user, nickname, onLogout }) {
   return (
     <div style={{ position: 'fixed', top: 20, left: 0, right: 0, zIndex: 30, pointerEvents: 'none' }}>
       <div style={{
@@ -221,16 +248,16 @@ function FloatingTop({ route, navigate, xp, streak, darkMode, onToggleDark }) {
           <LogoMenu navigate={navigate} route={route} variant="floating" />
         </div>
         <div style={{ pointerEvents: 'auto' }}>
-          <StatChips xp={xp} streak={streak} floating darkMode={darkMode} onToggleDark={onToggleDark} />
+          <StatChips xp={xp} streak={streak} floating darkMode={darkMode} onToggleDark={onToggleDark} user={user} nickname={nickname} onLogout={onLogout} />
         </div>
       </div>
     </div>
   );
 }
 
-function Navbar({ route, navigate, xp = 0, streak = 1, darkMode = false, onToggleDark }) {
-  if (route === 'home') return <FloatingTop route={route} navigate={navigate} xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} />;
-  if (route.startsWith('chapter/')) return <ChapterNav route={route} navigate={navigate} xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} />;
+function Navbar({ route, navigate, xp = 0, streak = 1, darkMode = false, onToggleDark, user = null, nickname = null, onLogout }) {
+  if (route === 'home') return <FloatingTop route={route} navigate={navigate} xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} user={user} nickname={nickname} onLogout={onLogout} />;
+  if (route.startsWith('chapter/')) return <ChapterNav route={route} navigate={navigate} xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} user={user} nickname={nickname} onLogout={onLogout} />;
   return null;
 }
 
