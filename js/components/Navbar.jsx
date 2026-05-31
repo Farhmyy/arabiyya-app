@@ -120,14 +120,14 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
       <span style={{
         display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 999,
-        ...chipStyle, background: floating ? 'var(--color-surface)' : 'var(--color-accent-50)', color: '#92400E',
+        ...chipStyle, background: floating ? 'var(--color-surface)' : 'var(--color-accent-50)', color: 'var(--color-amber-text)',
         fontFamily: 'var(--font-latin)', fontWeight: 700, fontSize: floating ? 14 : 13,
       }}>
         <Icon name="trophy" size={floating ? 15 : 14} color="var(--color-accent)" /> {xp}&nbsp;XP
       </span>
       <span style={{
         display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 999,
-        ...chipStyle, background: floating ? 'var(--color-surface)' : '#FFF7ED', color: '#9A3412',
+        ...chipStyle, background: floating ? 'var(--color-surface)' : '#FFF7ED', color: 'var(--color-amber-text)',
         fontFamily: 'var(--font-latin)', fontWeight: 700, fontSize: floating ? 14 : 13,
       }}>
         <Icon name="flame" size={floating ? 15 : 14} color="#F97316" /> {streak}

@@ -17,10 +17,10 @@ function ToastProvider({ children }) {
   React.useEffect(() => { window.showToast = show; }, [show]);
 
   const styles = {
-    success: { bg: 'var(--color-success-50)', border: '#BBF7D0', color: '#15803D', icon: 'check-circle', iconColor: 'var(--color-success)' },
-    error:   { bg: 'var(--color-error-50)',   border: '#FECACA', color: '#B91C1C', icon: 'x-circle',     iconColor: 'var(--color-error)' },
+    success: { bg: 'var(--color-success-50)', border: 'var(--color-success-border)', color: 'var(--color-success-text)', icon: 'check-circle', iconColor: 'var(--color-success)' },
+    error:   { bg: 'var(--color-error-50)',   border: 'var(--color-error-border)', color: 'var(--color-error-text)', icon: 'x-circle',     iconColor: 'var(--color-error)' },
     info:    { bg: 'var(--color-primary-50)', border: '#99F6E4', color: 'var(--color-primary)', icon: 'info', iconColor: 'var(--color-primary)' },
-    gold:    { bg: 'var(--color-accent-50)',  border: 'var(--color-accent-100)', color: '#92400E', icon: 'trophy',  iconColor: 'var(--color-accent)' },
+    gold:    { bg: 'var(--color-accent-50)',  border: 'var(--color-accent-100)', color: 'var(--color-amber-text)', icon: 'trophy',  iconColor: 'var(--color-accent)' },
   };
 
   return (
