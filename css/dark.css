@@ -18,10 +18,9 @@
   --color-accent-glow:    rgba(245,158,11,0.10);
 }
 
-/* Ilustrasi hero — dim sedikit agar blend dengan dark bg */
+/* Ilustrasi hero — dim sedikit di dark mode, tanpa blend mode agar warna asli terjaga */
 [data-theme="dark"] .hero-illustration {
-  opacity: 0.85;
-  mix-blend-mode: luminosity;
+  opacity: 0.80;
 }
 
 /* Cards di dark mode — tambah border tipis agar terlihat */
@@ -35,3 +34,4 @@
   border-color: var(--color-border-strong) !important;
   color: var(--color-text-primary) !important;
 }
+

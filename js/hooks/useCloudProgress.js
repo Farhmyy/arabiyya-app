@@ -40,7 +40,8 @@ function useCloudProgress(uid) {
       const next = updater(prev);
       clearTimeout(saveTimeout.current);
       saveTimeout.current = setTimeout(() => {
-        sbClient.from('users').update({ progress: next }).eq('id', uid).then(() => {});
+        sbClient.from('users').update({ progress: next }).eq('id', uid)
+          .then(({ error }) => { if (error) console.error('[Progress] save failed:', error.message); });
       }, 500);
       return next;
     });

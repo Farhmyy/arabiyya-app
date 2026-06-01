@@ -44,7 +44,7 @@ function HomeScreen({ navigate, xp, streak }) {
             {ui.hero.subtitle_ar}
           </p>
 
-          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+          <div className="hero-cta-row" style={{ display: 'flex', gap: 12, marginTop: 8 }}>
             <Button variant="primary" size="lg" iconRight="chevron-right" onClick={scrollToChapters}>
               {ui.hero.cta_primary}
             </Button>
@@ -55,7 +55,25 @@ function HomeScreen({ navigate, xp, streak }) {
         </div>
 
         <div style={{ position: 'relative' }}>
-          <img src="assets/images/illustration-hero.svg" alt="" className="hero-illustration" style={{ width: '100%', display: 'block' }} />
+          {/* Soft glow behind frame */}
+          <div style={{
+            position: 'absolute', inset: -10, borderRadius: 34,
+            background: 'linear-gradient(135deg, rgba(20,184,166,.18) 0%, rgba(245,158,11,.12) 100%)',
+            filter: 'blur(12px)', zIndex: 0,
+          }} />
+          {/* Gradient border frame */}
+          <div style={{
+            position: 'relative', zIndex: 1,
+            padding: 4,
+            borderRadius: 28,
+            background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent))',
+            boxShadow: '0 24px 56px -12px rgba(15,118,110,.35), 0 4px 16px rgba(0,0,0,.08)',
+          }}>
+            <div style={{ borderRadius: 24, overflow: 'hidden' }}>
+              <img src="assets/images/illustrasion-hero.png" alt="" className="hero-illustration"
+                style={{ width: '100%', display: 'block' }} />
+            </div>
+          </div>
         </div>
       </section>
 

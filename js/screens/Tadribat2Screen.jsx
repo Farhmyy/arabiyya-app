@@ -1,19 +1,37 @@
 /* Tadribat2Screen — Practice: Qawaid (final exercise) */
 
 function useTadribat2Content() {
-  return useCloudContent('tadribat2', DATA.tadribat2.questions, raw => raw.questions || []);
+  /* Baca dari Supabase hanya jika strukturnya cocok dengan data.js.
+     Jika Supabase punya soal lama/berbeda, pakai data.js langsung. */
+  const local = DATA.tadribat2.questions;
+  const transform = (raw) => {
+    const cloudQs = raw.questions || [];
+    const compatible =
+      cloudQs.length === local.length &&
+      local.every((lq, i) => cloudQs[i]?.prompt === lq.prompt);
+    if (!compatible) return local;
+    return cloudQs.map((q, i) => ({ ...local[i], ...q }));
+  };
+  return useCloudContent('tadribat2', local, transform);
 }
 
+const T2_KEY = 'arabiyya_quiz_t2';
+
 function Tadribat2Screen({ navigate, progress }) {
-  const { useState } = React;
+  const { useState, useEffect } = React;
   const { tadribat2, ui } = DATA;
   const questions = useTadribat2Content();
 
-  const [idx,      setIdx]      = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [revealed, setRevealed] = useState(false);
-  const [score,    setScore]    = useState(0);
-  const [answers,  setAnswers]  = useState([]);
+  const [savedSession] = useState(() => {
+    try { return JSON.parse(sessionStorage.getItem(T2_KEY)) || {}; }
+    catch { return {}; }
+  });
+
+  const [idx,      setIdx]      = useState(savedSession.idx ?? 0);
+  const [selected, setSelected] = useState(savedSession.selected ?? null);
+  const [revealed, setRevealed] = useState(savedSession.revealed ?? false);
+  const [score,    setScore]    = useState(savedSession.score ?? 0);
+  const [answers,  setAnswers]  = useState(savedSession.answers ?? []);
 
   const finished  = idx >= questions.length;
   const q         = !finished ? questions[idx] : null;
@@ -26,13 +44,24 @@ function Tadribat2Screen({ navigate, progress }) {
     order:     { label: 'Susun Kalimat', tone: 'neutral',  icon: 'list'       },
   };
 
+  useEffect(() => {
+    if (questions.length === 0) return;
+    if (idx >= questions.length) {
+      sessionStorage.removeItem(T2_KEY);
+    } else {
+      try { sessionStorage.setItem(T2_KEY, JSON.stringify({ idx, score, answers, revealed, selected })); }
+      catch {}
+    }
+  }, [idx, score, answers, revealed, selected, questions.length]);
+
   const check = () => {
     if (selected == null || !q) return;
     const correct = selected === q.correct_index;
     setRevealed(true);
     if (correct) {
       setScore(s => s + 1);
-      if (progress && progress.addXP) progress.addXP(tadribat2.xp_per_correct);
+      const alreadyDone = progress && progress.sectionStatus('3', 'tadribat_2') === 'done';
+      if (!alreadyDone && progress && progress.addXP) progress.addXP(tadribat2.xp_per_correct);
       window.showToast && window.showToast(ui.feedback.correct, 'success');
     } else {
       window.showToast && window.showToast(ui.feedback.wrong, 'error');
@@ -45,12 +74,14 @@ function Tadribat2Screen({ navigate, progress }) {
   };
 
   const restart = () => {
+    sessionStorage.removeItem(T2_KEY);
     setIdx(0); setScore(0); setRevealed(false); setSelected(null); setAnswers([]);
   };
 
   React.useEffect(() => {
     if (finished && progress && progress.completeSection) {
       progress.completeSection('3', 'tadribat_2', score, questions.length);
+      sessionStorage.removeItem(T2_KEY);
     }
   }, [finished]);
 
@@ -96,13 +127,13 @@ function Tadribat2Screen({ navigate, progress }) {
           {/* Order type: show token chips as hint */}
           {q.type === 'order' && q.tokens && (
             <div style={{ background: 'var(--color-accent-50)', borderRadius: 14, padding: '14px 16px', marginBottom: 20, border: '1px solid var(--color-accent-100)' }}>
-              <div style={{ fontSize: 12, color: '#92400E', fontWeight: 600, marginBottom: 8 }}>Kata-kata yang harus disusun:</div>
+              <div style={{ fontSize: 12, color: 'var(--color-amber-text)', fontWeight: 600, marginBottom: 8 }}>Kata-kata yang harus disusun:</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', direction: 'rtl', justifyContent: 'flex-end' }}>
                 {q.tokens.map((token, i) => (
                   <div key={i} style={{
                     padding: '8px 14px', borderRadius: 999,
                     background: 'var(--color-surface)', border: '1.5px solid var(--color-accent-100)',
-                    fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 20, color: '#92400E',
+                    fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 20, color: 'var(--color-amber-text)',
                   }}>{token}</div>
                 ))}
               </div>
@@ -112,7 +143,7 @@ function Tadribat2Screen({ navigate, progress }) {
           {/* Arabic display (for identify, transform, mcq with arabic) */}
           {q.arabic_display && q.type !== 'order' && (
             <div style={{ background: 'var(--color-accent-50)', borderRadius: 16, padding: 24, marginBottom: 24, textAlign: 'center', border: '1px solid var(--color-accent-100)' }}>
-              <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 40, fontWeight: 700, color: '#92400E', textAlign: 'center', direction: 'rtl', lineHeight: 1.6 }}>
+              <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 40, fontWeight: 700, color: 'var(--color-amber-text)', textAlign: 'center', direction: 'rtl', lineHeight: 1.6 }}>
                 {q.arabic_display}
               </div>
             </div>

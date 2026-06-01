@@ -6,8 +6,11 @@ function HiwarScreen({ navigate, progress }) {
 
   const [showTranslation, setShowTranslation] = useState(true);
   const [playingKey, setPlayingKey]           = useState(null);
-  const [activeScene, setActiveScene]         = useState(0);
-  const playAllRef = useRef(false); // tracks whether "Putar Semua" is running
+  const [activeScene, setActiveScene]         = useState(() => {
+    try { return parseInt(sessionStorage.getItem('arabiyya_hiwar_scene') || '0', 10); }
+    catch { return 0; }
+  });
+  const playAllRef = useRef(false);
 
   const allLines = hiwar.scenes.flatMap((scene, si) =>
     scene.lines.map((line, li) => ({ ...line, key: `${si}-${li}` }))
@@ -37,11 +40,50 @@ function HiwarScreen({ navigate, progress }) {
       }
       const line = allLines[i];
       setPlayingKey(line.key);
+      /* Tandai scene yang sedang diputar sebagai aktif */
+      const si = parseInt(line.key.split('-')[0], 10);
+      setActiveScene(si);
+      /* Auto-scroll ke baris yang sedang diputar */
+      requestAnimationFrame(() => {
+        const el = document.getElementById(`hiwar-line-${line.key}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
       window.speakArabic(line.audio_text, line.audio_ref, () => {
         setTimeout(() => playNext(i + 1), 400);
       });
     };
     playNext(0);
+  };
+
+  /* Persist active scene across in-app navigation */
+  useEffect(() => {
+    try { sessionStorage.setItem('arabiyya_hiwar_scene', activeScene); }
+    catch {}
+  }, [activeScene]);
+
+  /* Save scroll on unmount, restore on mount */
+  useEffect(() => {
+    const saved = (() => {
+      try { return parseInt(sessionStorage.getItem('arabiyya_hiwar_scroll') || '0', 10); }
+      catch { return 0; }
+    })();
+    if (saved > 0) {
+      /* rAF runs after navigate's scrollTo, overriding it with instant scroll */
+      requestAnimationFrame(() => window.scrollTo({ top: saved }));
+    }
+    return () => {
+      try { sessionStorage.setItem('arabiyya_hiwar_scroll', window.scrollY); }
+      catch {}
+    };
+  }, []);
+
+  /* Scroll to a scene card + set active */
+  const scrollToScene = (si) => {
+    setActiveScene(si);
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`hiwar-scene-${si}`);
+      if (el) window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 96, behavior: 'smooth' });
+    });
   };
 
   /* Stop speech on unmount */
@@ -66,23 +108,42 @@ function HiwarScreen({ navigate, progress }) {
       </a>
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 28, gap: 24, flexWrap: 'wrap' }}>
-        <div>
-          <h1 lang="ar" style={{ fontFamily: 'var(--font-arabic)', color: 'var(--color-primary)', fontSize: 40, fontWeight: 600, direction: 'rtl', textAlign: 'right', margin: 0 }}>الْحِوَار</h1>
-          <div style={{ fontSize: 20, fontWeight: 600, marginTop: 4 }}>Dialog · Hiwar</div>
-          <p style={{ color: 'var(--color-text-secondary)', marginTop: 6 }}>
-            Dengarkan percakapan antara Umar dan Ahmad. Tekan 🔊 untuk mendengar setiap kalimat.
+      <div className="page-header-flex" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28, gap: 32, flexWrap: 'wrap' }}>
+
+        {/* LEFT: keterangan */}
+        <div style={{ flex: 1, minWidth: 260 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <Badge tone="primary" icon="book">عِيَادَةُ الْمَرِيضِ</Badge>
+            <Badge tone="neutral">Bab 3</Badge>
+          </div>
+          <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', lineHeight: 1.75, margin: 0 }}>
+            Percakapan ini menggambarkan adegan <strong>menjenguk orang sakit</strong>.
+            Umar <span lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 17 }}>(أ)</span> mengunjungi
+            sahabatnya Ahmad <span lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 17 }}>(ب)</span> yang
+            sedang sakit — dimulai dari salam pembuka, menanyakan kabar dan keluhan, memberi saran ke dokter,
+            hingga mendoakan kesembuhan dan berpamitan.
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--color-text-light)', marginTop: 10 }}>
+            Tekan <strong>🔊</strong> pada setiap baris untuk mendengar pengucapannya.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexShrink: 0 }}>
-          <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
-            <input type="checkbox" checked={showTranslation} onChange={e => setShowTranslation(e.target.checked)}
-                   style={{ width: 16, height: 16, accentColor: 'var(--color-primary)' }} />
-            Terjemahan
-          </label>
-          <Button variant="primary" icon={playAllRef.current ? 'pause' : 'play'} size="sm" onClick={playAll}>
-            {playAllRef.current ? 'Stop' : 'Putar Semua'}
-          </Button>
+
+        {/* RIGHT: judul + kontrol */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 14, flexShrink: 0 }}>
+          <div style={{ textAlign: 'right' }}>
+            <h1 lang="ar" style={{ fontFamily: 'var(--font-arabic)', color: 'var(--color-primary)', fontSize: 44, fontWeight: 700, direction: 'rtl', margin: 0, lineHeight: 1.2 }}>الْحِوَار</h1>
+            <div style={{ fontSize: 18, fontWeight: 600, color: 'var(--color-text-secondary)', marginTop: 2 }}>Dialog · Hiwar</div>
+          </div>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+              <input type="checkbox" checked={showTranslation} onChange={e => setShowTranslation(e.target.checked)}
+                     style={{ width: 16, height: 16, accentColor: 'var(--color-primary)' }} />
+              Terjemahan
+            </label>
+            <Button variant="primary" icon={playAllRef.current ? 'pause' : 'play'} size="sm" onClick={playAll}>
+              {playAllRef.current ? 'Stop' : 'Putar Semua'}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -94,7 +155,7 @@ function HiwarScreen({ navigate, progress }) {
           {hiwar.scenes.map((scene, si) => {
             const isActive = activeScene === si;
             return (
-              <div key={scene.id} onClick={() => setActiveScene(si)}>
+              <div key={scene.id} id={`hiwar-scene-${si}`} onClick={() => setActiveScene(si)}>
                 <div style={{
                   borderRadius: 22, overflow: 'hidden',
                   background: 'var(--color-surface)',
@@ -129,28 +190,36 @@ function HiwarScreen({ navigate, progress }) {
                     </div>
                   </div>
 
+                  {/* Scene illustration */}
+                  {scene.illustration_ref && (
+                    <div style={{ borderBottom: '1px solid var(--color-border)', background: 'var(--color-bg)', padding: '12px 16px' }}>
+                      <img
+                        src={scene.illustration_ref}
+                        alt={scene.label}
+                        style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 10 }}
+                      />
+                    </div>
+                  )}
+
                   {/* Dialogue bubbles */}
-                  <div style={{
-                    padding: '20px 22px',
-                    background: isActive ? 'var(--color-surface)' : 'var(--color-surface)',
-                    transition: 'background var(--dur-med) var(--ease-out)',
-                  }}>
+                  <div style={{ padding: '20px 22px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                       {scene.lines.map((line, li) => {
                         const lineKey = `${si}-${li}`;
-                        const isLeft  = line.side === 'left';
+                        /* أ = kanan (RTL convention), ب = kiri */
+                        const isRight   = line.speaker === 'أ';
                         const isPlaying = playingKey === lineKey;
 
                         return (
-                          <div key={lineKey} style={{
+                          <div key={lineKey} id={`hiwar-line-${lineKey}`} style={{
                             display: 'flex',
-                            flexDirection: isLeft ? 'row' : 'row-reverse',
+                            flexDirection: isRight ? 'row-reverse' : 'row',
                             gap: 10, alignItems: 'flex-start',
                           }}>
                             {/* Speaker avatar */}
                             <div style={{
                               width: 36, height: 36, borderRadius: 999, flexShrink: 0,
-                              background: isLeft ? 'var(--color-primary)' : 'var(--color-accent)',
+                              background: isRight ? 'var(--color-primary)' : 'var(--color-accent)',
                               color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
                               fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 16,
                               marginTop: 4,
@@ -159,10 +228,10 @@ function HiwarScreen({ navigate, progress }) {
                             {/* Bubble */}
                             <div style={{
                               background: isPlaying
-                                ? (isLeft ? 'var(--color-primary-100)' : 'var(--color-accent-100)')
-                                : (isLeft ? 'var(--color-primary-50)'  : 'var(--color-accent-50)'),
-                              border: `1.5px solid ${isPlaying ? (isLeft ? 'var(--color-secondary)' : 'var(--color-accent)') : 'var(--color-border)'}`,
-                              borderRadius: isLeft ? '4px 18px 18px 18px' : '18px 4px 18px 18px',
+                                ? (isRight ? 'var(--color-primary-100)' : 'var(--color-accent-100)')
+                                : (isRight ? 'var(--color-primary-50)'  : 'var(--color-accent-50)'),
+                              border: `1.5px solid ${isPlaying ? (isRight ? 'var(--color-secondary)' : 'var(--color-accent)') : 'var(--color-border)'}`,
+                              borderRadius: isRight ? '18px 4px 18px 18px' : '4px 18px 18px 18px',
                               padding: '12px 14px', maxWidth: '80%',
                               transition: 'all var(--dur-med) var(--ease-out)',
                             }}>
@@ -184,13 +253,14 @@ function HiwarScreen({ navigate, progress }) {
                               style={{
                                 width: 34, height: 34, borderRadius: 999, flexShrink: 0,
                                 border: 'none', cursor: 'pointer',
-                                background: isPlaying ? 'var(--color-primary)' : 'var(--color-border)',
-                                color: isPlaying ? '#fff' : 'var(--color-text-secondary)',
+                                background: isPlaying ? 'var(--color-primary)' : 'transparent',
+                                color: isPlaying ? '#fff' : 'var(--color-primary)',
+                                border: isPlaying ? 'none' : '1.5px solid var(--color-primary)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 transition: 'all var(--dur-fast)',
                                 marginTop: 10,
                               }}>
-                              <Icon name={isPlaying ? 'pause' : 'volume-2'} size={16} />
+                              <Icon name={isPlaying ? 'pause' : 'play'} size={16} />
                             </button>
                           </div>
                         );
@@ -210,7 +280,7 @@ function HiwarScreen({ navigate, progress }) {
             <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10, color: 'var(--color-text-secondary)' }}>Adegan</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {hiwar.scenes.map((s, si) => (
-                <button key={si} onClick={() => setActiveScene(si)}
+                <button key={si} onClick={() => scrollToScene(si)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '8px 10px', borderRadius: 10, border: 'none',
@@ -256,6 +326,42 @@ function HiwarScreen({ navigate, progress }) {
               </Button>
             </div>
           </Card>
+        </div>
+      </div>
+
+      {/* Mobile-only footer: lanjut button + scene nav (sidebar hidden at ≤640px) */}
+      <div className="hiwar-mobile-footer" style={{ display: 'none', marginTop: 24, flexDirection: 'column', gap: 16 }}>
+
+        {/* Lanjut button — tampil dulu sebelum scene pills */}
+        <div style={{
+          padding: '14px 16px', borderRadius: 16,
+          background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
+        }}>
+          <div>
+            <ProgressBar value={100} label="Dialog ini" color="success" size="sm" />
+          </div>
+          <Button variant="primary" iconRight="chevron-right" onClick={() => navigate('chapter/3/mufrodat')}>
+            Lanjut ke Mufrodat
+          </Button>
+        </div>
+
+        {/* Scene jump pills */}
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-secondary)', marginBottom: 8 }}>Adegan</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {hiwar.scenes.map((s, si) => (
+              <button key={si} onClick={() => scrollToScene(si)}
+                style={{
+                  padding: '8px 14px', borderRadius: 999, border: 'none', cursor: 'pointer',
+                  background: activeScene === si ? 'var(--color-primary)' : 'var(--color-border)',
+                  color: activeScene === si ? '#fff' : 'var(--color-text-secondary)',
+                  fontWeight: activeScene === si ? 700 : 500, fontSize: 13,
+                }}>
+                {si + 1}. {s.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

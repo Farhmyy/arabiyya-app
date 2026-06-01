@@ -3,6 +3,7 @@
 function AdminScreen({ user, logout, darkMode, onToggleDark }) {
   const { useState, useEffect } = React;
   const [tab, setTab] = useState('ringkasan');
+  const [confirmLogout, setConfirmLogout] = useState(false);
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
 
@@ -61,21 +62,36 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-bg)', fontFamily: 'var(--font-latin)' }}>
-      <div style={{ background: 'var(--color-primary)', color: '#fff', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Logout confirmation dialog */}
+      {confirmLogout && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.5)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div style={{ background: 'var(--color-surface)', borderRadius: 20, padding: 28, maxWidth: 320, width: '100%', textAlign: 'center', boxShadow: 'var(--shadow-modal)' }}>
+            <div style={{ fontSize: 36, marginBottom: 12 }}>👋</div>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Keluar dari Admin?</h3>
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24, lineHeight: 1.6 }}>Sesi admin akan berakhir. Masuk lagi untuk mengakses dashboard.</p>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+              <button onClick={() => setConfirmLogout(false)} style={{ padding: '10px 20px', borderRadius: 12, border: '1.5px solid var(--color-border)', background: 'var(--color-surface)', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Batal</button>
+              <button onClick={() => { setConfirmLogout(false); logout(); }} style={{ padding: '10px 20px', borderRadius: 12, border: 'none', background: 'var(--color-error)', color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Ya, Keluar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="admin-header" style={{ background: 'var(--color-primary)', color: '#fff', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img src="assets/images/logo-mark.svg" width="36" height="36" alt="" style={{ borderRadius: 10 }} />
           <div>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>العربية التفاعلية — Admin</div>
-            <div style={{ fontSize: 12, opacity: 0.8 }}>Dashboard Guru</div>
+            <div style={{ fontWeight: 700, fontSize: 16 }}>العربية التفاعلية</div>
+            <div style={{ fontSize: 12, opacity: 0.8 }}>Admin · Dashboard Guru</div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13 }}>
+        <div className="admin-header-right" style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13 }}>
           <button onClick={onToggleDark} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#fff', fontSize: 16 }}>
             {darkMode ? '☀️' : '🌙'}
           </button>
-          <span style={{ opacity: 0.85 }}>{user.email}</span>
-          <button onClick={logout} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '6px 12px', cursor: 'pointer', color: '#fff', fontSize: 13, fontWeight: 600 }}>
-            Logout
+          <span className="admin-header-email" style={{ opacity: 0.85, fontSize: 12 }}>{user.email}</span>
+          <button onClick={() => setConfirmLogout(true)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '6px 12px', cursor: 'pointer', color: '#fff', fontSize: 13, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
+            <Icon name="log-out" size={14} /> Logout
           </button>
         </div>
       </div>
@@ -413,11 +429,34 @@ function TadribatCMSPanel({ collectionId, title }) {
   const [editQ, setEditQ] = useState(null);
   const [saving, setSaving] = useState(false);
 
+  /* data.js = sumber kebenaran. Admin selalu mulai dari soal data.js.
+     Jika sudah pernah disimpan ke Supabase (struktur sama = prompt[0] cocok),
+     tampilkan versi Supabase agar edit sebelumnya tidak hilang. */
+  const localQs = collectionId === 'tadribat1' ? DATA.tadribat1.questions : DATA.tadribat2.questions;
+
   const loadQuestions = () => {
     setLoading(true);
     sbClient.from('content').select('data').eq('id', collectionId).maybeSingle()
-      .then(({ data }) => setQuestions(data?.data?.questions || []))
-      .catch(() => setQuestions([]))
+      .then(({ data }) => {
+        const cloudQs = data?.data?.questions || [];
+        /* Cek apakah SETIAP soal Supabase cocok dengan data.js (berdasarkan prompt + urutan) */
+        const fullySync =
+          cloudQs.length === localQs.length &&
+          cloudQs.length > 0 &&
+          localQs.every((lq, i) => cloudQs[i]?.prompt === lq.prompt);
+
+        if (fullySync) {
+          setQuestions(cloudQs);            /* Supabase sudah sesuai data.js */
+        } else {
+          /* Supabase beda / lama → tampilkan data.js DAN otomatis push ke Supabase */
+          setQuestions(localQs);
+          sbClient.from('content')
+            .upsert({ id: collectionId, data: { questions: localQs } })
+            .then(() => {})
+            .catch(() => {});
+        }
+      })
+      .catch(() => setQuestions(localQs))
       .finally(() => setLoading(false));
   };
   useEffect(loadQuestions, [collectionId]);
@@ -454,13 +493,42 @@ function TadribatCMSPanel({ collectionId, title }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
         <h3 style={{ fontFamily: 'var(--font-latin)', fontSize: 16, color: 'var(--color-text-primary)', margin: 0 }}>{title} — {questions.length} soal</h3>
-        <button onClick={() => setEditQ({ _isNew: true, type: 'mcq', prompt: '', arabic_display: null, options: ['','','',''], correct_index: 0, explanation: '' })}
-          style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)' }}>
-          + Tambah Soal
-        </button>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button
+            onClick={async () => {
+              if (!confirm(`Reset seluruh soal ${title} ke data.js? Perubahan yang tersimpan di cloud akan tertimpa.`)) return;
+              await saveQuestions(localQs);
+            }}
+            style={{ padding: '8px 14px', borderRadius: 10, border: '1.5px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text-secondary)', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)', fontSize: 13 }}>
+            ↺ Sinkronkan dari data.js
+          </button>
+          <button onClick={() => setEditQ({ _isNew: true, type: 'mcq', prompt: '', arabic_display: null, options: ['','','',''], correct_index: 0, explanation: '' })}
+            style={{ padding: '8px 14px', borderRadius: 10, border: 'none', background: 'var(--color-primary)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)', fontSize: 13 }}>
+            + Tambah Soal
+          </button>
+        </div>
       </div>
+      {/* Status sinkronisasi */}
+      {!loading && (() => {
+        const synced = questions.length === localQs.length &&
+          localQs.every((lq, i) => questions[i]?.prompt === lq.prompt);
+        return (
+          <div style={{
+            marginBottom: 12, padding: '8px 14px', borderRadius: 10, fontSize: 13,
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: synced ? 'var(--color-success-50)' : 'var(--color-accent-50)',
+            color: synced ? 'var(--color-success-text)' : 'var(--color-amber-text)',
+            border: `1px solid ${synced ? 'var(--color-success-border)' : 'var(--color-accent-100)'}`,
+          }}>
+            {synced
+              ? '✅ Sinkron dengan web materi — edit soal di sini langsung terlihat oleh siswa.'
+              : '🔄 Soal cloud berbeda — sedang menyinkronkan otomatis dari data.js, tunggu sebentar lalu refresh.'}
+          </div>
+        );
+      })()}
+
       {loading ? <p style={{ color: 'var(--color-text-secondary)' }}>Memuat…</p> : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {questions.map((q, i) => (
@@ -532,6 +600,26 @@ function QuestionEditModal({ q, saving, onSave, onClose }) {
             placeholder="Teks Arab (kosongkan jika tidak ada)" dir="rtl"
             style={{ width: '100%', height: 40, border: '1px solid var(--color-border)', borderRadius: 8, padding: '0 12px', fontSize: 18, fontFamily: 'var(--font-arabic)', background: 'var(--color-bg)', color: 'var(--color-text-primary)', textAlign: 'right', boxSizing: 'border-box' }} />
         </div>
+        {/* Teks audio untuk soal tipe 'audio' */}
+        {form.type === 'audio' && (
+          <div style={{ marginBottom: 14, padding: '12px 14px', background: 'var(--color-accent-50)', borderRadius: 10, border: '1px solid var(--color-accent-100)' }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--color-amber-text)', marginBottom: 4 }}>Teks Audio (diputar saat soal) 🔊</label>
+            <input value={form.audio_text || ''} onChange={e => setF('audio_text', e.target.value || null)}
+              placeholder="النص العربي الذي يُقرأ" dir="rtl"
+              style={{ width: '100%', height: 40, border: '1px solid var(--color-accent-100)', borderRadius: 8, padding: '0 12px', fontSize: 18, fontFamily: 'var(--font-arabic)', background: 'var(--color-surface)', color: 'var(--color-text-primary)', textAlign: 'right', boxSizing: 'border-box' }} />
+            <div style={{ fontSize: 11, color: 'var(--color-amber-text)', marginTop: 4 }}>audio_ref file sudah tersimpan di data.js dan tidak diubah di sini.</div>
+          </div>
+        )}
+        {/* Token kata untuk soal tipe 'order' */}
+        {form.type === 'order' && (
+          <div style={{ marginBottom: 14, padding: '12px 14px', background: 'var(--color-primary-50)', borderRadius: 10, border: '1px solid var(--color-primary-100)' }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--color-primary)', marginBottom: 4 }}>Token kata (pisah spasi, RTL) 🧩</label>
+            <input value={(form.tokens || []).join(' ')} onChange={e => setF('tokens', e.target.value.trim().split(/\s+/).filter(Boolean))}
+              placeholder="كَتَبَ الطَّالِبُ الدَّرْسَ" dir="rtl"
+              style={{ width: '100%', height: 40, border: '1px solid var(--color-primary-100)', borderRadius: 8, padding: '0 12px', fontSize: 18, fontFamily: 'var(--font-arabic)', background: 'var(--color-surface)', color: 'var(--color-text-primary)', textAlign: 'right', boxSizing: 'border-box' }} />
+            <div style={{ fontSize: 11, color: 'var(--color-primary)', marginTop: 4 }}>Kata-kata yang akan diacak dan disusun oleh siswa.</div>
+          </div>
+        )}
         <div style={{ marginBottom: 14 }}>
           <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Pilihan Jawaban (4 opsi) — pilih radio = jawaban benar</label>
           {[0,1,2,3].map(i => (
