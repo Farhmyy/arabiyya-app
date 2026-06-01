@@ -1,11 +1,16 @@
 /* MufrodatScreen — Vocabulary grid (الْمُفْرَدَات) */
 
 function useMufrodatContent() {
-  const transform = (raw) => (raw.words || []).map(w => ({
-    ar: w.arabic, meaning_id: w.meaning, example_ar: w.example,
-    image_ref: w.image_url || null, audio_text: w.arabic,
-    audio_ref: null, transliteration: '',
-  }));
+  const transform = (raw) => (raw.words || []).map(w => {
+    const local = DATA.mufrodat.find(m => m.ar === w.arabic) || {};
+    return {
+      ar: w.arabic, meaning_id: w.meaning, example_ar: w.example,
+      image_ref: w.image_url || local.image_ref || null, audio_text: w.arabic,
+      audio_ref: local.audio_ref || null,
+      example_ref: local.example_ref || null,
+      transliteration: local.transliteration || '',
+    };
+  });
   return useCloudContent('mufrodat', DATA.mufrodat, transform);
 }
 
@@ -46,22 +51,39 @@ function MufrodatScreen({ navigate, progress }) {
       </a>
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 24, gap: 24, flexWrap: 'wrap' }}>
-        <div>
-          <h1 lang="ar" style={{ fontFamily: 'var(--font-arabic)', color: 'var(--color-primary)', fontSize: 40, fontWeight: 600, direction: 'rtl', textAlign: 'right', margin: 0 }}>الْمُفْرَدَات</h1>
-          <div style={{ fontSize: 20, fontWeight: 600, marginTop: 4 }}>Kosakata · Mufrodat</div>
-          <p style={{ color: 'var(--color-text-secondary)', marginTop: 6 }}>
-            Tap kartu untuk melihat artinya. Tekan 🔊 untuk mendengar pengucapan. {mufrodat.length} kosakata bab ini.
+      <div className="page-header-flex" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, gap: 32, flexWrap: 'wrap' }}>
+
+        {/* LEFT: keterangan */}
+        <div style={{ flex: 1, minWidth: 260 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <Badge tone="primary" icon="layers">عِيَادَةُ الْمَرِيضِ</Badge>
+            <Badge tone="neutral">Bab 3</Badge>
+          </div>
+          <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', lineHeight: 1.75, margin: 0 }}>
+            Pelajari <strong>{mufrodat.length} kosakata</strong> seputar tema menjenguk orang sakit —
+            mulai dari nama penyakit, gejala, hingga tempat dan orang yang terlibat dalam dunia kesehatan.
+            Setiap kartu dilengkapi gambar, contoh kalimat, dan audio pengucapan.
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--color-text-light)', marginTop: 10 }}>
+            Tap kartu untuk membalik dan melihat artinya. Tekan <strong>🔊</strong> untuk mendengar pengucapan.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <Button variant="secondary" icon="rotate" onClick={() => flipAll(true)}>Balik Semua</Button>
-          <Button variant="ghost" onClick={() => flipAll(false)}>Reset</Button>
+
+        {/* RIGHT: judul + kontrol */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 14, flexShrink: 0 }}>
+          <div style={{ textAlign: 'right' }}>
+            <h1 lang="ar" style={{ fontFamily: 'var(--font-arabic)', color: 'var(--color-primary)', fontSize: 44, fontWeight: 700, direction: 'rtl', margin: 0, lineHeight: 1.2 }}>الْمُفْرَدَات</h1>
+            <div style={{ fontSize: 18, fontWeight: 600, color: 'var(--color-text-secondary)', marginTop: 2 }}>Kosakata · Mufrodat</div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Button variant="secondary" icon="rotate" onClick={() => flipAll(true)}>Balik Semua</Button>
+            <Button variant="ghost" onClick={() => flipAll(false)}>Reset</Button>
+          </div>
         </div>
       </div>
 
       {/* Card grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+      <div className="mufrodat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {mufrodat.map((card, i) => {
           const isFlipped    = flipped.has(i);
           const wordKey      = `word-${i}`;
@@ -92,12 +114,13 @@ function MufrodatScreen({ navigate, progress }) {
                     <button onClick={e => speakWord(e, wordKey, card.audio_text, card.audio_ref)}
                       aria-label="Putar audio"
                       style={{
-                        width: 36, height: 36, borderRadius: 999, border: 'none', cursor: 'pointer',
-                        background: isPlayingW ? 'var(--color-primary)' : 'linear-gradient(180deg, var(--color-primary-50), var(--color-primary-100))',
+                        width: 36, height: 36, borderRadius: 999, cursor: 'pointer',
+                        border: '1.5px solid var(--color-primary)',
+                        background: isPlayingW ? 'var(--color-primary)' : 'transparent',
                         color: isPlayingW ? '#fff' : 'var(--color-primary)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                      <Icon name={isPlayingW ? 'pause' : 'volume-2'} size={14} />
+                      <Icon name={isPlayingW ? 'pause' : 'play'} size={16} />
                     </button>
                   </div>
                   <div style={{ textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -119,14 +142,15 @@ function MufrodatScreen({ navigate, progress }) {
                   border: '2px solid var(--color-primary)',
                 }}>
                   {/* Image / icon area */}
-                  <div style={{ flex: 1, background: 'var(--color-primary-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: 8, position: 'relative', minHeight: 80 }}>
+                  <div style={{ flex: 1, overflow: 'hidden', position: 'relative', minHeight: 80 }}>
                     <img
                       src={card.image_ref}
                       alt={card.meaning_id}
-                      style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
                       onError={e => {
                         e.target.style.display = 'none';
-                        e.target.parentNode.innerHTML = `<div style="color:var(--color-primary);font-size:40px;text-align:center">💊</div>`;
+                        e.target.parentNode.style.background = 'var(--color-primary-50)';
+                        e.target.parentNode.innerHTML = `<div style="color:var(--color-primary);font-size:40px;text-align:center;padding:20px">💊</div>`;
                       }}
                     />
                   </div>
@@ -146,15 +170,16 @@ function MufrodatScreen({ navigate, progress }) {
                         <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 14, color: 'var(--color-text-primary)', direction: 'rtl', lineHeight: 1.7 }}>{card.example_ar}</div>
                         <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2 }}>{card.example_id}</div>
                       </div>
-                      <button onClick={e => speakWord(e, exampleKey, card.example_ar, null)}
+                      <button onClick={e => speakWord(e, exampleKey, card.example_ar, card.example_ref || null)}
                         aria-label="Putar contoh"
                         style={{
-                          width: 28, height: 28, borderRadius: 999, border: 'none', cursor: 'pointer', flexShrink: 0,
-                          background: isPlayingEx ? 'var(--color-primary)' : 'var(--color-border)',
+                          width: 28, height: 28, borderRadius: 999, cursor: 'pointer', flexShrink: 0,
+                          border: '1.5px solid var(--color-text-secondary)',
+                          background: isPlayingEx ? 'var(--color-primary)' : 'transparent',
                           color: isPlayingEx ? '#fff' : 'var(--color-text-secondary)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
-                        <Icon name={isPlayingEx ? 'pause' : 'volume-2'} size={12} />
+                        <Icon name={isPlayingEx ? 'pause' : 'play'} size={14} />
                       </button>
                     </div>
                   </div>

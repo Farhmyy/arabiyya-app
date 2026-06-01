@@ -20,7 +20,7 @@ function LoginScreen({ onLogin, onGuest }) {
   return (
     <div className="login-layout" style={{
       minHeight: '100vh', display: 'flex',
-      background: 'var(--color-bg)',
+      background: 'var(--color-bg)', overflowX: 'hidden',
     }}>
       {/* Hero side */}
       <div className="login-hero" style={{
@@ -50,7 +50,7 @@ function LoginScreen({ onLogin, onGuest }) {
       </div>
 
       {/* Panel side */}
-      <div style={{
+      <div className="login-panel" style={{
         width: 400, flexShrink: 0,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',

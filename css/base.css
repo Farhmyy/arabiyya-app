@@ -7,10 +7,12 @@
 /* ── Reset ── */
 html { box-sizing: border-box; }
 *, *::before, *::after { box-sizing: inherit; }
-html, body, #root { height: 100%; }
+/* TIDAK ada height:100% di sini — itu yang mengunci tinggi = viewport dan mencegah scroll di HP nyata.
+   .app memakai min-height:100vh (cukup untuk full-screen) dan body tumbuh mengikuti konten. */
 
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: var(--font-latin);
   font-size: var(--fs-body);
   color: var(--color-text-primary);
@@ -85,6 +87,7 @@ a { color: inherit; text-decoration: none; }
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* cegah horizontal scroll di level app, bukan body */
 }
 
 .page {
@@ -150,7 +153,7 @@ a { color: inherit; text-decoration: none; }
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .page { padding: var(--space-md) var(--space-md) 60px; }
-  .hero-grid { grid-template-columns: 1fr !important; }
+  .hero-grid { grid-template-columns: 1fr !important; padding: 28px 24px !important; }
   .chapter-grid { grid-template-columns: 1fr !important; }
   .section-grid { grid-template-columns: 1fr !important; }
   .feature-grid { grid-template-columns: 1fr !important; }
@@ -158,6 +161,27 @@ a { color: inherit; text-decoration: none; }
   .conjugation-grid { grid-template-columns: 1fr !important; }
   .hiwar-layout { grid-template-columns: 1fr !important; }
   .hiwar-sidebar { display: none !important; }
+
+  /* Card mufrodat 2 kolom di tablet */
+  .mufrodat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 480px) {
+  /* Hero section: teks lebih kecil */
+  .hero-grid h1 { font-size: 40px !important; }
+  .hero-grid p  { font-size: 16px !important; }
+
+  /* Sembunyikan transliterasi di kartu mufrodat kecil */
+  .mufrodat-transliteration { display: none; }
+
+  /* Tashrif grid 1 kolom */
+  .conjugation-grid { grid-template-columns: 1fr !important; }
+
+  /* Quiz options 1 kolom */
+  .quiz-grid { grid-template-columns: 1fr !important; }
+
+  /* Admin table scrollable */
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
 
 /* ── Mobile bottom nav placeholder (shown by Navbar at ≤640px) ── */
@@ -175,11 +199,58 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 640px) {
   .bottom-nav { display: flex; }
   .page { padding-bottom: 72px; }
-  /* Ensure all interactive elements meet 44px touch target */
   button, a[role="button"] { min-height: 44px; }
-  /* Login screen stacks on mobile */
   .login-layout { flex-direction: column !important; }
   .login-hero { min-height: 220px !important; }
-  /* Admin table scrolls horizontally */
-  .admin-table-wrap { overflow-x: auto; }
+  .login-panel { width: 100% !important; padding: 32px 24px !important; border-left: none !important; border-top: 1px solid var(--color-border) !important; justify-content: flex-start !important; }
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ── Navbar mobile ── */
+  .nav-nickname-text { display: none !important; } /* sembunyikan nama, avatar tetap tampil */
+  .nav-guest-text    { display: none !important; }
+  .nav-logo-text     { display: none !important; }
+  .nav-row1       { height: 44px !important; padding: 0 12px !important; }
+  .nav-row2       { padding: 0 4px !important; }
+  .nav-section-label { display: none !important; }
+  .stat-chips     { gap: 4px !important; }
+
+  /* ── Header flex stack ── */
+  .page-header-flex { flex-direction: column !important; gap: 16px !important; }
+  .page-header-flex > div:last-child { align-items: flex-end !important; }
+
+  /* ── Hero CTA ── */
+  .hero-cta-row { flex-wrap: wrap !important; }
+
+  /* ── Chapter banner ── */
+  .chapter-banner-section { padding: 24px 20px !important; border-radius: 18px !important; }
+  .chapter-banner-inner   { gap: 16px !important; align-items: center !important; }
+  .chapter-num-box        { width: 80px !important; height: 80px !important; font-size: 48px !important; border-radius: 20px !important; }
+  .chapter-banner-title   { font-size: 36px !important; }
+  .chapter-banner-subtitle { font-size: 18px !important; }
+  .objectives-grid        { grid-template-columns: 1fr !important; }
+
+  /* ── Logout text hidden on mobile (icon only) ── */
+  .nav-logout-text { display: none !important; }
+
+  /* ── XP/streak chip: icon only di mobile ── */
+  .stat-chip-val { display: none !important; }
+  .stat-chips > span { padding: 0 8px !important; }
+
+  /* ── Admin header responsive ── */
+  .admin-header { padding: 10px 14px !important; gap: 8px !important; }
+  .admin-header-email { display: none !important; }
+  .admin-header-right { gap: 8px !important; }
+
+  /* ── Hiwar layout & mobile footer ── */
+  .hiwar-layout { grid-template-columns: 1fr !important; }
+  .hiwar-sidebar { display: none !important; }
+  .hiwar-mobile-footer { display: flex !important; }
+
+  /* ── Mufrodat grid 1 kolom ── */
+  .mufrodat-grid { grid-template-columns: 1fr !important; }
+
+  /* ── Qawaid grid ── */
+  .conjugation-grid { grid-template-columns: 1fr !important; }
+  .qawaid-materi-col  { order: -1; } /* tashrif/pola tampil duluan di mobile */
+  .qawaid-examples-col { order: 0; }
 }

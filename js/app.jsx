@@ -21,7 +21,7 @@ function App() {
   );
 
   /* Progress: cloud for students, localStorage for guests */
-  const cloudProgress = useCloudProgress(user ? user.uid : null);
+  const cloudProgress = useCloudProgress(user ? user.id : null);
   const localProgress = useProgress();
   const progress = (user && role === 'student') ? cloudProgress : localProgress;
 
@@ -38,9 +38,31 @@ function App() {
       .finally(() => setNicknameLoading(false));
   }, [user]);
 
-  /* Routing */
-  const [route, setRoute] = useState('home');
-  const navigate = (r) => { setRoute(r); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  /* Routing — route dipersist ke sessionStorage agar tidak hilang saat pindah tab */
+  const [route, setRoute] = useState(() => {
+    try { return sessionStorage.getItem('arabiyya_route') || 'home'; } catch { return 'home'; }
+  });
+  const navigate = (r) => {
+    setRoute(r);
+    try { sessionStorage.setItem('arabiyya_route', r); } catch {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  /* Simpan & pulihkan posisi scroll saat user pindah tab lalu kembali */
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.hidden) {
+        try { sessionStorage.setItem('arabiyya_scrollY', String(window.scrollY)); } catch {}
+      } else {
+        try {
+          const y = parseInt(sessionStorage.getItem('arabiyya_scrollY') || '0', 10);
+          if (y > 0) requestAnimationFrame(() => window.scrollTo({ top: y }));
+        } catch {}
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
 
   window._progress = progress;
 

@@ -1,19 +1,41 @@
 /* Tadribat1Screen — Practice: Hiwar & Mufrodat */
 
 function useTadribat1Content() {
-  return useCloudContent('tadribat1', DATA.tadribat1.questions, raw => raw.questions || []);
+  /* Baca dari Supabase hanya jika strukturnya cocok dengan data.js (prompt & jumlah sama).
+     Jika Supabase punya soal lama/berbeda, pakai data.js langsung.
+     audio_ref selalu diambil dari data.js agar audio tetap bekerja. */
+  const local = DATA.tadribat1.questions;
+  const transform = (raw) => {
+    const cloudQs = raw.questions || [];
+    const compatible =
+      cloudQs.length === local.length &&
+      local.every((lq, i) => cloudQs[i]?.prompt === lq.prompt);
+    if (!compatible) return local;
+    return cloudQs.map((q, i) => ({
+      ...local[i], ...q,
+      audio_ref: local[i]?.audio_ref || null,
+    }));
+  };
+  return useCloudContent('tadribat1', local, transform);
 }
+
+const T1_KEY = 'arabiyya_quiz_t1';
 
 function Tadribat1Screen({ navigate, progress }) {
   const { useState, useEffect } = React;
   const { tadribat1, ui } = DATA;
   const questions = useTadribat1Content();
 
-  const [idx,      setIdx]      = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [revealed, setRevealed] = useState(false);
-  const [score,    setScore]    = useState(0);
-  const [answers,  setAnswers]  = useState([]);
+  const [savedSession] = useState(() => {
+    try { return JSON.parse(sessionStorage.getItem(T1_KEY)) || {}; }
+    catch { return {}; }
+  });
+
+  const [idx,      setIdx]      = useState(savedSession.idx ?? 0);
+  const [selected, setSelected] = useState(savedSession.selected ?? null);
+  const [revealed, setRevealed] = useState(savedSession.revealed ?? false);
+  const [score,    setScore]    = useState(savedSession.score ?? 0);
+  const [answers,  setAnswers]  = useState(savedSession.answers ?? []);
   const [playing,  setPlaying]  = useState(false);
 
   const finished = idx >= questions.length;
@@ -28,11 +50,21 @@ function Tadribat1Screen({ navigate, progress }) {
 
   useEffect(() => () => { if (window.stopSpeech) window.stopSpeech(); }, []);
 
+  useEffect(() => {
+    if (questions.length === 0) return;
+    if (idx >= questions.length) {
+      sessionStorage.removeItem(T1_KEY);
+    } else {
+      try { sessionStorage.setItem(T1_KEY, JSON.stringify({ idx, score, answers, revealed, selected })); }
+      catch {}
+    }
+  }, [idx, score, answers, revealed, selected, questions.length]);
+
   const speakQuestion = () => {
     if (!q || q.type !== 'audio') return;
     if (playing) { if (window.stopSpeech) window.stopSpeech(); setPlaying(false); return; }
     setPlaying(true);
-    window.speakArabic(q.audio_text, null, () => setPlaying(false));
+    window.speakArabic(q.audio_text, q.audio_ref || null, () => setPlaying(false));
   };
 
   const check = () => {
@@ -41,7 +73,8 @@ function Tadribat1Screen({ navigate, progress }) {
     setRevealed(true);
     if (correct) {
       setScore(s => s + 1);
-      if (progress && progress.addXP) progress.addXP(tadribat1.xp_per_correct);
+      const alreadyDone = progress && progress.sectionStatus('3', 'tadribat_1') === 'done';
+      if (!alreadyDone && progress && progress.addXP) progress.addXP(tadribat1.xp_per_correct);
       window.showToast && window.showToast(ui.feedback.correct, 'success');
     } else {
       window.showToast && window.showToast(ui.feedback.wrong, 'error');
@@ -54,12 +87,14 @@ function Tadribat1Screen({ navigate, progress }) {
   };
 
   const restart = () => {
+    sessionStorage.removeItem(T1_KEY);
     setIdx(0); setScore(0); setRevealed(false); setSelected(null); setAnswers([]);
   };
 
   useEffect(() => {
     if (finished && progress && progress.completeSection) {
       progress.completeSection('3', 'tadribat_1', score, questions.length);
+      sessionStorage.removeItem(T1_KEY);
     }
   }, [finished]);
 
