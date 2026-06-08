@@ -10,22 +10,35 @@ function HiwarScreen({ navigate, progress }) {
     try { return parseInt(sessionStorage.getItem('arabiyya_hiwar_scene') || '0', 10); }
     catch { return 0; }
   });
-  const playAllRef = useRef(false);
+  const playAllRef    = useRef(false);
+  const playingKeyRef = useRef(null);
 
   const allLines = hiwar.scenes.flatMap((scene, si) =>
     scene.lines.map((line, li) => ({ ...line, key: `${si}-${li}` }))
   );
 
   const playLine = (key, audioText, audioRef) => {
+    if (playingKeyRef.current === key) {
+      playingKeyRef.current = null;
+      setPlayingKey(null);
+      playAllRef.current = false;
+      if (window.stopSpeech) window.stopSpeech();
+      return;
+    }
     if (window.stopSpeech) window.stopSpeech();
-    if (playingKey === key) { setPlayingKey(null); return; }
+    playAllRef.current = false;
+    playingKeyRef.current = key;
     setPlayingKey(key);
-    window.speakArabic(audioText, audioRef, () => setPlayingKey(null));
+    window.speakArabic(audioText, audioRef, () => {
+      playingKeyRef.current = null;
+      setPlayingKey(null);
+    });
   };
 
   const playAll = () => {
     if (playAllRef.current) {
       playAllRef.current = false;
+      playingKeyRef.current = null;
       if (window.stopSpeech) window.stopSpeech();
       setPlayingKey(null);
       return;
@@ -35,10 +48,12 @@ function HiwarScreen({ navigate, progress }) {
     const playNext = (i) => {
       if (!playAllRef.current || i >= allLines.length) {
         playAllRef.current = false;
+        playingKeyRef.current = null;
         setPlayingKey(null);
         return;
       }
       const line = allLines[i];
+      playingKeyRef.current = line.key;
       setPlayingKey(line.key);
       /* Tandai scene yang sedang diputar sebagai aktif */
       const si = parseInt(line.key.split('-')[0], 10);

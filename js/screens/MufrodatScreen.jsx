@@ -15,13 +15,14 @@ function useMufrodatContent() {
 }
 
 function MufrodatScreen({ navigate, progress }) {
-  const { useState, useEffect } = React;
+  const { useState, useEffect, useRef } = React;
   const mufrodat = useMufrodatContent();
   const { mufrodat_extra } = DATA;
 
   const [flipped,     setFlipped]     = useState(() => new Set());
   const [playingKey,  setPlayingKey]  = useState(null);
   const [showExtra,   setShowExtra]   = useState(false);
+  const playingKeyRef = useRef(null);
 
   const toggle = (i) => setFlipped(prev => {
     const s = new Set(prev); s.has(i) ? s.delete(i) : s.add(i); return s;
@@ -31,10 +32,19 @@ function MufrodatScreen({ navigate, progress }) {
 
   const speakWord = (e, key, text, audioRef) => {
     e.stopPropagation();
+    if (playingKeyRef.current === key) {
+      playingKeyRef.current = null;
+      setPlayingKey(null);
+      if (window.stopSpeech) window.stopSpeech();
+      return;
+    }
     if (window.stopSpeech) window.stopSpeech();
-    if (playingKey === key) { setPlayingKey(null); return; }
+    playingKeyRef.current = key;
     setPlayingKey(key);
-    window.speakArabic(text, audioRef, () => setPlayingKey(null));
+    window.speakArabic(text, audioRef, () => {
+      playingKeyRef.current = null;
+      setPlayingKey(null);
+    });
   };
 
   /* Mark mufrodat complete when all cards flipped */
@@ -65,7 +75,7 @@ function MufrodatScreen({ navigate, progress }) {
             Setiap kartu dilengkapi gambar, contoh kalimat, dan audio pengucapan.
           </p>
           <p style={{ fontSize: 13, color: 'var(--color-text-light)', marginTop: 10 }}>
-            Tap kartu untuk membalik dan melihat artinya. Tekan <strong>🔊</strong> untuk mendengar pengucapan.
+            Tap kartu untuk membalik dan melihat artinya. Tekan <strong>🔊</strong> untuk mendengar, lalu tekan <strong>🎤</strong> untuk melatih pengucapanmu.
           </p>
         </div>
 
@@ -111,17 +121,20 @@ function MufrodatScreen({ navigate, progress }) {
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <Badge tone="primary">{i + 1}</Badge>
-                    <button onClick={e => speakWord(e, wordKey, card.audio_text, card.audio_ref)}
-                      aria-label="Putar audio"
-                      style={{
-                        width: 36, height: 36, borderRadius: 999, cursor: 'pointer',
-                        border: '1.5px solid var(--color-primary)',
-                        background: isPlayingW ? 'var(--color-primary)' : 'transparent',
-                        color: isPlayingW ? '#fff' : 'var(--color-primary)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
-                      <Icon name={isPlayingW ? 'pause' : 'play'} size={16} />
-                    </button>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                      <button onClick={e => speakWord(e, wordKey, card.audio_text, card.audio_ref)}
+                        aria-label="Putar audio"
+                        style={{
+                          width: 36, height: 36, borderRadius: 999, cursor: 'pointer',
+                          border: '1.5px solid var(--color-primary)',
+                          background: isPlayingW ? 'var(--color-primary)' : 'transparent',
+                          color: isPlayingW ? '#fff' : 'var(--color-primary)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                        <Icon name={isPlayingW ? 'pause' : 'play'} size={16} />
+                      </button>
+                      <SpeakButton expectedText={card.audio_text} size="md" />
+                    </div>
                   </div>
                   <div style={{ textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 40, fontWeight: 700, color: 'var(--color-primary)', textAlign: 'center', lineHeight: 1.6, direction: 'rtl' }}>{card.ar}</div>
