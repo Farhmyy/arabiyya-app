@@ -45,8 +45,22 @@ function App() {
   const navigate = (r) => {
     setRoute(r);
     try { sessionStorage.setItem('arabiyya_route', r); } catch {}
+    window.history.pushState({ route: r }, '');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  /* Sinkronkan browser back button dengan router internal */
+  useEffect(() => {
+    window.history.replaceState({ route }, '');
+    const onPop = (e) => {
+      const r = (e.state && e.state.route) || 'home';
+      setRoute(r);
+      try { sessionStorage.setItem('arabiyya_route', r); } catch {}
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   /* Simpan & pulihkan posisi scroll saat user pindah tab lalu kembali */
   useEffect(() => {

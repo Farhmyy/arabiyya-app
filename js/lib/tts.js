@@ -31,22 +31,38 @@
     window.speechSynthesis.speak(u);
   }
 
+  let _currentAudio = null;
+
+  function stopCurrentAudio() {
+    if (_currentAudio) {
+      _currentAudio.pause();
+      _currentAudio.onended = null;
+      _currentAudio.onerror = null;
+      _currentAudio = null;
+    }
+  }
+
   /* Public API
      text     — Arabic text string (audio_text field)
      audioRef — path to audio file, or null to go straight to TTS
      onEnd    — optional callback fired when playback ends              */
   function speakArabic(text, audioRef, onEnd) {
+    stopCurrentAudio();
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+
     if (audioRef) {
       const a = new Audio(audioRef);
-      a.onended = onEnd || null;
-      a.onerror = () => ttsFallback(text, onEnd);
-      a.play().catch(() => ttsFallback(text, onEnd));
+      _currentAudio = a;
+      a.onended = () => { _currentAudio = null; if (onEnd) onEnd(); };
+      a.onerror = () => { _currentAudio = null; ttsFallback(text, onEnd); };
+      a.play().catch(() => { _currentAudio = null; ttsFallback(text, onEnd); });
       return;
     }
     ttsFallback(text, onEnd);
   }
 
   function stopSpeech() {
+    stopCurrentAudio();
     if (window.speechSynthesis) window.speechSynthesis.cancel();
   }
 
