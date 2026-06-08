@@ -1,4 +1,6 @@
 .superpowers/
+.claude/
+docs/
 node_modules/
 .env
 .env.local
