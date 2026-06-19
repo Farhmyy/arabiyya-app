@@ -27,10 +27,13 @@ function App() {
 
   /* Nickname check */
   const [nickname, setNickname] = useState(null);
-  const [nicknameLoading, setNicknameLoading] = useState(false);
+  const [nicknameLoading, setNicknameLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setNicknameLoading(false); // tidak ada user, tidak perlu loading
+      return;
+    }
     setNicknameLoading(true);
     sbClient.from('users').select('nickname').eq('id', user.id).maybeSingle()
       .then(({ data }) => setNickname(data?.nickname || null))
@@ -78,6 +81,15 @@ function App() {
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, []);
 
+  const [swUpdate, setSwUpdate] = useState(false);
+
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const onControllerChange = () => setSwUpdate(true);
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    return () => navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+  }, []);
+
   window._progress = progress;
 
   /* ── Loading splash ── */
@@ -116,6 +128,28 @@ function App() {
   if (user && role === 'admin') {
     return (
       <ToastProvider>
+        {swUpdate && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
+            background: 'var(--color-primary)', color: '#fff',
+            padding: '10px 16px', display: 'flex', alignItems: 'center',
+            justifyContent: 'space-between', gap: 12,
+            fontFamily: 'var(--font-latin)', fontSize: 14, fontWeight: 500,
+            boxShadow: '0 2px 8px rgba(0,0,0,.25)',
+          }}>
+            <span>🆕 Ada pembaruan tersedia.</span>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                background: '#fff', color: 'var(--color-primary)',
+                border: 'none', borderRadius: 8, padding: '6px 14px',
+                fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                fontFamily: 'var(--font-latin)',
+              }}>
+              Muat Ulang
+            </button>
+          </div>
+        )}
         <AdminScreen user={user} logout={logout} darkMode={darkMode} onToggleDark={() => setDarkMode(d => !d)} />
       </ToastProvider>
     );
@@ -139,6 +173,28 @@ function App() {
 
   return (
     <ToastProvider>
+      {swUpdate && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
+          background: 'var(--color-primary)', color: '#fff',
+          padding: '10px 16px', display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', gap: 12,
+          fontFamily: 'var(--font-latin)', fontSize: 14, fontWeight: 500,
+          boxShadow: '0 2px 8px rgba(0,0,0,.25)',
+        }}>
+          <span>🆕 Ada pembaruan tersedia.</span>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              background: '#fff', color: 'var(--color-primary)',
+              border: 'none', borderRadius: 8, padding: '6px 14px',
+              fontWeight: 700, fontSize: 13, cursor: 'pointer',
+              fontFamily: 'var(--font-latin)',
+            }}>
+            Muat Ulang
+          </button>
+        </div>
+      )}
       <div className="app">
         <Navbar route={route} navigate={navigate}
                 xp={progress.xp} streak={progress.streak}

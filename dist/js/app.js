@@ -106,6 +106,13 @@ function App() {
     document.addEventListener('visibilitychange', onVisibility);
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, []);
+  const [swUpdate, setSwUpdate] = useState(false);
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const onControllerChange = () => setSwUpdate(true);
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    return () => navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+  }, []);
   window._progress = progress;
 
   /* ── Loading splash ── */
@@ -162,7 +169,39 @@ function App() {
 
   /* ── Admin dashboard ── */
   if (user && role === 'admin') {
-    return /*#__PURE__*/React.createElement(ToastProvider, null, /*#__PURE__*/React.createElement(AdminScreen, {
+    return /*#__PURE__*/React.createElement(ToastProvider, null, swUpdate && /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 9999,
+        background: 'var(--color-primary)',
+        color: '#fff',
+        padding: '10px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 12,
+        fontFamily: 'var(--font-latin)',
+        fontSize: 14,
+        fontWeight: 500,
+        boxShadow: '0 2px 8px rgba(0,0,0,.25)'
+      }
+    }, /*#__PURE__*/React.createElement("span", null, "\uD83C\uDD95 Ada pembaruan tersedia."), /*#__PURE__*/React.createElement("button", {
+      onClick: () => window.location.reload(),
+      style: {
+        background: '#fff',
+        color: 'var(--color-primary)',
+        border: 'none',
+        borderRadius: 8,
+        padding: '6px 14px',
+        fontWeight: 700,
+        fontSize: 13,
+        cursor: 'pointer',
+        fontFamily: 'var(--font-latin)'
+      }
+    }, "Muat Ulang")), /*#__PURE__*/React.createElement(AdminScreen, {
       user: user,
       logout: logout,
       darkMode: darkMode,
@@ -202,7 +241,39 @@ function App() {
     isGuest: isGuest,
     onSwitchToLogin: onSwitchToLogin
   }));
-  return /*#__PURE__*/React.createElement(ToastProvider, null, /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(ToastProvider, null, swUpdate && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 9999,
+      background: 'var(--color-primary)',
+      color: '#fff',
+      padding: '10px 16px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 12,
+      fontFamily: 'var(--font-latin)',
+      fontSize: 14,
+      fontWeight: 500,
+      boxShadow: '0 2px 8px rgba(0,0,0,.25)'
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "\uD83C\uDD95 Ada pembaruan tersedia."), /*#__PURE__*/React.createElement("button", {
+    onClick: () => window.location.reload(),
+    style: {
+      background: '#fff',
+      color: 'var(--color-primary)',
+      border: 'none',
+      borderRadius: 8,
+      padding: '6px 14px',
+      fontWeight: 700,
+      fontSize: 13,
+      cursor: 'pointer',
+      fontFamily: 'var(--font-latin)'
+    }
+  }, "Muat Ulang")), /*#__PURE__*/React.createElement("div", {
     className: "app"
   }, /*#__PURE__*/React.createElement(Navbar, {
     route: route,
