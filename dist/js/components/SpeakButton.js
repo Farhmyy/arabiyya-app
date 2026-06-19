@@ -15,13 +15,13 @@ function SpeakButton({
   const supported = !!(window.isSpeechInputSupported && window.isSpeechInputSupported());
   const dim = size === 'sm' ? 28 : 36;
   const iconSize = size === 'sm' ? 13 : 16;
-
-  // state: 'idle' | 'listening' | 'correct' | 'wrong'
   const [phase, setPhase] = useState('idle');
   const [heard, setHeard] = useState('');
   const resetTimer = useRef(null);
+  const listenTimeout = useRef(null);
   useEffect(() => () => {
     clearTimeout(resetTimer.current);
+    clearTimeout(listenTimeout.current);
     if (window.stopListeningArabic) window.stopListeningArabic();
   }, []);
   if (!supported) return null;
@@ -32,16 +32,24 @@ function SpeakButton({
   const handleClick = e => {
     e.stopPropagation();
     if (phase === 'listening') {
+      clearTimeout(listenTimeout.current);
       window.stopListeningArabic();
       clearTimeout(resetTimer.current);
       setPhase('idle');
       return;
     }
-    clearTimeout(resetTimer.current); // batalkan timer reset dari sesi sebelumnya
+    clearTimeout(resetTimer.current);
+    clearTimeout(listenTimeout.current);
     setPhase('listening');
     setHeard('');
+    listenTimeout.current = setTimeout(() => {
+      window.stopListeningArabic && window.stopListeningArabic();
+      setPhase('wrong');
+      setHeard('');
+      scheduleReset();
+    }, 10000);
     window.startListeningArabic(transcripts => {
-      // Try all alternatives; use first one that matches, or fall back to first
+      clearTimeout(listenTimeout.current);
       let best = {
         correct: false,
         heard: transcripts[0] || ''
@@ -58,12 +66,13 @@ function SpeakButton({
       scheduleReset();
       if (onResult) onResult(best.correct);
     }, err => {
+      clearTimeout(listenTimeout.current);
       if (err === 'aborted') {
         setPhase('idle');
         return;
       }
       if (err === 'no-speech') {
-        setPhase('wrong'); // tampilkan "Tidak terdengar" bukan diam-diam reset
+        setPhase('wrong');
         scheduleReset();
         return;
       }
@@ -76,8 +85,6 @@ function SpeakButton({
       scheduleReset();
     });
   };
-
-  /* Visual config per phase */
   const cfg = {
     idle: {
       bg: 'transparent',

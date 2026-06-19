@@ -5,20 +5,23 @@
 function SpeakButton({ expectedText, size = 'md', onResult }) {
   const { useState, useEffect, useRef } = React;
 
-  if (!window.isSpeechInputSupported || !window.isSpeechInputSupported()) return null;
+  const supported = !!(window.isSpeechInputSupported && window.isSpeechInputSupported());
 
   const dim = size === 'sm' ? 28 : 36;
   const iconSize = size === 'sm' ? 13 : 16;
 
-  // state: 'idle' | 'listening' | 'correct' | 'wrong'
   const [phase, setPhase]   = useState('idle');
   const [heard,  setHeard]  = useState('');
-  const resetTimer = useRef(null);
+  const resetTimer    = useRef(null);
+  const listenTimeout = useRef(null);
 
   useEffect(() => () => {
     clearTimeout(resetTimer.current);
+    clearTimeout(listenTimeout.current);
     if (window.stopListeningArabic) window.stopListeningArabic();
   }, []);
+
+  if (!supported) return null;
 
   const scheduleReset = () => {
     clearTimeout(resetTimer.current);
@@ -29,19 +32,28 @@ function SpeakButton({ expectedText, size = 'md', onResult }) {
     e.stopPropagation();
 
     if (phase === 'listening') {
+      clearTimeout(listenTimeout.current);
       window.stopListeningArabic();
       clearTimeout(resetTimer.current);
       setPhase('idle');
       return;
     }
 
-    clearTimeout(resetTimer.current); // batalkan timer reset dari sesi sebelumnya
+    clearTimeout(resetTimer.current);
+    clearTimeout(listenTimeout.current);
     setPhase('listening');
     setHeard('');
 
+    listenTimeout.current = setTimeout(() => {
+      window.stopListeningArabic && window.stopListeningArabic();
+      setPhase('wrong');
+      setHeard('');
+      scheduleReset();
+    }, 10000);
+
     window.startListeningArabic(
       (transcripts) => {
-        // Try all alternatives; use first one that matches, or fall back to first
+        clearTimeout(listenTimeout.current);
         let best = { correct: false, heard: transcripts[0] || '' };
         for (const t of transcripts) {
           const result = window.checkArabicPronunciation(expectedText, t);
@@ -53,9 +65,10 @@ function SpeakButton({ expectedText, size = 'md', onResult }) {
         if (onResult) onResult(best.correct);
       },
       (err) => {
+        clearTimeout(listenTimeout.current);
         if (err === 'aborted') { setPhase('idle'); return; }
         if (err === 'no-speech') {
-          setPhase('wrong'); // tampilkan "Tidak terdengar" bukan diam-diam reset
+          setPhase('wrong');
           scheduleReset();
           return;
         }
@@ -70,7 +83,6 @@ function SpeakButton({ expectedText, size = 'md', onResult }) {
     );
   };
 
-  /* Visual config per phase */
   const cfg = {
     idle:      { bg: 'transparent', border: 'var(--color-primary)',        color: 'var(--color-primary)',        icon: 'mic',          title: 'Latihan ucap' },
     listening: { bg: 'var(--color-primary)',  border: 'var(--color-primary)',   color: '#fff',                       icon: 'mic',          title: 'Mendengarkan…' },
@@ -110,7 +122,6 @@ function SpeakButton({ expectedText, size = 'md', onResult }) {
         )}
       </button>
 
-      {/* Inline label shown only on correct/wrong — fades in */}
       {(phase === 'correct' || phase === 'wrong') && (
         <div className="anim-in" style={{
           position: 'absolute', top: dim + 4,
