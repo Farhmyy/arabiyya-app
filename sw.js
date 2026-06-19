@@ -11,7 +11,7 @@
    Jika lupa, pengguna lama akan tetap mendapat file lama dari cache browser.
 */
 
-const CACHE = 'arabiyya-20260619b';
+const CACHE = 'arabiyya-20260620a';
 
 /* Minimum files to pre-cache on install so the app loads offline immediately */
 const APP_SHELL = [
