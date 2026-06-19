@@ -1,7 +1,7 @@
 /* sw.js — Service Worker for offline support
    Strategy:
    - App shell (HTML, CSS, local JS, images) → stale-while-revalidate
-   - CDN scripts (React, Babel, Supabase, Lucide) → cache-first
+   - CDN scripts (React, Supabase, Lucide) → cache-first
    - Supabase REST / Auth API → network-only (user data must be fresh)
    - Supabase Storage images → cache-first (static assets)
 

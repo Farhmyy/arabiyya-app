@@ -6,9 +6,12 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 git add dist/
-# Jika ada perubahan di dist/ yang belum di-commit, commit otomatis
 if ! git diff --cached --quiet; then
-  git commit -m "chore: rebuild dist"
+  echo "❌ dist/ berubah setelah build. Tolong jalankan:"
+  echo "   git add dist/ && git commit -m 'build: rebuild dist'"
+  echo "   kemudian push lagi."
+  git restore --staged dist/
+  exit 1
 fi
-echo "✅ Build selesai. Melanjutkan push..."
+echo "✅ Build selesai dan dist/ sudah up-to-date. Melanjutkan push..."
 exit 0
