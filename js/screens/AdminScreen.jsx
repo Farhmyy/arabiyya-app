@@ -292,7 +292,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                 </thead>
                 <tbody>
                   {students.length === 0 && (
-                    <tr><td colSpan={11} style={{ padding: 24, textAlign: 'center', color: 'var(--color-text-light)' }}>Belum ada siswa terdaftar.</td></tr>
+                    <tr><td colSpan={12} style={{ padding: 24, textAlign: 'center', color: 'var(--color-text-light)' }}>Belum ada siswa terdaftar.</td></tr>
                   )}
                   {students.map((s, i) => (
                     <tr key={s.id} style={{ borderTop: '1px solid var(--color-border)', background: i % 2 === 0 ? 'var(--color-surface)' : 'var(--color-bg)' }}>

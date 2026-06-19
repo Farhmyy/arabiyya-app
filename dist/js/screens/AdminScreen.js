@@ -640,7 +640,7 @@ function AdminScreen({
       fontWeight: 700
     }
   }, "Reset"))), /*#__PURE__*/React.createElement("tbody", null, students.length === 0 && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-    colSpan: 11,
+    colSpan: 12,
     style: {
       padding: 24,
       textAlign: 'center',
