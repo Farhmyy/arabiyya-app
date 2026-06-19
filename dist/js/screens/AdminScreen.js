@@ -8,7 +8,8 @@ function AdminScreen({
 }) {
   const {
     useState,
-    useEffect
+    useEffect,
+    useCallback
   } = React;
   const [tab, setTab] = useState('ringkasan');
   const [confirmLogout, setConfirmLogout] = useState(false);
@@ -16,7 +17,10 @@ function AdminScreen({
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [loadError, setLoadError] = useState(null);
-  useEffect(() => {
+  const [resettingId, setResettingId] = useState(null);
+  const loadStudents = useCallback(() => {
+    setLoadingStudents(true);
+    setLoadError(null);
     sbClient.from('users').select('*').eq('role', 'student').then(({
       data,
       error
@@ -27,7 +31,6 @@ function AdminScreen({
         setStudents([]);
       } else {
         setStudents(data || []);
-        setLoadError(null);
       }
     }).catch(err => {
       console.error('[AdminScreen] Gagal memuat data siswa:', err);
@@ -35,6 +38,25 @@ function AdminScreen({
       setStudents([]);
     }).finally(() => setLoadingStudents(false));
   }, []);
+  useEffect(loadStudents, [loadStudents]);
+  const resetStudentProgress = useCallback(async (studentId, studentName) => {
+    if (!confirm(`Reset seluruh progress ${studentName}?\n\nSemua XP, streak, dan penyelesaian akan dihapus.`)) return;
+    setResettingId(studentId);
+    try {
+      const {
+        error
+      } = await sbClient.from('users').update({
+        progress: {}
+      }).eq('id', studentId);
+      if (error) throw error;
+      window.showToast && window.showToast(`Progress ${studentName} berhasil direset.`, 'success');
+      loadStudents();
+    } catch (err) {
+      window.showToast && window.showToast(`Gagal reset: ${err.message}`, 'error');
+    } finally {
+      setResettingId(null);
+    }
+  }, [loadStudents]);
   const SECTIONS = [{
     id: 'hiwar',
     label: 'Hiwar',
@@ -97,23 +119,27 @@ function AdminScreen({
   /* ── Analytics helpers ─────────────────────────────────────────────────── */
 
   const exportCSV = () => {
-    const header = ['No', 'Nama', 'Email', 'XP', 'Streak', 'Terakhir Aktif', 'Hiwar', 'Mufrodat', 'Tadribat 1', 'Qawaid', 'Tadribat 2', 'Imtihan', 'Best Imtihan', '% Selesai'];
-    const rows = students.map((s, i) => {
-      const p = s.progress || {};
-      const ch = p.chapters?.['3'] || {};
-      const fmt = (sec, scored) => scored ? sec?.completed ? `${sec.score}/${sec.maxScore}` : '-' : sec?.completed ? 'Selesai' : '-';
-      return [i + 1, s.nickname || '-', s.email || '-', p.xp || 0, p.streak || 0, p.lastActiveDate || '-', fmt(ch.hiwar, false), fmt(ch.mufrodat, false), fmt(ch.tadribat_1, true), fmt(ch.qawaid, false), fmt(ch.tadribat_2, true), fmt(ch.imtihan, true), ch.imtihan?.bestScore ?? '-', getOverall(s) + '%'];
-    });
-    const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-    const blob = new Blob(['﻿' + csv], {
-      type: 'text/csv;charset=utf-8;'
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `arabiyya-siswa-${today}.csv`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    try {
+      const header = ['No', 'Nama', 'Email', 'XP', 'Streak', 'Terakhir Aktif', 'Hiwar', 'Mufrodat', 'Tadribat 1', 'Qawaid', 'Tadribat 2', 'Imtihan', 'Best Imtihan', '% Selesai'];
+      const rows = students.map((s, i) => {
+        const p = s.progress || {};
+        const ch = p.chapters?.['3'] || {};
+        const fmt = (sec, scored) => scored ? sec?.completed ? `${sec.score}/${sec.maxScore}` : '-' : sec?.completed ? 'Selesai' : '-';
+        return [i + 1, s.nickname || '-', s.email || '-', p.xp || 0, p.streak || 0, p.lastActiveDate || '-', fmt(ch.hiwar, false), fmt(ch.mufrodat, false), fmt(ch.tadribat_1, true), fmt(ch.qawaid, false), fmt(ch.tadribat_2, true), fmt(ch.imtihan, true), ch.imtihan?.bestScore ?? '-', getOverall(s) + '%'];
+      });
+      const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob(['﻿' + csv], {
+        type: 'text/csv;charset=utf-8;'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `arabiyya-siswa-${today}.csv`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      window.showToast && window.showToast('Gagal export CSV: ' + err.message, 'error');
+    }
   };
   const getDistribution = (sectionId, maxScore) => {
     const bins = maxScore === 10 ? [{
@@ -332,7 +358,20 @@ function AdminScreen({
       color: '#fff',
       fontSize: 16
     }
-  }, darkMode ? '☀️' : '🌙'), /*#__PURE__*/React.createElement("span", {
+  }, darkMode ? '☀️' : '🌙'), /*#__PURE__*/React.createElement("button", {
+    onClick: loadStudents,
+    disabled: loadingStudents,
+    title: "Perbarui data siswa",
+    style: {
+      background: 'rgba(255,255,255,0.2)',
+      border: 'none',
+      borderRadius: 8,
+      padding: '6px 10px',
+      cursor: loadingStudents ? 'wait' : 'pointer',
+      color: '#fff',
+      fontSize: 16
+    }
+  }, "\uD83D\uDD04"), /*#__PURE__*/React.createElement("span", {
     className: "admin-header-email",
     style: {
       opacity: 0.85,
@@ -594,8 +633,14 @@ function AdminScreen({
       textAlign: 'center',
       fontWeight: 700
     }
-  }, "%"))), /*#__PURE__*/React.createElement("tbody", null, students.length === 0 && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-    colSpan: 10,
+  }, "%"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: '12px 8px',
+      textAlign: 'center',
+      fontWeight: 700
+    }
+  }, "Reset"))), /*#__PURE__*/React.createElement("tbody", null, students.length === 0 && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+    colSpan: 11,
     style: {
       padding: 24,
       textAlign: 'center',
@@ -686,7 +731,25 @@ function AdminScreen({
       fontWeight: 700,
       color: getOverall(s) >= 80 ? 'var(--color-success)' : getOverall(s) >= 40 ? 'var(--color-accent)' : 'var(--color-error)'
     }
-  }, getOverall(s), "%")))))), tab === 'perhatian' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+  }, getOverall(s), "%"), /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: '8px',
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => resetStudentProgress(s.id, s.nickname || s.email),
+    disabled: resettingId === s.id,
+    style: {
+      padding: '4px 10px',
+      borderRadius: 7,
+      border: 'none',
+      background: 'var(--color-error-50)',
+      color: 'var(--color-error)',
+      cursor: resettingId === s.id ? 'wait' : 'pointer',
+      fontSize: 12,
+      fontWeight: 600
+    }
+  }, resettingId === s.id ? '…' : '🔄 Reset'))))))), tab === 'perhatian' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     style: {
       color: 'var(--color-text-secondary)',
       fontSize: 14,

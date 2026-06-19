@@ -1,15 +1,18 @@
 /* AdminScreen — 4-tab admin dashboard + CMS */
 
 function AdminScreen({ user, logout, darkMode, onToggleDark }) {
-  const { useState, useEffect } = React;
+  const { useState, useEffect, useCallback } = React;
   const [tab, setTab] = useState('ringkasan');
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [wrongSec, setWrongSec] = useState('tadribat_1');
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [loadError, setLoadError] = useState(null);
+  const [resettingId, setResettingId] = useState(null);
 
-  useEffect(() => {
+  const loadStudents = useCallback(() => {
+    setLoadingStudents(true);
+    setLoadError(null);
     sbClient.from('users').select('*').eq('role', 'student')
       .then(({ data, error }) => {
         if (error) {
@@ -18,7 +21,6 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
           setStudents([]);
         } else {
           setStudents(data || []);
-          setLoadError(null);
         }
       })
       .catch(err => {
@@ -28,6 +30,23 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
       })
       .finally(() => setLoadingStudents(false));
   }, []);
+
+  useEffect(loadStudents, [loadStudents]);
+
+  const resetStudentProgress = useCallback(async (studentId, studentName) => {
+    if (!confirm(`Reset seluruh progress ${studentName}?\n\nSemua XP, streak, dan penyelesaian akan dihapus.`)) return;
+    setResettingId(studentId);
+    try {
+      const { error } = await sbClient.from('users').update({ progress: {} }).eq('id', studentId);
+      if (error) throw error;
+      window.showToast && window.showToast(`Progress ${studentName} berhasil direset.`, 'success');
+      loadStudents();
+    } catch (err) {
+      window.showToast && window.showToast(`Gagal reset: ${err.message}`, 'error');
+    } finally {
+      setResettingId(null);
+    }
+  }, [loadStudents]);
 
   const SECTIONS = [
     { id: 'hiwar',      label: 'Hiwar',      scored: false },
@@ -69,30 +88,34 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
   /* ── Analytics helpers ─────────────────────────────────────────────────── */
 
   const exportCSV = () => {
-    const header = ['No','Nama','Email','XP','Streak','Terakhir Aktif',
-      'Hiwar','Mufrodat','Tadribat 1','Qawaid','Tadribat 2','Imtihan','Best Imtihan','% Selesai'];
-    const rows = students.map((s, i) => {
-      const p  = s.progress || {};
-      const ch = p.chapters?.['3'] || {};
-      const fmt = (sec, scored) => scored
-        ? (sec?.completed ? `${sec.score}/${sec.maxScore}` : '-')
-        : (sec?.completed ? 'Selesai' : '-');
-      return [
-        i + 1, s.nickname || '-', s.email || '-',
-        p.xp || 0, p.streak || 0, p.lastActiveDate || '-',
-        fmt(ch.hiwar, false), fmt(ch.mufrodat, false),
-        fmt(ch.tadribat_1, true), fmt(ch.qawaid, false),
-        fmt(ch.tadribat_2, true), fmt(ch.imtihan, true),
-        ch.imtihan?.bestScore ?? '-',
-        getOverall(s) + '%',
-      ];
-    });
-    const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = `arabiyya-siswa-${today}.csv`; a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    try {
+      const header = ['No','Nama','Email','XP','Streak','Terakhir Aktif',
+        'Hiwar','Mufrodat','Tadribat 1','Qawaid','Tadribat 2','Imtihan','Best Imtihan','% Selesai'];
+      const rows = students.map((s, i) => {
+        const p  = s.progress || {};
+        const ch = p.chapters?.['3'] || {};
+        const fmt = (sec, scored) => scored
+          ? (sec?.completed ? `${sec.score}/${sec.maxScore}` : '-')
+          : (sec?.completed ? 'Selesai' : '-');
+        return [
+          i + 1, s.nickname || '-', s.email || '-',
+          p.xp || 0, p.streak || 0, p.lastActiveDate || '-',
+          fmt(ch.hiwar, false), fmt(ch.mufrodat, false),
+          fmt(ch.tadribat_1, true), fmt(ch.qawaid, false),
+          fmt(ch.tadribat_2, true), fmt(ch.imtihan, true),
+          ch.imtihan?.bestScore ?? '-',
+          getOverall(s) + '%',
+        ];
+      });
+      const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = `arabiyya-siswa-${today}.csv`; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      window.showToast && window.showToast('Gagal export CSV: ' + err.message, 'error');
+    }
   };
 
   const getDistribution = (sectionId, maxScore) => {
@@ -177,6 +200,10 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
           <button onClick={onToggleDark} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#fff', fontSize: 16 }}>
             {darkMode ? '☀️' : '🌙'}
           </button>
+          <button onClick={loadStudents} disabled={loadingStudents} title="Perbarui data siswa"
+            style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: loadingStudents ? 'wait' : 'pointer', color: '#fff', fontSize: 16 }}>
+            🔄
+          </button>
           <span className="admin-header-email" style={{ opacity: 0.85, fontSize: 12 }}>{user.email}</span>
           <button onClick={() => setConfirmLogout(true)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '6px 12px', cursor: 'pointer', color: '#fff', fontSize: 13, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
             <Icon name="log-out" size={14} /> Logout
@@ -260,11 +287,12 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                     <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 700 }}>Streak</th>
                     {SECTIONS.map(s => <th key={s.id} style={{ padding: '12px 8px', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>{s.label}</th>)}
                     <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 700 }}>%</th>
+                    <th style={{ padding: '12px 8px', textAlign: 'center', fontWeight: 700 }}>Reset</th>
                   </tr>
                 </thead>
                 <tbody>
                   {students.length === 0 && (
-                    <tr><td colSpan={10} style={{ padding: 24, textAlign: 'center', color: 'var(--color-text-light)' }}>Belum ada siswa terdaftar.</td></tr>
+                    <tr><td colSpan={11} style={{ padding: 24, textAlign: 'center', color: 'var(--color-text-light)' }}>Belum ada siswa terdaftar.</td></tr>
                   )}
                   {students.map((s, i) => (
                     <tr key={s.id} style={{ borderTop: '1px solid var(--color-border)', background: i % 2 === 0 ? 'var(--color-surface)' : 'var(--color-bg)' }}>
@@ -290,6 +318,19 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                         );
                       })}
                       <td style={{ padding: '10px 16px', textAlign: 'center', fontWeight: 700, color: getOverall(s) >= 80 ? 'var(--color-success)' : getOverall(s) >= 40 ? 'var(--color-accent)' : 'var(--color-error)' }}>{getOverall(s)}%</td>
+                      <td style={{ padding: '8px', textAlign: 'center' }}>
+                        <button
+                          onClick={() => resetStudentProgress(s.id, s.nickname || s.email)}
+                          disabled={resettingId === s.id}
+                          style={{
+                            padding: '4px 10px', borderRadius: 7, border: 'none',
+                            background: 'var(--color-error-50)', color: 'var(--color-error)',
+                            cursor: resettingId === s.id ? 'wait' : 'pointer',
+                            fontSize: 12, fontWeight: 600,
+                          }}>
+                          {resettingId === s.id ? '…' : '🔄 Reset'}
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
