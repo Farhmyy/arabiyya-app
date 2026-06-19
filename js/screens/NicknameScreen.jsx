@@ -11,18 +11,22 @@ function NicknameScreen({ user, onComplete }) {
     const trimmed = nickname.trim();
     if (trimmed.length < 2) { setError('Nickname minimal 2 karakter.'); return; }
     if (trimmed.length > 30) { setError('Nickname maksimal 30 karakter.'); return; }
+    if (!/^[\p{L}\p{N} ]+$/u.test(trimmed)) {
+      setError('Nickname hanya boleh huruf, angka, dan spasi.');
+      return;
+    }
 
     setSaving(true);
     setError(null);
     try {
-      const { error: insertError } = await sbClient.from('users').insert({
+      const { error: insertError } = await sbClient.from('users').upsert({
         id: user.id,
         email: user.email,
         nickname: trimmed,
         role: 'student',
         last_active_date: new Date().toISOString().slice(0, 10),
         progress: { xp: 0, streak: 1, chapters: window.DEFAULT_PROGRESS },
-      });
+      }, { onConflict: 'id' });
       if (insertError) throw insertError;
       onComplete(trimmed);
     } catch {

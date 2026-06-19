@@ -21,6 +21,10 @@ function NicknameScreen({
       setError('Nickname maksimal 30 karakter.');
       return;
     }
+    if (!/^[\p{L}\p{N} ]+$/u.test(trimmed)) {
+      setError('Nickname hanya boleh huruf, angka, dan spasi.');
+      return;
+    }
     setSaving(true);
     setError(null);
     try {
