@@ -19,69 +19,67 @@
 <body>
   <div id="root"></div>
 
-  <!-- ═══ Runtime: React + Babel ═══ -->
+  <!-- ═══ Runtime: React (Babel tidak lagi diperlukan) ═══ -->
   <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"
           crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"
           crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
-          crossorigin="anonymous"></script>
 
   <!-- ═══ TTS Helper ═══ -->
-  <script src="js/lib/tts.js"></script>
+  <script src="dist/js/lib/tts.js"></script>
 
   <!-- ═══ Speech Recognition Helper ═══ -->
-  <script src="js/lib/speechRecognition.js"></script>
+  <script src="dist/js/lib/speechRecognition.js"></script>
 
   <!-- ═══ Spaced Repetition (SM-2) ═══ -->
-  <script src="js/lib/srs.js"></script>
+  <script src="dist/js/lib/srs.js"></script>
 
   <!-- ═══ Supabase ═══ -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/lib/supabase.js"></script>
+  <script src="dist/js/lib/supabase.js"></script>
 
   <!-- ═══ Data ═══ -->
-  <script src="js/data.js"></script>
+  <script src="dist/js/data.js"></script>
 
   <!-- ═══ Hooks ═══ -->
-  <script type="text/babel" src="js/hooks/useProgress.js"></script>
-  <script type="text/babel" src="js/hooks/useAuth.js"></script>
-  <script type="text/babel" src="js/hooks/useCloudProgress.js"></script>
-  <script type="text/babel" src="js/hooks/useCloudContent.js"></script>
-  <script type="text/babel" src="js/hooks/useQuizTimer.js"></script>
+  <script src="dist/js/hooks/useProgress.js"></script>
+  <script src="dist/js/hooks/useAuth.js"></script>
+  <script src="dist/js/hooks/useCloudProgress.js"></script>
+  <script src="dist/js/hooks/useCloudContent.js"></script>
+  <script src="dist/js/hooks/useQuizTimer.js"></script>
 
   <!-- ═══ UI Primitives (order matters: dependencies first) ═══ -->
-  <script type="text/babel" src="js/components/Icon.jsx"></script>
-  <script type="text/babel" src="js/components/Card.jsx"></script>
-  <script type="text/babel" src="js/components/Button.jsx"></script>
-  <script type="text/babel" src="js/components/Badge.jsx"></script>
-  <script type="text/babel" src="js/components/AudioButton.jsx"></script>
-  <script type="text/babel" src="js/components/ProgressBar.jsx"></script>
-  <script type="text/babel" src="js/components/Toast.jsx"></script>
-  <script type="text/babel" src="js/components/SpeakButton.jsx"></script>
+  <script src="dist/js/components/Icon.js"></script>
+  <script src="dist/js/components/Card.js"></script>
+  <script src="dist/js/components/Button.js"></script>
+  <script src="dist/js/components/Badge.js"></script>
+  <script src="dist/js/components/AudioButton.js"></script>
+  <script src="dist/js/components/ProgressBar.js"></script>
+  <script src="dist/js/components/Toast.js"></script>
+  <script src="dist/js/components/SpeakButton.js"></script>
 
   <!-- ═══ Layout Components ═══ -->
-  <script type="text/babel" src="js/components/Navbar.jsx"></script>
-  <script type="text/babel" src="js/components/ChapterCard.jsx"></script>
-  <script type="text/babel" src="js/components/SectionCard.jsx"></script>
-  <script type="text/babel" src="js/components/DialogueBubble.jsx"></script>
-  <script type="text/babel" src="js/components/QuizNavigator.jsx"></script>
+  <script src="dist/js/components/Navbar.js"></script>
+  <script src="dist/js/components/ChapterCard.js"></script>
+  <script src="dist/js/components/SectionCard.js"></script>
+  <script src="dist/js/components/DialogueBubble.js"></script>
+  <script src="dist/js/components/QuizNavigator.js"></script>
 
   <!-- ═══ Screens ═══ -->
-  <script type="text/babel" src="js/screens/LoginScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/NicknameScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/HomeScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/ChapterScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/HiwarScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/MufrodatScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/Tadribat1Screen.jsx"></script>
-  <script type="text/babel" src="js/screens/QawaidScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/Tadribat2Screen.jsx"></script>
-  <script type="text/babel" src="js/screens/ImtihanScreen.jsx"></script>
-  <script type="text/babel" src="js/screens/AdminScreen.jsx"></script>
+  <script src="dist/js/screens/LoginScreen.js"></script>
+  <script src="dist/js/screens/NicknameScreen.js"></script>
+  <script src="dist/js/screens/HomeScreen.js"></script>
+  <script src="dist/js/screens/ChapterScreen.js"></script>
+  <script src="dist/js/screens/HiwarScreen.js"></script>
+  <script src="dist/js/screens/MufrodatScreen.js"></script>
+  <script src="dist/js/screens/Tadribat1Screen.js"></script>
+  <script src="dist/js/screens/QawaidScreen.js"></script>
+  <script src="dist/js/screens/Tadribat2Screen.js"></script>
+  <script src="dist/js/screens/ImtihanScreen.js"></script>
+  <script src="dist/js/screens/AdminScreen.js"></script>
 
   <!-- ═══ App Entry ═══ -->
-  <script type="text/babel" src="js/app.jsx"></script>
+  <script src="dist/js/app.js"></script>
 
   <!-- ═══ Service Worker Registration ═══ -->
   <script>
