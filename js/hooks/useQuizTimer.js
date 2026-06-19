@@ -1,11 +1,12 @@
 /* useQuizTimer — countdown timer hook for quiz/exam screens */
 
 function useQuizTimer({ durationSeconds, active, initialTimeLeft, onTimeUp }) {
-  const { useState, useEffect, useRef } = React;
+  const { useState, useEffect, useRef, useCallback } = React;
 
   const [timeLeft, setTimeLeft] = useState(
     initialTimeLeft != null && initialTimeLeft > 0 ? initialTimeLeft : durationSeconds
   );
+  const [resetCount, setResetCount] = useState(0);
 
   const onTimeUpRef = useRef(onTimeUp);
   onTimeUpRef.current = onTimeUp;
@@ -17,7 +18,7 @@ function useQuizTimer({ durationSeconds, active, initialTimeLeft, onTimeUp }) {
       setTimeLeft(t => Math.max(0, t - 1));
     }, 1000);
     return () => clearInterval(id);
-  }, [active]);
+  }, [active, resetCount]);
 
   /* Fire onTimeUp when timeLeft hits zero */
   useEffect(() => {
@@ -27,7 +28,10 @@ function useQuizTimer({ durationSeconds, active, initialTimeLeft, onTimeUp }) {
   }, [timeLeft, active]);
 
   /* Reset to full duration (call on restart) */
-  const reset = () => setTimeLeft(durationSeconds);
+  const reset = useCallback(() => {
+    setTimeLeft(durationSeconds);
+    setResetCount(c => c + 1);
+  }, [durationSeconds]);
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;

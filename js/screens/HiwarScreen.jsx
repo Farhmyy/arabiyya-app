@@ -107,12 +107,13 @@ function HiwarScreen({ navigate, progress }) {
     if (window.stopSpeech) window.stopSpeech();
   }, []);
 
-  /* Mark hiwar complete when page mounts */
+  /* Mark hiwar complete — re-runs when progress becomes ready */
+  const hiwarCompletedRef = useRef(false);
   useEffect(() => {
-    if (progress && progress.completeSection) {
-      progress.completeSection('3', 'hiwar', hiwar.scenes.length, hiwar.scenes.length);
-    }
-  }, []);
+    if (hiwarCompletedRef.current || !progress?.completeSection) return;
+    hiwarCompletedRef.current = true;
+    progress.completeSection('3', 'hiwar', hiwar.scenes.length, hiwar.scenes.length);
+  }, [progress]);
 
   const isPlayingAll = playingKey !== null && allLines.some(l => l.key === playingKey && playAllRef.current);
 

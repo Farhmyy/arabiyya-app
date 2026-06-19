@@ -24,6 +24,13 @@ function useCloudProgress(uid) {
   const [state, setState] = useState(DEFAULT);
   const saveTimeout = useRef(null);
 
+  /* Cleanup pending save on unmount */
+  useEffect(() => {
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    };
+  }, []);
+
   /* Load from Supabase on mount */
   useEffect(() => {
     if (!uid || typeof sbClient === 'undefined' || !sbClient) return;
@@ -32,7 +39,8 @@ function useCloudProgress(uid) {
         if (data?.progress && Object.keys(data.progress).length > 0) {
           const saved = data.progress;
           const today = localDateStr();
-          const diff = (new Date(today) - new Date(saved.lastActiveDate || today)) / 86400000;
+          const parseLocalDate = str => { const [y, m, d] = str.split('-').map(Number); return new Date(y, m - 1, d).getTime(); };
+          const diff = (parseLocalDate(today) - parseLocalDate(saved.lastActiveDate || today)) / 86400000;
           if (diff > 1) saved.streak = 0;
           setState(saved);
         }

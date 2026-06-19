@@ -126,7 +126,7 @@ function Tadribat1Screen({ navigate, progress }) {
       .map(([displayIdx]) => questionOrder[Number(displayIdx)]);
     progress?.completeSection?.('3', 'tadribat_1', finalScore, orderedQuestions.length, wrongIndices);
     sessionStorage.removeItem(T1_KEY);
-  }, [showResults]);
+  }, [showResults, progress]);
 
   /* ── Navigation ── */
   const jumpTo = useCallback((i) => {

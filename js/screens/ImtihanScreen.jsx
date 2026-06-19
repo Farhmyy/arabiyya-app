@@ -7,7 +7,7 @@ const MAX_ATTEMPTS     = 3;
 function ImtihanScreen({ navigate, progress }) {
   const { useState, useEffect, useCallback, useRef } = React;
   const { imtihan, ui } = DATA;
-  const questions = imtihan.questions;
+  const questions = imtihan?.questions ?? [];
 
   const [savedSession] = useState(() => {
     try { return JSON.parse(sessionStorage.getItem(IMTIHAN_KEY)) || {}; }
@@ -62,7 +62,7 @@ function ImtihanScreen({ navigate, progress }) {
     const wrongIndices = Object.keys(answeredMap).filter(k => !answeredMap[k].isCorrect).map(Number);
     progress?.completeSection?.('3', 'imtihan', finalScore, questions.length, wrongIndices);
     sessionStorage.removeItem(IMTIHAN_KEY);
-  }, [showResults]);
+  }, [showResults, progress]);
 
   /* ── Navigation ── */
   const jumpTo = useCallback((i) => {
@@ -101,6 +101,20 @@ function ImtihanScreen({ navigate, progress }) {
       <span className={isUrgent ? 'pulse' : ''}>{formattedTime}</span>
     </div>
   );
+
+  /* ── Guard: data.js not yet updated in cache ── */
+  if (!imtihan) {
+    return (
+      <div className="page anim-in" style={{ textAlign: 'center', padding: 40 }}>
+        <p style={{ color: 'var(--color-text-secondary)' }}>
+          Data ujian tidak ditemukan. Silakan{' '}
+          <a onClick={() => window.location.reload()} style={{ color: 'var(--color-primary)', cursor: 'pointer' }}>
+            muat ulang halaman
+          </a>.
+        </p>
+      </div>
+    );
+  }
 
   /* ── Intro screen ── */
   if (!started) {
@@ -195,7 +209,7 @@ function ImtihanScreen({ navigate, progress }) {
     const isNewBest   = score > (imtihanData?.bestScore ?? imtihanData?.score ?? 0);
     const passing     = score >= Math.ceil(questions.length * 0.6);
     const perfectScore = score === questions.length;
-    const finalAttempts = (imtihanData?.attempts ?? 0); // after completeSection updates this
+    const finalAttempts = Math.min(attemptsUsed + 1, MAX_ATTEMPTS);
 
     return (
       <div className="page anim-in">

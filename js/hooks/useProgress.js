@@ -16,12 +16,12 @@ const DEFAULT_STATE = {
   lastActiveDate: localDateStr(),
   chapters: {
     '3': {
-      hiwar:      { completed: false, score: 0, maxScore: 6 },
-      mufrodat:   { completed: false, score: 0, maxScore: 6 },
-      tadribat_1: { completed: false, score: 0, maxScore: 15, bestScore: 0, attempts: 0 },
-      qawaid:     { completed: false, score: 0, maxScore: 6 },
-      tadribat_2: { completed: false, score: 0, maxScore: 10, bestScore: 0, attempts: 0 },
-      imtihan:    { completed: false, score: 0, maxScore: 15, bestScore: 0, attempts: 0 },
+      hiwar:      { completed: false, score: 0, maxScore: DATA?.hiwar?.scenes?.length        ?? 6  },
+      mufrodat:   { completed: false, score: 0, maxScore: DATA?.mufrodat?.length             ?? 6  },
+      tadribat_1: { completed: false, score: 0, maxScore: DATA?.tadribat_1?.questions?.length ?? 15, bestScore: 0, attempts: 0 },
+      qawaid:     { completed: false, score: 0, maxScore: DATA?.qawaid?.topics?.length        ?? 3  },
+      tadribat_2: { completed: false, score: 0, maxScore: DATA?.tadribat_2?.questions?.length ?? 10, bestScore: 0, attempts: 0 },
+      imtihan:    { completed: false, score: 0, maxScore: DATA?.imtihan?.questions?.length    ?? 15, bestScore: 0, attempts: 0 },
     },
   },
 };
@@ -37,7 +37,8 @@ function loadState() {
     /* validate streak */
     const today = localDateStr();
     const last  = saved.lastActiveDate || today;
-    const diff  = (new Date(today) - new Date(last)) / 86400000;
+    const parseLocalDate = str => { const [y, m, d] = str.split('-').map(Number); return new Date(y, m - 1, d).getTime(); };
+    const diff  = (parseLocalDate(today) - parseLocalDate(last)) / 86400000;
     if (diff > 1) saved.streak = 0;
 
     return saved;

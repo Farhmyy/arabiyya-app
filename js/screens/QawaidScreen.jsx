@@ -199,17 +199,20 @@ function MudhariExplorer({ topic }) {
 function SentenceBuilder({ topic }) {
   const { useState } = React;
   const [setIdx,   setBuildSetIdx] = useState(0);
-  const [placed,   setPlaced]      = useState([]);
+  const [placed,   setPlaced]      = useState([]); // array of { token, originalIdx }
   const [result,   setResult]      = useState(null);
 
   const buildSet  = topic.builder_sets[setIdx];
-  const remaining = buildSet.tokens.filter(t => !placed.includes(t));
+  const usedIdx   = new Set(placed.map(p => p.originalIdx));
+  const remaining = buildSet.tokens
+    .map((t, i) => ({ t, i }))
+    .filter(({ i }) => !usedIdx.has(i));
 
-  const placeToken = (token) => { if (result) return; setPlaced(prev => [...prev, token]); };
-  const removeToken = (i)    => { if (result) return; setPlaced(prev => prev.filter((_, idx) => idx !== i)); setResult(null); };
+  const placeToken  = (token, originalIdx) => { if (result) return; setPlaced(prev => [...prev, { token, originalIdx }]); };
+  const removeToken = (i) => { if (result) return; setPlaced(prev => prev.filter((_, idx) => idx !== i)); setResult(null); };
 
   const check = () => {
-    const isOk = placed.join(' ') === buildSet.answer;
+    const isOk = placed.map(p => p.token).join(' ') === buildSet.answer;
     setResult(isOk ? 'correct' : 'wrong');
     /* task 9: no audio */
   };
@@ -252,16 +255,16 @@ function SentenceBuilder({ topic }) {
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 12, color: 'var(--color-text-light)', marginBottom: 6 }}>Kata tersedia (klik untuk menempatkan):</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, direction: 'rtl', justifyContent: 'flex-end' }}>
-          {remaining.length > 0 ? remaining.map((token, i) => (
-            <button key={i} onClick={() => placeToken(token)}
+          {remaining.length > 0 ? remaining.map(({ t, i }) => (
+            <button key={i} onClick={() => placeToken(t, i)}
               style={{
                 padding: '8px 16px', borderRadius: 999, cursor: 'pointer',
-                background: getColor(token) + '22', color: getColor(token),
-                border: `1.5px solid ${getColor(token)}55`,
+                background: getColor(t) + '22', color: getColor(t),
+                border: `1.5px solid ${getColor(t)}55`,
                 fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 20,
                 transition: 'all var(--dur-fast)',
               }}>
-              {token}
+              {t}
             </button>
           )) : (
             <div style={{ color: 'var(--color-text-light)', fontSize: 13 }}>— semua kata sudah ditempatkan —</div>
@@ -276,15 +279,15 @@ function SentenceBuilder({ topic }) {
         display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
         flexWrap: 'wrap', gap: 8, direction: 'rtl', marginBottom: 12,
       }}>
-        {placed.length > 0 ? placed.map((token, i) => (
+        {placed.length > 0 ? placed.map((p, i) => (
           <button key={i} onClick={() => removeToken(i)}
             style={{
               padding: '8px 16px', borderRadius: 999, border: 'none', cursor: result ? 'default' : 'pointer',
-              background: getColor(token), color: '#fff',
+              background: getColor(p.token), color: '#fff',
               fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 20,
               transition: 'all var(--dur-fast)',
             }}>
-            {token}
+            {p.token}
           </button>
         )) : (
           <div style={{ color: 'var(--color-text-light)', fontSize: 13, width: '100%', textAlign: 'center' }}>
