@@ -16,7 +16,10 @@ function useCloudContent(contentId, fallback, transform) {
       if (raw && Object.keys(raw).length > 0) {
         setData(transform ? transform(raw) : raw);
       }
-    }).catch(() => {});
+    }).catch(() => {
+      if (!mounted) return;
+      window.showToast && window.showToast('Koneksi ke server gagal, menggunakan data bawaan.', 'error');
+    });
     return () => {
       mounted = false;
     };
