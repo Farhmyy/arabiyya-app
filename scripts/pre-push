@@ -1,0 +1,14 @@
+#!/bin/sh
+echo "🔨 Pre-push: building dist/..."
+npm run build
+if [ $? -ne 0 ]; then
+  echo "❌ Build gagal. Push dibatalkan."
+  exit 1
+fi
+git add dist/
+# Jika ada perubahan di dist/ yang belum di-commit, commit otomatis
+if ! git diff --cached --quiet; then
+  git commit -m "chore: rebuild dist"
+fi
+echo "✅ Build selesai. Melanjutkan push..."
+exit 0

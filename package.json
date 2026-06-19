@@ -1,0 +1,14 @@
+{
+  "name": "arabiyya-app",
+  "private": true,
+  "scripts": {
+    "build": "babel js --out-dir dist/js --extensions .js,.jsx",
+    "watch": "babel js --out-dir dist/js --extensions .js,.jsx --watch",
+    "prepare": "node scripts/install-hooks.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.29.0",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-react": "^7.29.0"
+  }
+}
