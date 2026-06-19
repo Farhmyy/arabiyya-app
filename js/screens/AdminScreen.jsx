@@ -7,13 +7,25 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
   const [wrongSec, setWrongSec] = useState('tadribat_1');
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     sbClient.from('users').select('*').eq('role', 'student')
-      .then(({ data }) => {
-        setStudents(data || []);
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('[AdminScreen] Gagal memuat data siswa:', error);
+          setLoadError(error.message);
+          setStudents([]);
+        } else {
+          setStudents(data || []);
+          setLoadError(null);
+        }
       })
-      .catch(() => {})
+      .catch(err => {
+        console.error('[AdminScreen] Gagal memuat data siswa:', err);
+        setLoadError(err.message || 'Gagal memuat data siswa');
+        setStudents([]);
+      })
       .finally(() => setLoadingStudents(false));
   }, []);
 
@@ -178,6 +190,12 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px 80px' }}>
 
+        {loadError && (
+          <div style={{ marginBottom: 16, padding: '10px 16px', borderRadius: 10, background: 'var(--color-error-50)', border: '1px solid var(--color-error-border)', color: 'var(--color-error)', fontSize: 13, fontWeight: 500 }}>
+            ⚠ Gagal memuat data siswa: {loadError}
+          </div>
+        )}
+
         {tab === 'ringkasan' && (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, marginBottom: 24 }}>
@@ -249,7 +267,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                     <tr><td colSpan={10} style={{ padding: 24, textAlign: 'center', color: 'var(--color-text-light)' }}>Belum ada siswa terdaftar.</td></tr>
                   )}
                   {students.map((s, i) => (
-                    <tr key={s.uid} style={{ borderTop: '1px solid var(--color-border)', background: i % 2 === 0 ? 'var(--color-surface)' : 'var(--color-bg)' }}>
+                    <tr key={s.id} style={{ borderTop: '1px solid var(--color-border)', background: i % 2 === 0 ? 'var(--color-surface)' : 'var(--color-bg)' }}>
                       <td style={{ padding: '10px 16px', fontWeight: 600, color: 'var(--color-text-primary)' }}>{s.nickname}</td>
                       <td style={{ padding: '10px 16px', color: 'var(--color-text-secondary)', fontSize: 12 }}>{s.email}</td>
                       <td style={{ padding: '10px 16px', textAlign: 'center', color: 'var(--color-primary)', fontWeight: 700 }}>{s.progress?.xp || 0}</td>
@@ -290,7 +308,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
               : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {atRisk.map(s => (
-                    <div key={s.uid} style={{ background: 'var(--color-surface)', borderRadius: 12, padding: '14px 18px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                    <div key={s.id} style={{ background: 'var(--color-surface)', borderRadius: 12, padding: '14px 18px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
                       <div>
                         <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{s.nickname}</div>
                         <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 2 }}>{s.email}</div>
@@ -434,7 +452,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                         const daysSince  = lastDate ? Math.floor((new Date(today) - new Date(lastDate)) / 86400000) : null;
                         const overall    = getOverall(s);
                         return (
-                          <div key={s.uid} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '12px 16px', borderRadius: 10, border: '1px solid var(--color-border)', background: 'var(--color-bg)', flexWrap: 'wrap' }}>
+                          <div key={s.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '12px 16px', borderRadius: 10, border: '1px solid var(--color-border)', background: 'var(--color-bg)', flexWrap: 'wrap' }}>
                             <div>
                               <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{s.nickname || '—'}</div>
                               <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 2 }}>{s.email}</div>
@@ -515,7 +533,7 @@ function AdminCMSPanel() {
       }
       const wordId = formData.id || Date.now().toString();
       const cleanWord = { id: wordId, arabic: formData.arabic, meaning: formData.meaning,
-        example: formData.example, image_url: imageUrl || null };
+        example: formData.example, example_id: formData.example_id || null, image_url: imageUrl || null };
       let newWords;
       if (formData.id) {
         newWords = words.map(w => w.id === formData.id ? cleanWord : w);
@@ -559,7 +577,7 @@ function AdminCMSPanel() {
       {cmsTab === 'mufrodat' && (
         <div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-            <button onClick={() => setEditWord({ id: null, arabic: '', meaning: '', example: '', image_url: null })}
+            <button onClick={() => setEditWord({ id: null, arabic: '', meaning: '', example: '', example_id: '', image_url: null })}
               style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)' }}>
               + Tambah Kosakata
             </button>
@@ -637,9 +655,10 @@ function WordEditModal({ word, saving, uploadProgress, onSave, onClose }) {
           {form.id ? 'Edit Kosakata' : 'Tambah Kosakata Baru'}
         </h3>
         {[
-          { key: 'arabic', label: 'Arab', placeholder: 'الطَّبِيب', dir: 'rtl', font: 'var(--font-arabic)', size: 20 },
-          { key: 'meaning', label: 'Arti (Indonesia)', placeholder: 'Dokter', dir: 'ltr', font: 'var(--font-latin)', size: 15 },
-          { key: 'example', label: 'Contoh kalimat (Arab)', placeholder: 'فَحَصَ الطَّبِيبُ الْمَرِيضَ', dir: 'rtl', font: 'var(--font-arabic)', size: 18 },
+          { key: 'arabic',     label: 'Arab',                      placeholder: 'الطَّبِيب',                  dir: 'rtl', font: 'var(--font-arabic)', size: 20 },
+          { key: 'meaning',    label: 'Arti (Indonesia)',           placeholder: 'Dokter',                    dir: 'ltr', font: 'var(--font-latin)',  size: 15 },
+          { key: 'example',    label: 'Contoh kalimat (Arab)',      placeholder: 'فَحَصَ الطَّبِيبُ الْمَرِيضَ', dir: 'rtl', font: 'var(--font-arabic)', size: 18 },
+          { key: 'example_id', label: 'Contoh kalimat (Indonesia)', placeholder: 'Dokter memeriksa si sakit', dir: 'ltr', font: 'var(--font-latin)',  size: 15 },
         ].map(f => (
           <div key={f.key} style={{ marginBottom: 14 }}>
             <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 4 }}>{f.label}</label>

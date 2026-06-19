@@ -1224,6 +1224,7 @@ function AdminCMSPanel() {
         arabic: formData.arabic,
         meaning: formData.meaning,
         example: formData.example,
+        example_id: formData.example_id || null,
         image_url: imageUrl || null
       };
       let newWords;
@@ -1287,6 +1288,7 @@ function AdminCMSPanel() {
       arabic: '',
       meaning: '',
       example: '',
+      example_id: '',
       image_url: null
     }),
     style: {
@@ -1541,6 +1543,13 @@ function WordEditModal({
     dir: 'rtl',
     font: 'var(--font-arabic)',
     size: 18
+  }, {
+    key: 'example_id',
+    label: 'Contoh kalimat (Indonesia)',
+    placeholder: 'Dokter memeriksa si sakit',
+    dir: 'ltr',
+    font: 'var(--font-latin)',
+    size: 15
   }].map(f => /*#__PURE__*/React.createElement("div", {
     key: f.key,
     style: {

@@ -7,6 +7,7 @@ function useMufrodatContent() {
       ar: w.arabic,
       meaning_id: w.meaning,
       example_ar: w.example,
+      example_id: w.example_id || local.example_id || null,
       image_ref: w.image_url || local.image_ref || null,
       audio_text: w.arabic,
       audio_ref: local.audio_ref || null,
