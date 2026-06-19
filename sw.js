@@ -4,9 +4,14 @@
    - CDN scripts (React, Babel, Supabase, Lucide) → cache-first
    - Supabase REST / Auth API → network-only (user data must be fresh)
    - Supabase Storage images → cache-first (static assets)
+
+   !! WAJIB UPDATE SETIAP DEPLOY !!
+   Ganti tanggal di CACHE setiap kali ada perubahan pada js/, css/, atau data.js.
+   Format: 'arabiyya-YYYYMMDD'  → contoh deploy besok: 'arabiyya-20260620'
+   Jika lupa, pengguna lama akan tetap mendapat file lama dari cache browser.
 */
 
-const CACHE = 'arabiyya-v1';
+const CACHE = 'arabiyya-20260619b';
 
 /* Minimum files to pre-cache on install so the app loads offline immediately */
 const APP_SHELL = [
@@ -14,7 +19,7 @@ const APP_SHELL = [
   './css/base.css',
   './css/dark.css',
   './css/tokens.css',
-  './js/data.js',
+  './dist/js/data.js',
   './assets/images/logo-mark.svg',
 ];
 
