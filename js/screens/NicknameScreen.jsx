@@ -25,7 +25,7 @@ function NicknameScreen({ user, onComplete }) {
         nickname: trimmed,
         role: 'student',
         last_active_date: new Date().toISOString().slice(0, 10),
-        progress: { xp: 0, streak: 1, chapters: window.DEFAULT_PROGRESS },
+        progress: { xp: 0, streak: 1, chapters: window.DEFAULT_PROGRESS || {} },
       }, { onConflict: 'id' });
       if (insertError) throw insertError;
       onComplete(trimmed);

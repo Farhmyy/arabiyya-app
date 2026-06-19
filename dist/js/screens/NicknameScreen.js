@@ -39,7 +39,7 @@ function NicknameScreen({
         progress: {
           xp: 0,
           streak: 1,
-          chapters: window.DEFAULT_PROGRESS
+          chapters: window.DEFAULT_PROGRESS || {}
         }
       }, {
         onConflict: 'id'
