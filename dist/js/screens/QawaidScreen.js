@@ -1,0 +1,1331 @@
+/* QawaidScreen — Grammar lesson (التَّرْكِيب) — 3 topics */
+
+/* ── Shared display area for both explorers ── */
+function ExplorerDisplay({
+  form,
+  badges,
+  hint
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-surface)',
+      borderRadius: 14,
+      padding: '20px 16px',
+      border: '2px solid var(--color-primary-100)',
+      minHeight: 120,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      width: '100%',
+      boxSizing: 'border-box'
+    }
+  }, form ? /*#__PURE__*/React.createElement("div", {
+    className: "anim-in",
+    style: {
+      width: '100%'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 52,
+      fontWeight: 700,
+      color: 'var(--color-primary)',
+      lineHeight: 1.4,
+      textAlign: 'center',
+      display: 'block'
+    }
+  }, form), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      justifyContent: 'center',
+      marginTop: 12,
+      flexWrap: 'wrap'
+    }
+  }, badges)) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: 'var(--color-text-light)',
+      fontSize: 14
+    }
+  }, hint));
+}
+
+/* ── Conjugation Explorer (Penjelajah Tashrif Fi'il Mādhī) ── */
+function ConjugationExplorer({
+  topic
+}) {
+  const {
+    useState
+  } = React;
+  const DHOMIR = [{
+    ar: 'هُوَ',
+    id: 'Dia (lk)'
+  }, {
+    ar: 'هِيَ',
+    id: 'Dia (pr)'
+  }, {
+    ar: 'أَنَا',
+    id: 'Saya'
+  }, {
+    ar: 'أَنْتَ',
+    id: 'Kamu (lk)'
+  }, {
+    ar: 'أَنْتِ',
+    id: 'Kamu (pr)'
+  }, {
+    ar: 'نَحْنُ',
+    id: 'Kami'
+  }];
+  const verbs = topic.madhi_verbs || [];
+  const [verbIdx, setVerbIdx] = useState(0);
+  const [dhoIdx, setDhoIdx] = useState(null);
+  const randomPick = () => {
+    setVerbIdx(Math.floor(Math.random() * verbs.length));
+    setDhoIdx(Math.floor(Math.random() * DHOMIR.length));
+  };
+  const verb = verbs[verbIdx];
+  const form = dhoIdx !== null && verb ? verb.forms[dhoIdx] : null;
+  const suffix = dhoIdx !== null && verb ? verb.suffixes[dhoIdx] : null;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-primary-50)',
+      borderRadius: 16,
+      padding: '18px 16px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: 'var(--color-text-secondary)',
+      marginBottom: 12
+    }
+  }, "\uD83D\uDD79\uFE0F Penjelajah Tashrif M\u0101dh\u012B \u2014 pilih fi'il & dhamir"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: 'var(--color-text-light)',
+      marginBottom: 5
+    }
+  }, "Pilih Fi'il M\u0101dh\u012B:"), /*#__PURE__*/React.createElement("select", {
+    value: verbIdx,
+    onChange: e => {
+      setVerbIdx(Number(e.target.value));
+      setDhoIdx(null);
+    },
+    style: {
+      width: '100%',
+      padding: '10px 14px',
+      borderRadius: 12,
+      border: '1.5px solid var(--color-primary-100)',
+      fontSize: 16,
+      fontWeight: 600,
+      background: 'var(--color-surface)',
+      cursor: 'pointer',
+      fontFamily: 'var(--font-arabic)',
+      direction: 'rtl',
+      color: 'var(--color-text-primary)'
+    }
+  }, verbs.map((v, i) => /*#__PURE__*/React.createElement("option", {
+    key: i,
+    value: i
+  }, v.madhi, " \u2014 ", v.meaning)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: 'var(--color-text-light)',
+      marginBottom: 8
+    }
+  }, "Pilih Dhamir:"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: 8,
+      justifyContent: 'center'
+    }
+  }, DHOMIR.map((d, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    onClick: () => setDhoIdx(i),
+    style: {
+      padding: '8px 16px',
+      borderRadius: 999,
+      cursor: 'pointer',
+      fontWeight: 700,
+      background: dhoIdx === i ? 'var(--color-primary)' : 'var(--color-surface)',
+      color: dhoIdx === i ? '#fff' : 'var(--color-primary)',
+      border: `1.5px solid ${dhoIdx === i ? 'var(--color-primary)' : 'var(--color-primary-100)'}`,
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 18,
+      transition: 'all var(--dur-fast)'
+    }
+  }, d.ar)), /*#__PURE__*/React.createElement("button", {
+    onClick: randomPick,
+    style: {
+      padding: '8px 14px',
+      borderRadius: 999,
+      border: '1.5px solid var(--color-border)',
+      background: 'var(--color-surface)',
+      cursor: 'pointer',
+      fontSize: 13,
+      fontWeight: 600,
+      color: 'var(--color-text-secondary)'
+    }
+  }, "Acak \uD83C\uDFB2"))), /*#__PURE__*/React.createElement(ExplorerDisplay, {
+    form: form,
+    hint: "Pilih fi'il & dhamir di atas, atau tekan \uD83C\uDFB2 untuk acak",
+    badges: dhoIdx !== null && verb ? [/*#__PURE__*/React.createElement(Badge, {
+      key: "d",
+      tone: "primary"
+    }, /*#__PURE__*/React.createElement("span", {
+      lang: "ar",
+      style: {
+        fontFamily: 'var(--font-arabic)'
+      }
+    }, DHOMIR[dhoIdx].ar), "\xA0(", DHOMIR[dhoIdx].id, ")"), /*#__PURE__*/React.createElement(Badge, {
+      key: "s",
+      tone: "gold"
+    }, "akhiran: ", /*#__PURE__*/React.createElement("span", {
+      lang: "ar",
+      style: {
+        fontFamily: 'var(--font-arabic)',
+        fontSize: 16,
+        marginRight: 4
+      }
+    }, suffix)), /*#__PURE__*/React.createElement(Badge, {
+      key: "m",
+      tone: "neutral"
+    }, verb.meaning)] : []
+  }));
+}
+
+/* ── Mudhari Explorer (Penjelajah Tashrif Fi'il Mudhāri') ── task 6 */
+function MudhariExplorer({
+  topic
+}) {
+  const {
+    useState
+  } = React;
+  const DHOMIR = [{
+    ar: 'هُوَ',
+    id: 'Dia (lk)',
+    prefix: 'يـ'
+  }, {
+    ar: 'هِيَ',
+    id: 'Dia (pr)',
+    prefix: 'تـ'
+  }, {
+    ar: 'أَنَا',
+    id: 'Saya',
+    prefix: 'أـ'
+  }, {
+    ar: 'أَنْتَ',
+    id: 'Kamu (lk)',
+    prefix: 'تـ'
+  }, {
+    ar: 'أَنْتِ',
+    id: 'Kamu (pr)',
+    prefix: 'تـ'
+  }, {
+    ar: 'نَحْنُ',
+    id: 'Kami',
+    prefix: 'نـ'
+  }];
+  const verbs = topic.mudhari_verbs || [];
+  const [verbIdx, setVerbIdx] = useState(0);
+  const [dhoIdx, setDhoIdx] = useState(null);
+  const randomPick = () => {
+    setVerbIdx(Math.floor(Math.random() * verbs.length));
+    setDhoIdx(Math.floor(Math.random() * DHOMIR.length));
+  };
+  const verb = verbs[verbIdx];
+  const form = dhoIdx !== null && verb ? verb.forms[dhoIdx] : null;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-primary-50)',
+      borderRadius: 16,
+      padding: '18px 16px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: 'var(--color-text-secondary)',
+      marginBottom: 12
+    }
+  }, "\uD83D\uDD79\uFE0F Penjelajah Tashrif Mudh\u0101ri' \u2014 pilih fi'il & dhamir"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: 'var(--color-text-light)',
+      marginBottom: 5
+    }
+  }, "Pilih Fi'il M\u0101dh\u012B:"), /*#__PURE__*/React.createElement("select", {
+    value: verbIdx,
+    onChange: e => {
+      setVerbIdx(Number(e.target.value));
+      setDhoIdx(null);
+    },
+    style: {
+      width: '100%',
+      padding: '10px 14px',
+      borderRadius: 12,
+      border: '1.5px solid var(--color-primary-100)',
+      fontSize: 16,
+      fontWeight: 600,
+      background: 'var(--color-surface)',
+      cursor: 'pointer',
+      fontFamily: 'var(--font-arabic)',
+      direction: 'rtl',
+      color: 'var(--color-text-primary)'
+    }
+  }, verbs.map((v, i) => /*#__PURE__*/React.createElement("option", {
+    key: i,
+    value: i
+  }, v.madhi, " \u2014 ", v.meaning)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: 'var(--color-text-light)',
+      marginBottom: 8
+    }
+  }, "Pilih Dhamir:"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: 8,
+      justifyContent: 'center'
+    }
+  }, DHOMIR.map((d, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    onClick: () => setDhoIdx(i),
+    style: {
+      padding: '8px 16px',
+      borderRadius: 999,
+      cursor: 'pointer',
+      fontWeight: 700,
+      background: dhoIdx === i ? 'var(--color-primary)' : 'var(--color-surface)',
+      color: dhoIdx === i ? '#fff' : 'var(--color-primary)',
+      border: `1.5px solid ${dhoIdx === i ? 'var(--color-primary)' : 'var(--color-primary-100)'}`,
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 18,
+      transition: 'all var(--dur-fast)'
+    }
+  }, d.ar)), /*#__PURE__*/React.createElement("button", {
+    onClick: randomPick,
+    style: {
+      padding: '8px 14px',
+      borderRadius: 999,
+      border: '1.5px solid var(--color-border)',
+      background: 'var(--color-surface)',
+      cursor: 'pointer',
+      fontSize: 13,
+      fontWeight: 600,
+      color: 'var(--color-text-secondary)'
+    }
+  }, "Acak \uD83C\uDFB2"))), /*#__PURE__*/React.createElement(ExplorerDisplay, {
+    form: form,
+    hint: "Pilih fi'il & dhamir di atas, atau tekan \uD83C\uDFB2 untuk acak",
+    badges: dhoIdx !== null && verb ? [/*#__PURE__*/React.createElement(Badge, {
+      key: "d",
+      tone: "primary"
+    }, /*#__PURE__*/React.createElement("span", {
+      lang: "ar",
+      style: {
+        fontFamily: 'var(--font-arabic)'
+      }
+    }, DHOMIR[dhoIdx].ar), "\xA0(", DHOMIR[dhoIdx].id, ")"), /*#__PURE__*/React.createElement(Badge, {
+      key: "p",
+      tone: "neutral"
+    }, "huruf: ", /*#__PURE__*/React.createElement("span", {
+      lang: "ar",
+      style: {
+        fontFamily: 'var(--font-arabic)',
+        fontSize: 16,
+        marginRight: 4
+      }
+    }, DHOMIR[dhoIdx].prefix)), /*#__PURE__*/React.createElement(Badge, {
+      key: "m",
+      tone: "gold"
+    }, verb.meaning)] : []
+  }));
+}
+
+/* ── Sentence Builder (Bina Jumlah) ── */
+function SentenceBuilder({
+  topic
+}) {
+  const {
+    useState
+  } = React;
+  const [setIdx, setBuildSetIdx] = useState(0);
+  const [placed, setPlaced] = useState([]); // array of { token, originalIdx }
+  const [result, setResult] = useState(null);
+  const buildSet = topic.builder_sets[setIdx];
+  const usedIdx = new Set(placed.map(p => p.originalIdx));
+  const remaining = buildSet.tokens.map((t, i) => ({
+    t,
+    i
+  })).filter(({
+    i
+  }) => !usedIdx.has(i));
+  const placeToken = (token, originalIdx) => {
+    if (result) return;
+    setPlaced(prev => [...prev, {
+      token,
+      originalIdx
+    }]);
+  };
+  const removeToken = i => {
+    if (result) return;
+    setPlaced(prev => prev.filter((_, idx) => idx !== i));
+    setResult(null);
+  };
+  const check = () => {
+    const isOk = placed.map(p => p.token).join(' ') === buildSet.answer;
+    setResult(isOk ? 'correct' : 'wrong');
+    /* task 9: no audio */
+  };
+  const reset = () => {
+    setPlaced([]);
+    setResult(null);
+  };
+  const nextSet = () => {
+    setBuildSetIdx((setIdx + 1) % topic.builder_sets.length);
+    setPlaced([]);
+    setResult(null);
+  };
+  const prevSet = () => {
+    setBuildSetIdx((setIdx - 1 + topic.builder_sets.length) % topic.builder_sets.length);
+    setPlaced([]);
+    setResult(null);
+  };
+  const roleColors = {
+    fiil: '#34A853',
+    fail: '#4285F4',
+    maful: '#F9A825',
+    jar: '#7C3AED'
+  };
+  const getColor = token => {
+    for (const ex of topic.examples) {
+      const part = ex.parts?.find(p => p.text === token);
+      if (part) return roleColors[part.role] || '#64748B';
+    }
+    return '#64748B';
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-primary-50)',
+      borderRadius: 16,
+      padding: '18px 16px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: 'var(--color-text-secondary)',
+      marginBottom: 8
+    }
+  }, "\uD83E\uDDE9 Bina Jumlah \u2014 susun kata menjadi kalimat (fi'il paling kanan)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: prevSet,
+    style: {
+      padding: '6px 12px',
+      borderRadius: 8,
+      border: '1.5px solid var(--color-border)',
+      background: 'var(--color-surface)',
+      cursor: 'pointer',
+      fontSize: 13,
+      fontWeight: 600,
+      color: 'var(--color-text-secondary)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "chevron-left",
+    size: 14
+  }), " Sebelumnya"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: 'var(--color-text-secondary)'
+    }
+  }, "Set ", setIdx + 1, " dari ", topic.builder_sets.length), /*#__PURE__*/React.createElement("button", {
+    onClick: nextSet,
+    style: {
+      padding: '6px 12px',
+      borderRadius: 8,
+      border: '1.5px solid var(--color-border)',
+      background: 'var(--color-surface)',
+      cursor: 'pointer',
+      fontSize: 13,
+      fontWeight: 600,
+      color: 'var(--color-text-secondary)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 4
+    }
+  }, "Berikutnya ", /*#__PURE__*/React.createElement(Icon, {
+    name: "chevron-right",
+    size: 14
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: 'var(--color-text-light)',
+      marginBottom: 6
+    }
+  }, "Kata tersedia (klik untuk menempatkan):"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: 8,
+      direction: 'rtl',
+      justifyContent: 'flex-end'
+    }
+  }, remaining.length > 0 ? remaining.map(({
+    t,
+    i
+  }) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    onClick: () => placeToken(t, i),
+    style: {
+      padding: '8px 16px',
+      borderRadius: 999,
+      cursor: 'pointer',
+      background: getColor(t) + '22',
+      color: getColor(t),
+      border: `1.5px solid ${getColor(t)}55`,
+      fontFamily: 'var(--font-arabic)',
+      fontWeight: 700,
+      fontSize: 20,
+      transition: 'all var(--dur-fast)'
+    }
+  }, t)) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: 'var(--color-text-light)',
+      fontSize: 13
+    }
+  }, "\u2014 semua kata sudah ditempatkan \u2014"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: 60,
+      background: 'var(--color-surface)',
+      borderRadius: 14,
+      padding: '12px 14px',
+      border: `2px dashed ${result === 'correct' ? 'var(--color-success)' : result === 'wrong' ? 'var(--color-error)' : 'var(--color-border)'}`,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      flexWrap: 'wrap',
+      gap: 8,
+      direction: 'rtl',
+      marginBottom: 12
+    }
+  }, placed.length > 0 ? placed.map((p, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    onClick: () => removeToken(i),
+    style: {
+      padding: '8px 16px',
+      borderRadius: 999,
+      border: 'none',
+      cursor: result ? 'default' : 'pointer',
+      background: getColor(p.token),
+      color: '#fff',
+      fontFamily: 'var(--font-arabic)',
+      fontWeight: 700,
+      fontSize: 20,
+      transition: 'all var(--dur-fast)'
+    }
+  }, p.token)) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: 'var(--color-text-light)',
+      fontSize: 13,
+      width: '100%',
+      textAlign: 'center'
+    }
+  }, "Klik kata di atas untuk menyusun kalimat\u2026")), result && /*#__PURE__*/React.createElement("div", {
+    className: "anim-in",
+    style: {
+      padding: '10px 14px',
+      borderRadius: 12,
+      marginBottom: 12,
+      background: result === 'correct' ? 'var(--color-success-50)' : 'var(--color-error-50)',
+      color: result === 'correct' ? 'var(--color-success-text)' : 'var(--color-error-text)',
+      fontWeight: 600,
+      fontSize: 14,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: result === 'correct' ? 'check-circle' : 'x-circle',
+    size: 20
+  }), result === 'correct' ? "Benar! 🎉 fi'il → fā'il → maf'ūl" : /*#__PURE__*/React.createElement("span", null, "Belum tepat. Jawaban: ", /*#__PURE__*/React.createElement("span", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      direction: 'rtl'
+    }
+  }, buildSet.answer))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: check,
+    disabled: placed.length < buildSet.tokens.length,
+    style: {
+      flex: 1,
+      padding: '10px 14px',
+      borderRadius: 12,
+      border: 'none',
+      background: placed.length < buildSet.tokens.length ? 'var(--color-border)' : 'var(--color-primary)',
+      color: placed.length < buildSet.tokens.length ? 'var(--color-text-light)' : '#fff',
+      fontWeight: 700,
+      fontSize: 14,
+      cursor: placed.length < buildSet.tokens.length ? 'not-allowed' : 'pointer'
+    }
+  }, "Periksa"), /*#__PURE__*/React.createElement("button", {
+    onClick: reset,
+    style: {
+      padding: '10px 16px',
+      borderRadius: 12,
+      border: '1.5px solid var(--color-border)',
+      background: 'var(--color-surface)',
+      fontWeight: 600,
+      fontSize: 14,
+      cursor: 'pointer'
+    }
+  }, "Reset")));
+}
+
+/* ── Main QawaidScreen ── */
+function QawaidScreen({
+  navigate,
+  progress
+}) {
+  const {
+    useState
+  } = React;
+  const {
+    qawaid
+  } = DATA;
+  const [activeTab, setActiveTab] = useState(0);
+  const [understoodTabs, setUnderstoodTabs] = useState(new Set());
+  const [showIntro, setShowIntro] = useState(true);
+  const topic = qawaid.topics[activeTab];
+  const markUnderstood = () => {
+    const next = new Set(understoodTabs);
+    next.add(activeTab);
+    setUnderstoodTabs(next);
+    if (activeTab < qawaid.topics.length - 1) {
+      setActiveTab(activeTab + 1);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  };
+  const goToTadribat = () => {
+    if (progress && progress.completeSection) progress.completeSection('3', 'qawaid', 3, 3);
+    navigate('chapter/3/tadribat-2');
+  };
+  const allUnderstood = understoodTabs.size === qawaid.topics.length;
+  const tabIcons = ['history', 'zap', 'layout'];
+  const tabColors = ['var(--color-amber-text)', 'var(--color-primary)', 'var(--color-purple-text, #7C3AED)'];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "page anim-in"
+  }, /*#__PURE__*/React.createElement("a", {
+    onClick: () => navigate('chapter/3'),
+    style: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 6,
+      fontSize: 14,
+      color: 'var(--color-text-secondary)',
+      cursor: 'pointer',
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "chevron-left",
+    size: 16
+  }), " Bab 3 \u2014 Menjenguk Orang Sakit"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 24
+    }
+  }, /*#__PURE__*/React.createElement("h1", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      color: 'var(--color-primary)',
+      fontSize: 40,
+      fontWeight: 600,
+      direction: 'rtl',
+      textAlign: 'right',
+      margin: 0
+    }
+  }, "\u0627\u0644\u062A\u064E\u0651\u0631\u0652\u0643\u0650\u064A\u0628"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 20,
+      fontWeight: 600,
+      marginTop: 4
+    }
+  }, "Tata Bahasa \xB7 Qawaid"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: 'var(--color-text-secondary)',
+      marginTop: 6
+    }
+  }, "Pelajari fi'il m\u0101dh\u012B, fi'il mudh\u0101ri', dan jumlah fi'liyyah melalui penjelasan dan latihan interaktif.")), showIntro && /*#__PURE__*/React.createElement(Card, {
+    padding: 24,
+    accent: "gold",
+    style: {
+      marginBottom: 24
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 16,
+      alignItems: 'flex-start'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 48,
+      height: 48,
+      borderRadius: 14,
+      flexShrink: 0,
+      background: 'linear-gradient(180deg, var(--color-accent), #D97706)',
+      color: '#fff',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 24
+    }
+  }, "\u23F0")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 18,
+      marginBottom: 8
+    }
+  }, "Analogi: Mesin Waktu Kata Kerja"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 15,
+      color: 'var(--color-text-secondary)',
+      lineHeight: 1.7,
+      marginBottom: 10
+    }
+  }, qawaid.intro.hook), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 14,
+      color: 'var(--color-text-secondary)',
+      lineHeight: 1.6
+    }
+  }, qawaid.intro.summary)), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowIntro(false),
+    style: {
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: 'var(--color-text-light)',
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "x",
+    size: 18
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 4,
+      marginBottom: 20,
+      background: 'var(--color-border)',
+      borderRadius: 14,
+      padding: 4
+    }
+  }, qawaid.topics.map((t, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    onClick: () => {
+      setActiveTab(i);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    },
+    style: {
+      flex: 1,
+      padding: '10px 12px',
+      borderRadius: 10,
+      border: 'none',
+      cursor: 'pointer',
+      background: activeTab === i ? 'var(--color-surface)' : 'transparent',
+      boxShadow: activeTab === i ? 'var(--shadow-card)' : 'none',
+      transition: 'all var(--dur-med) var(--ease-out)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: tabIcons[i],
+    size: 16,
+    color: activeTab === i ? tabColors[i] : 'var(--color-text-light)'
+  }), understoodTabs.has(i) && /*#__PURE__*/React.createElement(Icon, {
+    name: "check-circle",
+    size: 14,
+    color: "var(--color-success)"
+  })), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 700,
+      color: activeTab === i ? tabColors[i] : 'var(--color-text-light)'
+    }
+  }, ["Fi'il Mādhī", "Fi'il Mudhāri'", "Jumlah Fi'liyyah"][i])))), /*#__PURE__*/React.createElement("div", {
+    className: "anim-in",
+    key: activeTab
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 12,
+      marginBottom: 6,
+      direction: 'rtl'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 40,
+      height: 40,
+      borderRadius: 12,
+      background: `${tabColors[activeTab]}22`,
+      color: tabColors[activeTab],
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: tabIcons[activeTab],
+    size: 20
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: 'right'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 26,
+      fontWeight: 700,
+      color: tabColors[activeTab],
+      direction: 'rtl'
+    }
+  }, topic.title_ar), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 600,
+      fontSize: 15,
+      color: 'var(--color-text-primary)'
+    }
+  }, topic.title_id))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 15,
+      color: 'var(--color-text-secondary)',
+      lineHeight: 1.7,
+      padding: '12px 16px',
+      background: 'var(--color-bg)',
+      borderRadius: 12,
+      borderRight: `4px solid ${tabColors[activeTab]}`,
+      textAlign: 'right'
+    }
+  }, topic.explanation)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 20,
+      alignItems: 'flex-start'
+    },
+    className: "conjugation-grid"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "qawaid-examples-col",
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16
+    }
+  }, /*#__PURE__*/React.createElement(Card, {
+    padding: 20
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      marginBottom: 12,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      gap: 8,
+      direction: 'rtl'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    lang: "ar"
+  }, "\u0645\u062B\u0627\u0644"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      fontFamily: 'var(--font-latin)',
+      color: 'var(--color-text-secondary)',
+      marginRight: 4
+    }
+  }, " / Contoh"), /*#__PURE__*/React.createElement(Icon, {
+    name: "message",
+    size: 18,
+    color: "var(--color-primary)"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 10
+    }
+  }, topic.examples.map((ex, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: '12px 14px',
+      borderRadius: 12,
+      background: 'var(--color-primary-50)',
+      border: '1px solid var(--color-primary-100)'
+    }
+  }, topic.structure ? /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 20,
+      fontWeight: 600,
+      direction: 'rtl',
+      textAlign: 'right',
+      lineHeight: 1.8,
+      marginBottom: 4
+    }
+  }, ex.parts.map((p, pi) => {
+    const rc = {
+      fiil: '#34A853',
+      fail: '#4285F4',
+      maful: '#F9A825',
+      jar: '#7C3AED'
+    };
+    return /*#__PURE__*/React.createElement("span", {
+      key: pi,
+      style: {
+        color: rc[p.role] || 'var(--color-text-primary)',
+        marginLeft: pi > 0 ? '0.25em' : 0
+      }
+    }, p.text, ' ');
+  })) : /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 20,
+      fontWeight: 600,
+      color: 'var(--color-text-primary)',
+      direction: 'rtl',
+      textAlign: 'right',
+      lineHeight: 1.8,
+      marginBottom: 4
+    }
+  }, ex.ar), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: 'var(--color-text-secondary)',
+      textAlign: 'right'
+    }
+  }, ex.id), ex.grammar_note && /*#__PURE__*/React.createElement(Badge, {
+    tone: "primary",
+    style: {
+      marginTop: 6,
+      float: 'right'
+    }
+  }, ex.grammar_note))))), topic.key_points && /*#__PURE__*/React.createElement(Card, {
+    padding: 20
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700,
+      marginBottom: 12,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      gap: 8,
+      direction: 'rtl'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    lang: "ar"
+  }, "\u062A\u0642\u0646\u064A\u0629 \u0633\u0631\u064A\u0639\u0629"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      fontFamily: 'var(--font-latin)',
+      color: 'var(--color-text-secondary)',
+      marginRight: 4
+    }
+  }, " / Trik Kilat"), /*#__PURE__*/React.createElement(Icon, {
+    name: "zap",
+    size: 16,
+    color: "var(--color-accent)"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: 'var(--color-text-light)',
+      marginBottom: 10,
+      textAlign: 'right'
+    }
+  }, "Trik kilat menghafal akhiran fi'il m\u0101dh\u012B"), topic.key_points.map((kp, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: '14px 16px',
+      borderRadius: 12,
+      background: 'var(--color-accent-50)',
+      border: '2px solid var(--color-accent-100)',
+      marginBottom: i < topic.key_points.length - 1 ? 10 : 0,
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 20,
+      flexShrink: 0
+    }
+  }, "\u26A1"), /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 17,
+      fontWeight: 700,
+      color: 'var(--color-amber-text)',
+      direction: 'rtl',
+      textAlign: 'right',
+      lineHeight: 1.8
+    }
+  }, kp)))), topic.interactive.type === 'conjugation_explorer' && /*#__PURE__*/React.createElement(ConjugationExplorer, {
+    topic: topic
+  }), topic.interactive.type === 'mudhari_explorer' && /*#__PURE__*/React.createElement(MudhariExplorer, {
+    topic: topic
+  }), topic.interactive.type === 'sentence_builder' && /*#__PURE__*/React.createElement(SentenceBuilder, {
+    topic: topic
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "qawaid-materi-col",
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16
+    }
+  }, topic.conjugation && /*#__PURE__*/React.createElement(Card, {
+    padding: 20
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      marginBottom: 6,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      gap: 8,
+      direction: 'rtl'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    lang: "ar"
+  }, "\u062A\u0635\u0631\u064A\u0641"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      fontFamily: 'var(--font-latin)',
+      color: 'var(--color-text-secondary)',
+      marginRight: 4
+    }
+  }, " / Tashrif"), /*#__PURE__*/React.createElement(Icon, {
+    name: "layers",
+    size: 18,
+    color: "var(--color-primary)"
+  })), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 12,
+      color: 'var(--color-text-secondary)',
+      marginBottom: 12,
+      textAlign: 'right'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 16
+    }
+  }, topic.conjugation.root_verb), "\xA0(", topic.conjugation.root_meaning, ") \u2014 6 dhamir"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 5
+    }
+  }, topic.conjugation.rows.map((row, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr auto',
+      gap: 10,
+      alignItems: 'center',
+      direction: 'rtl',
+      padding: '10px 14px',
+      borderRadius: 10,
+      background: 'var(--color-primary-50)',
+      border: '1px solid var(--color-primary-100)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 17,
+      fontWeight: 700,
+      color: 'var(--color-text-secondary)',
+      minWidth: 60,
+      textAlign: 'right'
+    }
+  }, row.pronoun_ar), /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 22,
+      fontWeight: 700,
+      color: 'var(--color-primary)',
+      textAlign: 'center'
+    }
+  }, row.verb_form), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: 'var(--color-text-secondary)',
+      textAlign: 'left',
+      direction: 'ltr',
+      minWidth: 80
+    }
+  }, row.meaning))))), topic.mudharaah && /*#__PURE__*/React.createElement(Card, {
+    padding: 20
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      marginBottom: 12,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      gap: 8,
+      direction: 'rtl'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    lang: "ar"
+  }, "\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u0636\u0627\u0631\u0639\u0629"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      fontFamily: 'var(--font-latin)',
+      color: 'var(--color-text-secondary)',
+      marginRight: 4
+    }
+  }, " / Huruf Mudh\u0101ra'ah"), /*#__PURE__*/React.createElement(Icon, {
+    name: "key",
+    size: 18,
+    color: "var(--color-primary)"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-accent-50)',
+      borderRadius: 10,
+      padding: '8px 12px',
+      marginBottom: 12,
+      textAlign: 'center',
+      fontWeight: 700,
+      fontSize: 13,
+      color: 'var(--color-amber-text)',
+      letterSpacing: 2
+    }
+  }, "\u0623\u064E \u2014 \u0646\u064E \u2014 \u064A\u064E \u2014 \u062A\u064E \xA0\u2190\xA0 \u0623\u064E\u0646\u064E\u064A\u0652\u062A\u064F"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8
+    }
+  }, topic.mudharaah.map((m, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '52px 1fr auto',
+      alignItems: 'center',
+      gap: 12,
+      direction: 'rtl',
+      padding: '12px 16px',
+      borderRadius: 12,
+      background: 'var(--color-surface)',
+      border: '2px solid var(--color-accent-100)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 36,
+      fontWeight: 800,
+      color: 'var(--color-amber-text)',
+      lineHeight: 1
+    }
+  }, m.huruf)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: 'right'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: 'var(--color-text-light)',
+      marginBottom: 2
+    }
+  }, "untuk dhamir:"), /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 16,
+      fontWeight: 700,
+      color: 'var(--color-text-primary)'
+    }
+  }, m.for)), /*#__PURE__*/React.createElement("div", {
+    lang: "ar",
+    style: {
+      fontFamily: 'var(--font-arabic)',
+      fontSize: 22,
+      fontWeight: 700,
+      color: 'var(--color-primary)',
+      textAlign: 'left',
+      direction: 'ltr'
+    }
+  }, m.example))))), topic.structure && /*#__PURE__*/React.createElement(Card, {
+    padding: 20
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      marginBottom: 10,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      gap: 8,
+      direction: 'rtl'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    lang: "ar"
+  }, "\u0646\u0645\u0637 \u0627\u0644\u062C\u0645\u0644\u0629"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      fontFamily: 'var(--font-latin)',
+      color: 'var(--color-text-secondary)',
+      marginRight: 4
+    }
+  }, " / Pola Kalimat"), /*#__PURE__*/React.createElement(Icon, {
+    name: "layout",
+    size: 18,
+    color: "var(--color-primary)"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      justifyContent: 'center',
+      marginBottom: 14,
+      direction: 'rtl'
+    }
+  }, topic.structure.map((s, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '10px 16px',
+      borderRadius: 10,
+      background: s.color + '22',
+      color: s.color,
+      border: `1.5px solid ${s.color}55`,
+      fontFamily: 'var(--font-arabic)',
+      fontWeight: 700,
+      fontSize: 20
+    }
+  }, s.role_ar), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: 'var(--color-text-secondary)',
+      marginTop: 4
+    }
+  }, s.role_id)))), topic.rule_note && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '10px 14px',
+      borderRadius: 10,
+      background: 'var(--color-error-50)',
+      border: '1px solid var(--color-error-border)',
+      fontSize: 13,
+      color: 'var(--color-error-text)',
+      fontWeight: 600,
+      textAlign: 'right'
+    }
+  }, "\u26A0\uFE0F ", topic.rule_note)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 24,
+      display: 'flex',
+      gap: 12,
+      justifyContent: 'flex-end',
+      flexWrap: 'wrap'
+    }
+  }, !understoodTabs.has(activeTab) && /*#__PURE__*/React.createElement(Button, {
+    variant: "secondary",
+    icon: "check",
+    onClick: markUnderstood
+  }, activeTab < qawaid.topics.length - 1 ? 'Sudah Paham — Topik Berikutnya' : 'Sudah Paham'), (allUnderstood || understoodTabs.has(activeTab)) && activeTab === qawaid.topics.length - 1 && /*#__PURE__*/React.createElement(Button, {
+    variant: "primary",
+    iconRight: "chevron-right",
+    onClick: goToTadribat
+  }, "Lanjut ke Tadribat 2"))));
+}
+window.ExplorerDisplay = ExplorerDisplay;
+window.ConjugationExplorer = ConjugationExplorer;
+window.MudhariExplorer = MudhariExplorer;
+window.SentenceBuilder = SentenceBuilder;
+window.QawaidScreen = QawaidScreen;

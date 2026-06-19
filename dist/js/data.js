@@ -1,0 +1,1016 @@
+/* ==========================================================================
+   العربية التفاعلية — All Learning Content (BAB 3)
+   Single source of truth. Pages read from here, never hardcode content.
+   ========================================================================== */
+
+const DATA = {
+  chapters: [{
+    number: 1,
+    numeral_ar: '١',
+    title_ar: 'الرِّيَاضَة',
+    title_id: 'Olahraga',
+    summary: 'Kosakata & dialog seputar aktivitas olahraga',
+    status: 'soon',
+    progress: 0
+  }, {
+    number: 2,
+    numeral_ar: '٢',
+    title_ar: 'أَصْحَابُ الْمِهْنَة',
+    title_id: 'Para Pekerja Profesi',
+    summary: 'Nama-nama profesi dan tugas sehari-hari',
+    status: 'soon',
+    progress: 0
+  }, {
+    number: 3,
+    numeral_ar: '٣',
+    title_ar: 'عِيَادَةُ الْمَرِيضِ',
+    title_id: 'Menjenguk Orang Sakit',
+    summary: 'Dialog, kosakata, qawaid & doa untuk yang sakit',
+    status: 'available',
+    progress: 0
+  }],
+  chapter3: {
+    number: 3,
+    numeral_ar: '٣',
+    title_ar: 'عِيَادَةُ الْمَرِيضِ',
+    title_id: 'Menjenguk Orang Sakit',
+    description: "Belajar percakapan, kosakata, dan doa pendek saat menjenguk yang sakit, serta tata bahasa fi'il mādhī, fi'il mudhāri', dan jumlah fi'liyyah.",
+    objectives: ['Mengenali kosakata penyakit, gejala, dan kegiatan menjenguk orang sakit', 'Memahami struktur dialog menjenguk: salam, menanyakan kabar, keluhan, doa, dan pamit', 'Mempraktikkan ungkapan مِمَّ تَشْكُو؟ / لَا بَأْسَ عَلَيْكَ / شَفَاكَ اللَّهُ sesuai konteks dialog', "Membedakan fi'il mādhī dan fi'il mudhāri' serta perubahannya untuk 6 dhamir", "Menyusun jumlah fi'liyyah sederhana (fi'il + fā'il + maf'ūl) bertema kesehatan"]
+  },
+  hiwar: {
+    scenes: [{
+      id: 'scene-salam',
+      label: 'Salam & Sapaan',
+      label_ar: 'السَّلَامُ وَالتَّحِيَّة',
+      illustration_ref: 'assets/images/hiwar/hiwar-1-salam.png',
+      lines: [{
+        speaker: 'أ',
+        side: 'left',
+        ar: 'السَّلَامُ عَلَيْكُمْ يَا أَحْمَدُ',
+        id: "Assalamu'alaikum, wahai Ahmad",
+        audio_ref: 'assets/audio/hiwar/01-hiwar_salam_1.mp3',
+        audio_text: 'السَّلَامُ عَلَيْكُمْ يَا أَحْمَدُ'
+      }, {
+        speaker: 'ب',
+        side: 'right',
+        ar: 'وَعَلَيْكُمُ السَّلَامُ وَرَحْمَةُ اللَّهِ، أَهْلًا وَسَهْلًا',
+        id: "Wa'alaikumussalam warahmatullah, selamat datang",
+        audio_ref: 'assets/audio/hiwar/02-hiwar_salam_2.mp3',
+        audio_text: 'وَعَلَيْكُمُ السَّلَامُ وَرَحْمَةُ اللَّهِ، أَهْلًا وَسَهْلًا'
+      }]
+    }, {
+      id: 'scene-tanya',
+      label: 'Menanyakan Kabar',
+      label_ar: 'السُّؤَالُ عَنِ الْحَال',
+      illustration_ref: 'assets/images/hiwar/hiwar-2-menanyakan kabar.png',
+      lines: [{
+        speaker: 'أ',
+        side: 'left',
+        ar: 'كَيْفَ حَالُكَ الْيَوْمَ يَا صَدِيقِي؟',
+        id: 'Bagaimana keadaanmu hari ini, sahabatku?',
+        audio_ref: 'assets/audio/hiwar/03-hiwar_tanya_1.mp3',
+        audio_text: 'كَيْفَ حَالُكَ الْيَوْمَ يَا صَدِيقِي'
+      }, {
+        speaker: 'ب',
+        side: 'right',
+        ar: 'أَنَا مَرِيضٌ قَلِيلًا، عِنْدِي حُمَّى وَصُدَاعٌ',
+        id: 'Aku agak sakit, aku demam dan pusing',
+        audio_ref: 'assets/audio/hiwar/04-hiwar_tanya_2.mp3',
+        audio_text: 'أَنَا مَرِيضٌ قَلِيلًا، عِنْدِي حُمَّى وَصُدَاعٌ'
+      }]
+    }, {
+      id: 'scene-syakwa',
+      label: 'Menanyakan Keluhan',
+      label_ar: 'السُّؤَالُ عَنِ الشَّكْوَى',
+      illustration_ref: 'assets/images/hiwar/hiwar-3-menanyakan keluhan.png',
+      lines: [{
+        speaker: 'أ',
+        side: 'left',
+        ar: 'مِمَّ تَشْكُو؟ مَتَى شَعَرْتَ بِهَذَا الْأَلَمِ؟',
+        id: 'Apa keluhanmu? Kapan kamu merasakan sakit ini?',
+        audio_ref: 'assets/audio/hiwar/05-hiwar_syakwa_1.mp3',
+        audio_text: 'مِمَّ تَشْكُو؟ مَتَى شَعَرْتَ بِهَذَا الْأَلَمِ'
+      }, {
+        speaker: 'ب',
+        side: 'right',
+        ar: 'شَعَرْتُ بِالْأَلَمِ مُنْذُ يَوْمَيْنِ، عِنْدِي أَلَمٌ فِي الرَّأْسِ',
+        id: 'Aku merasakannya sejak dua hari lalu, kepalaku sakit',
+        audio_ref: 'assets/audio/hiwar/06-hiwar_syakwa_2.mp3',
+        audio_text: 'شَعَرْتُ بِالْأَلَمِ مُنْذُ يَوْمَيْنِ، عِنْدِي أَلَمٌ فِي الرَّأْسِ'
+      }]
+    }, {
+      id: 'scene-tabib',
+      label: 'Soal ke Dokter',
+      label_ar: 'زِيَارَةُ الطَّبِيب',
+      illustration_ref: 'assets/images/hiwar/hiwar-4-soal ke dokter.png',
+      lines: [{
+        speaker: 'أ',
+        side: 'left',
+        ar: 'هَلْ ذَهَبْتَ إِلَى الطَّبِيبِ؟',
+        id: 'Apakah kamu sudah ke dokter?',
+        audio_ref: 'assets/audio/hiwar/07-hiwar_tabib_1.mp3',
+        audio_text: 'هَلْ ذَهَبْتَ إِلَى الطَّبِيبِ'
+      }, {
+        speaker: 'ب',
+        side: 'right',
+        ar: 'نَعَمْ، ذَهَبْتُ أَمْسِ وَأَخَذْتُ الدَّوَاءَ مِنَ الصَّيْدَلِيَّةِ',
+        id: 'Ya, aku ke sana kemarin dan mengambil obat dari apotek',
+        audio_ref: 'assets/audio/hiwar/08-hiwar_tabib_2.mp3',
+        audio_text: 'نَعَمْ، ذَهَبْتُ أَمْسِ وَأَخَذْتُ الدَّوَاءَ مِنَ الصَّيْدَلِيَّةِ'
+      }]
+    }, {
+      id: 'scene-doa',
+      label: 'Mendoakan Sembuh',
+      label_ar: 'الدُّعَاءُ بِالشِّفَاء',
+      illustration_ref: 'assets/images/hiwar/hiwar-5-mendoakan sembuh.png',
+      lines: [{
+        speaker: 'أ',
+        side: 'left',
+        ar: 'لَا بَأْسَ عَلَيْكَ، شَفَاكَ اللَّهُ شِفَاءً عَاجِلًا',
+        id: 'Tidak apa-apa, semoga Allah menyembuhkanmu dengan segera',
+        audio_ref: 'assets/audio/hiwar/09-hiwar_doa_1.mp3',
+        audio_text: 'لَا بَأْسَ عَلَيْكَ، شَفَاكَ اللَّهُ شِفَاءً عَاجِلًا'
+      }, {
+        speaker: 'ب',
+        side: 'right',
+        ar: 'آمِينَ، شُكْرًا جَزِيلًا عَلَى زِيَارَتِكَ',
+        id: 'Amin, terima kasih banyak atas kunjunganmu',
+        audio_ref: 'assets/audio/hiwar/10-hiwar_doa_2.mp3',
+        audio_text: 'آمِينَ، شُكْرًا جَزِيلًا عَلَى زِيَارَتِكَ'
+      }]
+    }, {
+      id: 'scene-wada',
+      label: 'Pamit',
+      label_ar: 'الْوَدَاع',
+      illustration_ref: 'assets/images/hiwar/hiwar-6-pamit.png',
+      lines: [{
+        speaker: 'أ',
+        side: 'left',
+        ar: 'عَلَيْكَ بِالرَّاحَةِ، إِلَى اللِّقَاءِ فِي الْمَدْرَسَةِ',
+        id: 'Istirahatlah, sampai jumpa di sekolah',
+        audio_ref: 'assets/audio/hiwar/11-hiwar_wada_1.mp3',
+        audio_text: 'عَلَيْكَ بِالرَّاحَةِ، إِلَى اللِّقَاءِ فِي الْمَدْرَسَةِ'
+      }, {
+        speaker: 'ب',
+        side: 'right',
+        ar: 'إِلَى اللِّقَاءِ، مَعَ السَّلَامَةِ',
+        id: 'Sampai jumpa, hati-hati',
+        audio_ref: 'assets/audio/hiwar/12-hiwar_wada_2.mp3',
+        audio_text: 'إِلَى اللِّقَاءِ، مَعَ السَّلَامَةِ'
+      }]
+    }],
+    full_audio_ref: null,
+    vocab: [{
+      ar: 'كَيْفَ حَالُكَ',
+      id: 'Bagaimana keadaanmu'
+    }, {
+      ar: 'مِمَّ تَشْكُو؟',
+      id: 'Apa keluhanmu?'
+    }, {
+      ar: 'عِنْدِي…',
+      id: 'Aku menderita…'
+    }, {
+      ar: 'لَا بَأْسَ عَلَيْكَ',
+      id: 'Jangan khawatir / tidak apa-apa'
+    }, {
+      ar: 'شَفَاكَ اللَّهُ',
+      id: 'Semoga Allah menyembuhkanmu'
+    }]
+  },
+  mufrodat: [{
+    ar: 'الطَّبِيبُ',
+    transliteration: 'aṭ-Ṭabīb',
+    meaning_id: 'Dokter',
+    image_ref: 'assets/images/mufrodat/1-dokter.png',
+    audio_ref: 'assets/audio/mufrodat/01-mufrodat_01_at-tabib.mp3',
+    audio_text: 'الطَّبِيبُ',
+    example_ar: 'فَحَصَ الطَّبِيبُ الْمَرِيضَ',
+    example_id: 'Dokter memeriksa si sakit',
+    example_ref: 'assets/audio/mufrodat/02-mufrodat_01_at-tabib_contoh.mp3'
+  }, {
+    ar: 'الْمَرِيضُ',
+    transliteration: 'al-Marīḍ',
+    meaning_id: 'Orang sakit',
+    image_ref: 'assets/images/mufrodat/2-orang-sakit.png',
+    audio_ref: 'assets/audio/mufrodat/03-mufrodat_02_al-marid.mp3',
+    audio_text: 'الْمَرِيضُ',
+    example_ar: 'الْمَرِيضُ فِي الْغُرْفَةِ',
+    example_id: 'Si sakit ada di kamar',
+    example_ref: 'assets/audio/mufrodat/04-mufrodat_02_al-marid_contoh.mp3'
+  }, {
+    ar: 'الْمُسْتَشْفَى',
+    transliteration: 'al-Mustasyfā',
+    meaning_id: 'Rumah sakit',
+    image_ref: 'assets/images/mufrodat/3-rumah-sakit.png',
+    audio_ref: 'assets/audio/mufrodat/05-mufrodat_03_al-mustashfa.mp3',
+    audio_text: 'الْمُسْتَشْفَى',
+    example_ar: 'ذَهَبَ أَحْمَدُ إِلَى الْمُسْتَشْفَى',
+    example_id: 'Ahmad pergi ke rumah sakit',
+    example_ref: 'assets/audio/mufrodat/06-mufrodat_03_al-mustashfa_contoh.mp3'
+  }, {
+    ar: 'الصَّيْدَلِيَّةُ',
+    transliteration: 'aṣ-Ṣaydaliyyah',
+    meaning_id: 'Apotek',
+    image_ref: 'assets/images/mufrodat/4-apotek.png',
+    audio_ref: 'assets/audio/mufrodat/07-mufrodat_04_as-saydaliyyah.mp3',
+    audio_text: 'الصَّيْدَلِيَّةُ',
+    example_ar: 'أَخَذْتُ الدَّوَاءَ مِنَ الصَّيْدَلِيَّةِ',
+    example_id: 'Aku ambil obat dari apotek',
+    example_ref: 'assets/audio/mufrodat/08-mufrodat_04_as-saydaliyyah_contoh.mp3'
+  }, {
+    ar: 'الدَّوَاءُ',
+    transliteration: "ad-Dawā'",
+    meaning_id: 'Obat',
+    image_ref: 'assets/images/mufrodat/5-obat.png',
+    audio_ref: 'assets/audio/mufrodat/09-mufrodat_05_ad-dawa.mp3',
+    audio_text: 'الدَّوَاءُ',
+    example_ar: 'تَنَاوَلَ الدَّوَاءَ بَعْدَ الْأَكْلِ',
+    example_id: 'Ia minum obat setelah makan',
+    example_ref: 'assets/audio/mufrodat/10-mufrodat_05_ad-dawa_contoh.mp3'
+  }, {
+    ar: 'الْوَصْفَةُ الطِّبِّيَّةُ',
+    transliteration: 'al-Waṣfah aṭ-Ṭibbiyyah',
+    meaning_id: 'Resep dokter',
+    image_ref: 'assets/images/mufrodat/6-resep-dokter.png',
+    audio_ref: 'assets/audio/mufrodat/11-mufrodat_06_al-wasfah.mp3',
+    audio_text: 'الْوَصْفَةُ الطِّبِّيَّةُ',
+    example_ar: 'كَتَبَ الطَّبِيبُ الْوَصْفَةَ',
+    example_id: 'Dokter menulis resep',
+    example_ref: 'assets/audio/mufrodat/12-mufrodat_06_al-wasfah_contoh.mp3'
+  }, {
+    ar: 'حُمَّى',
+    transliteration: 'Ḥummā',
+    meaning_id: 'Demam',
+    image_ref: 'assets/images/mufrodat/7-demam.png',
+    audio_ref: 'assets/audio/mufrodat/13-mufrodat_07_humma.mp3',
+    audio_text: 'حُمَّى',
+    example_ar: 'عِنْدِي حُمَّى شَدِيدَةٌ',
+    example_id: 'Aku demam tinggi',
+    example_ref: 'assets/audio/mufrodat/14-mufrodat_07_humma_contoh.mp3'
+  }, {
+    ar: 'صُدَاعٌ',
+    transliteration: "Ṣudā'",
+    meaning_id: 'Sakit kepala / pusing',
+    image_ref: 'assets/images/mufrodat/8-sakit%20kepala.png',
+    audio_ref: 'assets/audio/mufrodat/15-mufrodat_08_sudaa.mp3',
+    audio_text: 'صُدَاعٌ',
+    example_ar: 'عِنْدِي صُدَاعٌ فِي الرَّأْسِ',
+    example_id: 'Kepalaku pusing',
+    example_ref: 'assets/audio/mufrodat/16-mufrodat_08_sudaa_contoh.mp3'
+  }, {
+    ar: 'سُعَالٌ',
+    transliteration: "Su'āl",
+    meaning_id: 'Batuk',
+    image_ref: 'assets/images/mufrodat/9-batuk.png',
+    audio_ref: 'assets/audio/mufrodat/17-mufrodat_09_sual.mp3',
+    audio_text: 'سُعَالٌ',
+    example_ar: 'عِنْدِي سُعَالٌ مُنْذُ يَوْمَيْنِ',
+    example_id: 'Aku batuk sejak dua hari',
+    example_ref: 'assets/audio/mufrodat/18-mufrodat_09_sual_contoh.mp3'
+  }, {
+    ar: 'زُكَامٌ',
+    transliteration: 'Zukām',
+    meaning_id: 'Flu / pilek',
+    image_ref: 'assets/images/mufrodat/10-flu.png',
+    audio_ref: 'assets/audio/mufrodat/19-mufrodat_10_zukam.mp3',
+    audio_text: 'زُكَامٌ',
+    example_ar: 'أَنَا مُصَابٌ بِالزُّكَامِ',
+    example_id: 'Aku terkena flu',
+    example_ref: 'assets/audio/mufrodat/20-mufrodat_10_zukam_contoh.mp3'
+  }, {
+    ar: 'إِسْهَالٌ',
+    transliteration: 'Isyhāl',
+    meaning_id: 'Diare',
+    image_ref: 'assets/images/mufrodat/11-diare.png',
+    audio_ref: 'assets/audio/mufrodat/21-mufrodat_11_ishal.mp3',
+    audio_text: 'إِسْهَالٌ',
+    example_ar: 'عِنْدِي إِسْهَالٌ',
+    example_id: 'Aku diare',
+    example_ref: 'assets/audio/mufrodat/22-mufrodat_11_ishal_contoh.mp3'
+  }, {
+    ar: 'أَلَمٌ',
+    transliteration: 'Alam',
+    meaning_id: 'Rasa sakit / nyeri',
+    image_ref: 'assets/images/mufrodat/12-nyeri.png',
+    audio_ref: 'assets/audio/mufrodat/23-mufrodat_12_alam.mp3',
+    audio_text: 'أَلَمٌ',
+    example_ar: 'عِنْدِي أَلَمٌ فِي الْمَعِدَةِ',
+    example_id: 'Perutku nyeri',
+    example_ref: 'assets/audio/mufrodat/24-mufrodat_12_alam_contoh.mp3'
+  }],
+  mufrodat_extra: [{
+    ar: 'وَجَعُ الْأَسْنَانِ',
+    id: 'Sakit gigi'
+  }, {
+    ar: 'اِلْتِهَابُ الْحَلْقِ',
+    id: 'Radang tenggorokan'
+  }, {
+    ar: 'مَغَصٌ',
+    id: 'Sakit perut / mulas'
+  }, {
+    ar: 'قَيْءٌ',
+    id: 'Mual / muntah'
+  }, {
+    ar: 'حَسَاسِيَّةٌ',
+    id: 'Alergi'
+  }, {
+    ar: 'ضَغْطُ الدَّمِ',
+    id: 'Tekanan darah'
+  }, {
+    ar: 'عِيَادَةٌ',
+    id: 'Klinik / poli dokter'
+  }, {
+    ar: 'مُمَرِّضٌ / مُمَرِّضَةٌ',
+    id: 'Perawat (lk/pr)'
+  }, {
+    ar: 'عَمَلِيَّةٌ جِرَاحِيَّةٌ',
+    id: 'Operasi'
+  }, {
+    ar: 'رَاحَةٌ تَامَّةٌ',
+    id: 'Istirahat total'
+  }],
+  qawaid: {
+    intro: {
+      title_ar: 'التَّرْكِيب',
+      title_id: 'Tata Bahasa',
+      hook: 'Bayangkan kata kerja seperti MESIN WAKTU: kata yang sama bisa "berpindah waktu" — ذَهَبَ (sudah pergi) ↔ يَذْهَبُ (sedang/akan pergi). Ekornya juga berubah mengikuti pelaku.',
+      summary: "Kata kerja (fi'il) berubah sesuai WAKTU (sudah/sedang) dan PELAKU. Kita pelajari fi'il mādhī, fi'il mudhāri', lalu merangkainya jadi jumlah fi'liyyah."
+    },
+    topics: [{
+      id: 'fiil-madhi',
+      title_ar: 'الفِعْلُ الْمَاضِي',
+      title_id: "Fi'il Mādhī (Kata Kerja Lampau)",
+      icon: 'history',
+      explanation: "Fi'il mādhī adalah kata kerja yang menunjukkan pekerjaan SUDAH terjadi (lampau). Cirinya: huruf akhir asalnya berharakat fathah, lalu diberi AKHIRAN sesuai pelaku.",
+      key_points: ['هُوَ → bentuk asli (ذَهَبَ), هِيَ → tambah ـَتْ (ذَهَبَتْ)', 'أَنَا → ـْتُ | أَنْتَ → ـْتَ | أَنْتِ → ـْتِ | نَحْنُ → ـْنَا'],
+      madhi_verbs: [{
+        madhi: 'ذَهَبَ',
+        meaning: 'pergi',
+        forms: ['ذَهَبَ', 'ذَهَبَتْ', 'ذَهَبْتُ', 'ذَهَبْتَ', 'ذَهَبْتِ', 'ذَهَبْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }, {
+        madhi: 'فَحَصَ',
+        meaning: 'memeriksa',
+        forms: ['فَحَصَ', 'فَحَصَتْ', 'فَحَصْتُ', 'فَحَصْتَ', 'فَحَصْتِ', 'فَحَصْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }, {
+        madhi: 'شَرِبَ',
+        meaning: 'minum',
+        forms: ['شَرِبَ', 'شَرِبَتْ', 'شَرِبْتُ', 'شَرِبْتَ', 'شَرِبْتِ', 'شَرِبْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }, {
+        madhi: 'كَتَبَ',
+        meaning: 'menulis',
+        forms: ['كَتَبَ', 'كَتَبَتْ', 'كَتَبْتُ', 'كَتَبْتَ', 'كَتَبْتِ', 'كَتَبْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }, {
+        madhi: 'أَخَذَ',
+        meaning: 'mengambil',
+        forms: ['أَخَذَ', 'أَخَذَتْ', 'أَخَذْتُ', 'أَخَذْتَ', 'أَخَذْتِ', 'أَخَذْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }, {
+        madhi: 'سَأَلَ',
+        meaning: 'bertanya',
+        forms: ['سَأَلَ', 'سَأَلَتْ', 'سَأَلْتُ', 'سَأَلْتَ', 'سَأَلْتِ', 'سَأَلْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }, {
+        madhi: 'شَعَرَ',
+        meaning: 'merasa',
+        forms: ['شَعَرَ', 'شَعَرَتْ', 'شَعَرْتُ', 'شَعَرْتَ', 'شَعَرْتِ', 'شَعَرْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }, {
+        madhi: 'جَلَسَ',
+        meaning: 'duduk',
+        forms: ['جَلَسَ', 'جَلَسَتْ', 'جَلَسْتُ', 'جَلَسْتَ', 'جَلَسْتِ', 'جَلَسْنَا'],
+        suffixes: ['ـَ', 'ـَتْ', 'ـْتُ', 'ـْتَ', 'ـْتِ', 'ـْنَا']
+      }],
+      conjugation: {
+        root_verb: 'ذَهَبَ',
+        root_meaning: 'pergi',
+        suffix_color: '#F5C84B',
+        rows: [{
+          pronoun_ar: 'هُوَ',
+          pronoun_id: 'Dia (lk)',
+          verb_form: 'ذَهَبَ',
+          suffix: 'ـَ',
+          meaning: 'Dia telah pergi'
+        }, {
+          pronoun_ar: 'هِيَ',
+          pronoun_id: 'Dia (pr)',
+          verb_form: 'ذَهَبَتْ',
+          suffix: 'ـَتْ',
+          meaning: 'Dia (pr) telah pergi'
+        }, {
+          pronoun_ar: 'أَنَا',
+          pronoun_id: 'Saya',
+          verb_form: 'ذَهَبْتُ',
+          suffix: 'ـْتُ',
+          meaning: 'Saya telah pergi'
+        }, {
+          pronoun_ar: 'أَنْتَ',
+          pronoun_id: 'Kamu (lk)',
+          verb_form: 'ذَهَبْتَ',
+          suffix: 'ـْتَ',
+          meaning: 'Kamu telah pergi'
+        }, {
+          pronoun_ar: 'أَنْتِ',
+          pronoun_id: 'Kamu (pr)',
+          verb_form: 'ذَهَبْتِ',
+          suffix: 'ـْتِ',
+          meaning: 'Kamu (pr) telah pergi'
+        }, {
+          pronoun_ar: 'نَحْنُ',
+          pronoun_id: 'Kami',
+          verb_form: 'ذَهَبْنَا',
+          suffix: 'ـْنَا',
+          meaning: 'Kami telah pergi'
+        }]
+      },
+      examples: [{
+        ar: 'ذَهَبْتُ إِلَى الطَّبِيبِ',
+        id: 'Saya pergi ke dokter',
+        highlight_word: 'ذَهَبْتُ',
+        grammar_note: "Fi'il mādhī, أَنَا"
+      }, {
+        ar: 'فَحَصَتْ الطَّبِيبَةُ الْمَرِيضَ',
+        id: 'Dokter (pr) memeriksa pasien',
+        highlight_word: 'فَحَصَتْ',
+        grammar_note: "Fi'il mādhī + تْ, هِيَ"
+      }, {
+        ar: 'شَرِبْنَا الدَّوَاءَ',
+        id: 'Kami minum obat',
+        highlight_word: 'شَرِبْنَا',
+        grammar_note: "Fi'il mādhī, نَحْنُ"
+      }],
+      interactive: {
+        type: 'conjugation_explorer'
+      }
+    }, {
+      id: 'fiil-mudhari',
+      title_ar: 'الفِعْلُ الْمُضَارِع',
+      title_id: "Fi'il Mudhāri' (Sekarang/Akan)",
+      icon: 'play',
+      explanation: "Fi'il mudhāri' menunjukkan pekerjaan yang SEDANG / AKAN terjadi atau kebiasaan. Cirinya: SELALU diawali huruf mudhāra'ah → أَنَيْتُ (أ، ن، ي، ت).",
+      mudharaah: [{
+        huruf: 'أ',
+        for: 'أَنَا',
+        example: 'أَذْهَبُ'
+      }, {
+        huruf: 'ن',
+        for: 'نَحْنُ',
+        example: 'نَذْهَبُ'
+      }, {
+        huruf: 'ي',
+        for: 'هُوَ',
+        example: 'يَذْهَبُ'
+      }, {
+        huruf: 'ت',
+        for: 'هِيَ / أَنْتَ / أَنْتِ',
+        example: 'تَذْهَبُ'
+      }],
+      mudhari_verbs: [{
+        madhi: 'ذَهَبَ',
+        meaning: 'pergi',
+        forms: ['يَذْهَبُ', 'تَذْهَبُ', 'أَذْهَبُ', 'تَذْهَبُ', 'تَذْهَبِينَ', 'نَذْهَبُ']
+      }, {
+        madhi: 'شَرِبَ',
+        meaning: 'minum',
+        forms: ['يَشْرَبُ', 'تَشْرَبُ', 'أَشْرَبُ', 'تَشْرَبُ', 'تَشْرَبِينَ', 'نَشْرَبُ']
+      }, {
+        madhi: 'فَحَصَ',
+        meaning: 'memeriksa',
+        forms: ['يَفْحَصُ', 'تَفْحَصُ', 'أَفْحَصُ', 'تَفْحَصُ', 'تَفْحَصِينَ', 'نَفْحَصُ']
+      }, {
+        madhi: 'كَتَبَ',
+        meaning: 'menulis',
+        forms: ['يَكْتُبُ', 'تَكْتُبُ', 'أَكْتُبُ', 'تَكْتُبُ', 'تَكْتُبِينَ', 'نَكْتُبُ']
+      }, {
+        madhi: 'أَخَذَ',
+        meaning: 'mengambil',
+        forms: ['يَأْخُذُ', 'تَأْخُذُ', 'آخُذُ', 'تَأْخُذُ', 'تَأْخُذِينَ', 'نَأْخُذُ']
+      }, {
+        madhi: 'سَأَلَ',
+        meaning: 'bertanya',
+        forms: ['يَسْأَلُ', 'تَسْأَلُ', 'أَسْأَلُ', 'تَسْأَلُ', 'تَسْأَلِينَ', 'نَسْأَلُ']
+      }, {
+        madhi: 'شَعَرَ',
+        meaning: 'merasa',
+        forms: ['يَشْعُرُ', 'تَشْعُرُ', 'أَشْعُرُ', 'تَشْعُرُ', 'تَشْعُرِينَ', 'نَشْعُرُ']
+      }, {
+        madhi: 'جَلَسَ',
+        meaning: 'duduk',
+        forms: ['يَجْلِسُ', 'تَجْلِسُ', 'أَجْلِسُ', 'تَجْلِسُ', 'تَجْلِسِينَ', 'نَجْلِسُ']
+      }],
+      conjugation: {
+        root_verb: 'يَذْهَبُ',
+        root_meaning: 'pergi',
+        rows: [{
+          pronoun_ar: 'هُوَ',
+          pronoun_id: 'Dia (lk)',
+          verb_form: 'يَذْهَبُ',
+          meaning: 'Dia (lk) pergi'
+        }, {
+          pronoun_ar: 'هِيَ',
+          pronoun_id: 'Dia (pr)',
+          verb_form: 'تَذْهَبُ',
+          meaning: 'Dia (pr) pergi'
+        }, {
+          pronoun_ar: 'أَنَا',
+          pronoun_id: 'Saya',
+          verb_form: 'أَذْهَبُ',
+          meaning: 'Saya pergi'
+        }, {
+          pronoun_ar: 'أَنْتَ',
+          pronoun_id: 'Kamu (lk)',
+          verb_form: 'تَذْهَبُ',
+          meaning: 'Kamu pergi'
+        }, {
+          pronoun_ar: 'أَنْتِ',
+          pronoun_id: 'Kamu (pr)',
+          verb_form: 'تَذْهَبِينَ',
+          meaning: 'Kamu (pr) pergi'
+        }, {
+          pronoun_ar: 'نَحْنُ',
+          pronoun_id: 'Kami',
+          verb_form: 'نَذْهَبُ',
+          meaning: 'Kami pergi'
+        }]
+      },
+      examples: [{
+        ar: 'يَفْحَصُ الطَّبِيبُ الْمَرِيضَ',
+        id: 'Dokter sedang memeriksa pasien',
+        highlight_word: 'يَفْحَصُ',
+        grammar_note: "Mudhāri', هُوَ → ي"
+      }, {
+        ar: 'أَشْرَبُ الدَّوَاءَ',
+        id: 'Saya minum obat',
+        highlight_word: 'أَشْرَبُ',
+        grammar_note: "Mudhāri', أَنَا → أ"
+      }, {
+        ar: 'تَذْهَبُ إِلَى الْمُسْتَشْفَى',
+        id: 'Dia (pr) pergi ke rumah sakit',
+        highlight_word: 'تَذْهَبُ',
+        grammar_note: "Mudhāri', هِيَ → ت"
+      }],
+      interactive: {
+        type: 'mudhari_explorer'
+      }
+    }, {
+      id: 'jumlah-filiyyah',
+      title_ar: 'الْجُمْلَةُ الْفِعْلِيَّة',
+      title_id: "Jumlah Fi'liyyah (Kalimat Verbal)",
+      icon: 'layout',
+      explanation: "Jumlah fi'liyyah adalah kalimat yang DIAWALI fi'il. Polanya: فِعْل + فَاعِل + (مَفْعُول بِهِ). Fā'il selalu marfū' (dhammah), maf'ūl manshūb (fathah).",
+      rule_note: "Jika fā'il-nya perempuan (muannats) dan langsung setelah fi'il mādhī, fi'il diberi tambahan تْ (tā' ta'nīts). Contoh: عَالَجَ (lk) → فَحَصَتْ (pr).",
+      structure: [{
+        role_ar: 'فِعْل',
+        role_id: 'Kata kerja',
+        color: '#34A853'
+      }, {
+        role_ar: 'فَاعِل',
+        role_id: 'Pelaku (dhammah)',
+        color: '#4285F4'
+      }, {
+        role_ar: 'مَفْعُول بِهِ',
+        role_id: 'Objek (fathah)',
+        color: '#F9A825'
+      }],
+      examples: [{
+        ar: 'ذَهَبَ أَحْمَدُ إِلَى الْمُسْتَشْفَى',
+        id: 'Ahmad pergi ke rumah sakit',
+        parts: [{
+          text: 'ذَهَبَ',
+          role: 'fiil'
+        }, {
+          text: 'أَحْمَدُ',
+          role: 'fail'
+        }, {
+          text: 'إِلَى الْمُسْتَشْفَى',
+          role: 'jar'
+        }]
+      }, {
+        ar: 'عَالَجَ الطَّبِيبُ الْمَرِيضَ',
+        id: 'Dokter mengobati si sakit',
+        parts: [{
+          text: 'عَالَجَ',
+          role: 'fiil'
+        }, {
+          text: 'الطَّبِيبُ',
+          role: 'fail'
+        }, {
+          text: 'الْمَرِيضَ',
+          role: 'maful'
+        }]
+      }, {
+        ar: 'فَحَصَتْ الطَّبِيبَةُ الْمَرِيضَةَ',
+        id: 'Dokter (pr) memeriksa pasien (pr)',
+        parts: [{
+          text: 'فَحَصَتْ',
+          role: 'fiil'
+        }, {
+          text: 'الطَّبِيبَةُ',
+          role: 'fail'
+        }, {
+          text: 'الْمَرِيضَةَ',
+          role: 'maful'
+        }]
+      }, {
+        ar: 'شَرِبَ الْوَلَدُ الدَّوَاءَ',
+        id: 'Anak itu minum obat',
+        parts: [{
+          text: 'شَرِبَ',
+          role: 'fiil'
+        }, {
+          text: 'الْوَلَدُ',
+          role: 'fail'
+        }, {
+          text: 'الدَّوَاءَ',
+          role: 'maful'
+        }]
+      }, {
+        ar: 'كَتَبَ الطَّبِيبُ الْوَصْفَةَ',
+        id: 'Dokter menulis resep',
+        parts: [{
+          text: 'كَتَبَ',
+          role: 'fiil'
+        }, {
+          text: 'الطَّبِيبُ',
+          role: 'fail'
+        }, {
+          text: 'الْوَصْفَةَ',
+          role: 'maful'
+        }]
+      }],
+      builder_sets: [{
+        tokens: ['الْمَرِيضَ', 'عَالَجَ', 'الطَّبِيبُ'],
+        answer: 'عَالَجَ الطَّبِيبُ الْمَرِيضَ'
+      }, {
+        tokens: ['الدَّوَاءَ', 'شَرِبَ', 'الْوَلَدُ'],
+        answer: 'شَرِبَ الْوَلَدُ الدَّوَاءَ'
+      }, {
+        tokens: ['الْوَصْفَةَ', 'الطَّبِيبُ', 'كَتَبَ'],
+        answer: 'كَتَبَ الطَّبِيبُ الْوَصْفَةَ'
+      }, {
+        tokens: ['الْمَرِيضَ', 'فَحَصَتْ', 'الطَّبِيبَةُ'],
+        answer: 'فَحَصَتْ الطَّبِيبَةُ الْمَرِيضَ'
+      }, {
+        tokens: ['الدَّوَاءَ', 'أَخَذَ', 'أَحْمَدُ'],
+        answer: 'أَخَذَ أَحْمَدُ الدَّوَاءَ'
+      }],
+      interactive: {
+        type: 'sentence_builder'
+      }
+    }]
+  },
+  tadribat1: {
+    scope: 'hiwar_mufrodat',
+    xp_per_correct: 10,
+    next_section: 'qawaid',
+    questions: [{
+      type: 'audio',
+      prompt: 'Dengarkan, lalu pilih artinya.',
+      audio_text: 'الطَّبِيبُ',
+      audio_ref: 'assets/audio/tadribat%201/01-tadribat1_q01.mp3',
+      arabic_display: null,
+      options: ['Dokter', 'Perawat', 'Pasien', 'Apoteker'],
+      correct_index: 0,
+      explanation: 'الطَّبِيبُ (aṭ-Ṭabīb) artinya Dokter.'
+    }, {
+      type: 'audio',
+      prompt: 'Dengarkan ungkapan ini, apa maksudnya?',
+      audio_text: 'عِنْدِي صُدَاعٌ',
+      audio_ref: 'assets/audio/tadribat%201/02-tadribat1_q02.mp3',
+      arabic_display: null,
+      options: ['Aku lapar', 'Aku pusing/sakit kepala', 'Aku lelah', 'Aku sehat'],
+      correct_index: 1,
+      explanation: 'عِنْدِي صُدَاعٌ = Aku sakit kepala / pusing.'
+    }, {
+      type: 'audio',
+      prompt: 'Dengarkan doa ini, apa artinya?',
+      audio_text: 'شَفَاكَ اللَّهُ',
+      audio_ref: 'assets/audio/tadribat%201/03-tadribat1_q03.mp3',
+      arabic_display: null,
+      options: ['Semoga Allah menyembuhkanmu', 'Semoga Allah merahmatimu', 'Terima kasih', 'Selamat datang'],
+      correct_index: 0,
+      explanation: 'شَفَاكَ اللَّهُ = Semoga Allah menyembuhkanmu.'
+    }, {
+      type: 'audio',
+      prompt: 'Dengarkan pertanyaan ini. Jawaban yang tepat adalah…',
+      audio_text: 'هَلْ ذَهَبْتَ إِلَى الطَّبِيبِ؟',
+      audio_ref: 'assets/audio/tadribat%201/04-tadribat1_q04.mp3',
+      arabic_display: null,
+      options: ['نَعَمْ، ذَهَبْتُ أَمْسِ', 'أَنَا طَالِبٌ', 'فِي الْمَدْرَسَةِ', 'شُكْرًا'],
+      correct_index: 0,
+      explanation: '"Apakah kamu sudah ke dokter?" dijawab "Ya, aku ke sana kemarin".'
+    }, {
+      type: 'audio',
+      prompt: 'Dengarkan kata ini, apa artinya?',
+      audio_text: 'الصَّيْدَلِيَّةُ',
+      audio_ref: 'assets/audio/tadribat%201/05-tadribat1_q05.mp3',
+      arabic_display: null,
+      options: ['Sekolah', 'Masjid', 'Apotek', 'Pasar'],
+      correct_index: 2,
+      explanation: 'الصَّيْدَلِيَّةُ (aṣ-Ṣaydaliyyah) = Apotek.'
+    }, {
+      type: 'text',
+      prompt: 'Apa arti kata berikut?',
+      audio_text: null,
+      arabic_display: 'الْمَرِيضُ',
+      options: ['Dokter', 'Orang sakit', 'Obat', 'Rumah sakit'],
+      correct_index: 1,
+      explanation: 'الْمَرِيضُ (al-Marīḍ) = Orang sakit.'
+    }, {
+      type: 'text',
+      prompt: 'Ungkapan "لَا بَأْسَ عَلَيْكَ" dalam dialog Hiwar diucapkan saat…',
+      audio_text: null,
+      arabic_display: 'لَا بَأْسَ عَلَيْكَ',
+      options: ['Mengucapkan salam pembuka', 'Menenangkan dan menyemangati yang sakit', 'Meminta maaf kepada teman', 'Mengucapkan selamat tinggal'],
+      correct_index: 1,
+      explanation: 'لَا بَأْسَ عَلَيْكَ = Tidak apa-apa, ungkapan untuk menenangkan orang yang sakit.'
+    }, {
+      type: 'text',
+      prompt: 'Dalam dialog, apa keluhan Ahmad?',
+      audio_text: null,
+      arabic_display: null,
+      options: ['Sakit gigi', 'Demam dan pusing', 'Diare', 'Patah kaki'],
+      correct_index: 1,
+      explanation: 'Ahmad berkata: عِنْدِي حُمَّى وَصُدَاعٌ (demam dan pusing).'
+    }, {
+      type: 'text',
+      prompt: 'Apa arti "الدَّوَاءُ"?',
+      audio_text: null,
+      arabic_display: 'الدَّوَاءُ',
+      options: ['Penyakit', 'Obat', 'Makanan', 'Air'],
+      correct_index: 1,
+      explanation: "الدَّوَاءُ (ad-Dawā') = Obat."
+    }, {
+      type: 'text',
+      prompt: 'Ungkapan mana yang berarti "Apa keluhanmu?"',
+      audio_text: null,
+      arabic_display: null,
+      options: ['كَيْفَ حَالُكَ', 'مِمَّ تَشْكُو', 'مَا اسْمُكَ', 'أَيْنَ تَسْكُنُ'],
+      correct_index: 1,
+      explanation: 'مِمَّ تَشْكُو؟ = Apa keluhanmu?'
+    }, {
+      type: 'speak',
+      prompt: 'Ucapkan kata berikut dengan benar!',
+      arabic_display: 'الطَّبِيبُ',
+      audio_text: 'الطَّبِيبُ',
+      transliteration: 'aṭ-Ṭabīb',
+      audio_ref: 'assets/audio/mufrodat/01-mufrodat_01_at-tabib.mp3',
+      options: [],
+      correct_index: -1,
+      explanation: 'الطَّبِيبُ (aṭ-Ṭabīb) artinya Dokter.'
+    }, {
+      type: 'speak',
+      prompt: 'Ucapkan kata berikut dengan benar!',
+      arabic_display: 'الْمَرِيضُ',
+      audio_text: 'الْمَرِيضُ',
+      transliteration: 'al-Marīḍ',
+      audio_ref: 'assets/audio/mufrodat/03-mufrodat_02_al-marid.mp3',
+      options: [],
+      correct_index: -1,
+      explanation: 'الْمَرِيضُ (al-Marīḍ) artinya Orang sakit.'
+    }, {
+      type: 'speak',
+      prompt: 'Ucapkan kata berikut dengan benar!',
+      arabic_display: 'الْمُسْتَشْفَى',
+      audio_text: 'الْمُسْتَشْفَى',
+      transliteration: 'al-Mustasyfā',
+      audio_ref: 'assets/audio/mufrodat/05-mufrodat_03_al-mustashfa.mp3',
+      options: [],
+      correct_index: -1,
+      explanation: 'الْمُسْتَشْفَى (al-Mustasyfā) artinya Rumah sakit.'
+    }, {
+      type: 'speak',
+      prompt: 'Ucapkan kata berikut dengan benar!',
+      arabic_display: 'الدَّوَاءُ',
+      audio_text: 'الدَّوَاءُ',
+      transliteration: "ad-Dawā'",
+      audio_ref: 'assets/audio/mufrodat/09-mufrodat_05_ad-dawa.mp3',
+      options: [],
+      correct_index: -1,
+      explanation: "الدَّوَاءُ (ad-Dawā') artinya Obat."
+    }, {
+      type: 'speak',
+      prompt: 'Ucapkan kata berikut dengan benar!',
+      arabic_display: 'سُعَالٌ',
+      audio_text: 'سُعَالٌ',
+      transliteration: "Su'āl",
+      audio_ref: 'assets/audio/mufrodat/17-mufrodat_09_sual.mp3',
+      options: [],
+      correct_index: -1,
+      explanation: "سُعَالٌ (Su'āl) artinya Batuk."
+    }]
+  },
+  tadribat2: {
+    scope: 'qawaid',
+    xp_per_correct: 10,
+    next_section: 'chapter_overview',
+    questions: [{
+      type: 'mcq',
+      prompt: "Bentuk fi'il mādhī dari ذَهَبَ untuk pelaku أَنَا?",
+      arabic_display: null,
+      options: ['ذَهَبَ', 'ذَهَبْتُ', 'ذَهَبَتْ', 'ذَهَبُوا'],
+      correct_index: 1,
+      explanation: 'أَنَا memakai akhiran ـْتُ → ذَهَبْتُ.'
+    }, {
+      type: 'identify',
+      prompt: "Siapa pelaku (fā'il) kalimat berikut?",
+      arabic_display: 'ذَهَبَتْ إِلَى الْمُسْتَشْفَى',
+      options: ['هُوَ', 'هِيَ', 'أَنَا', 'هُمْ'],
+      correct_index: 1,
+      explanation: "Akhiran ـَتْ (tā' ta'nīts) menandakan هِيَ (perempuan)."
+    }, {
+      type: 'transform',
+      prompt: "Ubah ke fi'il mudhāri': كَتَبَ → ?",
+      arabic_display: 'كَتَبَ',
+      options: ['يَكْتُبُ', 'كَتَبْتُ', 'تَكْتُبُ', 'اُكْتُبْ'],
+      correct_index: 0,
+      explanation: "كَتَبَ (mādhī) → يَكْتُبُ (mudhāri', هُوَ)."
+    }, {
+      type: 'mcq',
+      prompt: "Huruf mudhāra'ah untuk dhamir أَنَا adalah…",
+      arabic_display: null,
+      options: ['أَ', 'نَ', 'يَ', 'تَ'],
+      correct_index: 0,
+      explanation: "أَنَيْتُ: أَ untuk أَنَا → أَذْهَبُ."
+    }, {
+      type: 'mcq',
+      prompt: "Pola dasar jumlah fi'liyyah adalah…",
+      arabic_display: null,
+      options: ['فَاعِل + فِعْل', 'فِعْل + فَاعِل', 'اِسْم + خَبَر', 'حَرْف + اِسْم'],
+      correct_index: 1,
+      explanation: "Diawali fi'il lalu fā'il (+ maf'ūl): فِعْل + فَاعِل + مَفْعُول."
+    }, {
+      type: 'mcq',
+      prompt: 'Lengkapi: "… الطَّبِيبَةُ الْمَرِيضَ" (pelaku perempuan)',
+      arabic_display: '… الطَّبِيبَةُ الْمَرِيضَ',
+      options: ['فَحَصَ', 'فَحَصَتْ', 'يَفْحَصُ', 'اِفْحَصْ'],
+      correct_index: 1,
+      explanation: "Fā'il muannats → fi'il mādhī + تْ → فَحَصَتْ."
+    }, {
+      type: 'mcq',
+      prompt: "Bentuk fi'il mādhī فَحَصَ (memeriksa) untuk pelaku أَنْتَ?",
+      arabic_display: null,
+      options: ['فَحَصَ', 'فَحَصْتَ', 'فَحَصَتْ', 'نَفْحَصُ'],
+      correct_index: 1,
+      explanation: "أَنْتَ memakai akhiran ـْتَ → فَحَصْتَ."
+    }, {
+      type: 'mcq',
+      prompt: "Huruf mudhāra'ah yang digunakan untuk dhamir نَحْنُ adalah…",
+      arabic_display: null,
+      options: ['أَ', 'نَ', 'يَ', 'تَ'],
+      correct_index: 1,
+      explanation: "أَنَيْتُ: نَ untuk نَحْنُ → contoh: نَذْهَبُ (kami pergi)."
+    }, {
+      type: 'mcq',
+      prompt: "Fi'il mudhāri' dari شَرِبَ untuk dhamir أَنْتِ adalah…",
+      arabic_display: null,
+      options: ['يَشْرَبُ', 'أَشْرَبُ', 'تَشْرَبِينَ', 'نَشْرَبُ'],
+      correct_index: 2,
+      explanation: "أَنْتِ memakai huruf mudhāra'ah ت + akhiran ـِينَ → تَشْرَبِينَ."
+    }, {
+      type: 'mcq',
+      prompt: "Mana susunan jumlah fi'liyyah yang benar untuk 'Dokter menulis resep'?",
+      arabic_display: null,
+      options: ['كَتَبَ الطَّبِيبُ الْوَصْفَةَ', 'الطَّبِيبُ كَتَبَ الْوَصْفَةَ', 'الْوَصْفَةَ كَتَبَ الطَّبِيبُ', 'كَتَبَ الْوَصْفَةَ الطَّبِيبُ'],
+      correct_index: 0,
+      explanation: "Jumlah fi'liyyah: fi'il (كَتَبَ) → fā'il (الطَّبِيبُ) → maf'ūl (الْوَصْفَةَ)."
+    }]
+  },
+  imtihan: {
+    xp_per_correct: 15,
+    questions: [/* ── Hiwar (5 soal) ── */
+    {
+      type: 'mcq',
+      prompt: 'Apa keluhan yang disampaikan Ahmad dalam dialog?',
+      options: ['سُعَالٌ وَزُكَامٌ', 'حُمَّى وَصُدَاعٌ', 'إِسْهَالٌ وَأَلَمٌ', 'حُمَّى وَسُعَالٌ'],
+      correct_index: 1,
+      explanation: 'Ahmad berkata: "عِنْدِي حُمَّى وَصُدَاعٌ" — aku demam dan sakit kepala.'
+    }, {
+      type: 'mcq',
+      prompt: 'Sudah berapa lama Ahmad merasakan sakit saat ditanya dalam dialog?',
+      options: ['Sejak kemarin', 'Sejak tadi pagi', 'Sejak dua hari lalu', 'Sejak seminggu lalu'],
+      correct_index: 2,
+      explanation: 'Ahmad berkata: "شَعَرْتُ بِالْأَلَمِ مُنْذُ يَوْمَيْنِ" — aku merasakan sakit sejak dua hari lalu.'
+    }, {
+      type: 'mcq',
+      prompt: 'Apa arti ungkapan "مِمَّ تَشْكُو؟" dalam dialog?',
+      arabic_display: 'مِمَّ تَشْكُو؟',
+      options: ['Bagaimana kabarmu?', 'Sudah ke dokter?', 'Apa keluhanmu?', 'Dari mana kamu?'],
+      correct_index: 2,
+      explanation: '"مِمَّ تَشْكُو؟" artinya "Apa keluhanmu?" — digunakan saat menanyakan gejala/sakit.'
+    }, {
+      type: 'mcq',
+      prompt: 'Di mana Ahmad mengambil obat setelah ke dokter?',
+      options: ['الْمُسْتَشْفَى (Rumah Sakit)', 'الْعِيَادَة (Klinik)', 'الصَّيْدَلِيَّة (Apotek)', 'الْبَيْت (Rumah)'],
+      correct_index: 2,
+      explanation: 'Ahmad berkata: "أَخَذْتُ الدَّوَاءَ مِنَ الصَّيْدَلِيَّةِ" — aku mengambil obat dari apotek.'
+    }, {
+      type: 'mcq',
+      prompt: 'Apa doa lengkap yang diucapkan Umar untuk Ahmad dalam dialog?',
+      arabic_display: 'لَا بَأْسَ عَلَيْكَ، شَفَاكَ اللَّهُ شِفَاءً عَاجِلًا',
+      options: ['Semoga Allah merahmatimu', 'Semoga Allah menyembuhkanmu dengan segera', 'Semoga cepat pulih', 'Tidak apa-apa, istirahatlah'],
+      correct_index: 1,
+      explanation: '"شَفَاكَ اللَّهُ شِفَاءً عَاجِلًا" artinya "Semoga Allah menyembuhkanmu dengan segera".'
+    }, /* ── Mufrodat (5 soal) ── */
+    {
+      type: 'mcq',
+      prompt: 'Apa arti kata "الطَّبِيبُ"?',
+      arabic_display: 'الطَّبِيبُ',
+      options: ['Pasien', 'Dokter', 'Perawat', 'Apotek'],
+      correct_index: 1,
+      explanation: '"الطَّبِيبُ" artinya Dokter — orang yang memeriksa dan mengobati pasien.'
+    }, {
+      type: 'mcq',
+      prompt: 'Apa arti kata "الصَّيْدَلِيَّةُ"?',
+      arabic_display: 'الصَّيْدَلِيَّةُ',
+      options: ['Rumah sakit', 'Klinik', 'Apotek', 'Resep dokter'],
+      correct_index: 2,
+      explanation: '"الصَّيْدَلِيَّةُ" artinya Apotek — tempat membeli obat dengan atau tanpa resep.'
+    }, {
+      type: 'mcq',
+      prompt: 'Kata Arab untuk "obat" adalah…',
+      options: ['الْمَرِيضُ', 'الْوَصْفَةُ', 'الدَّوَاءُ', 'الْمُسْتَشْفَى'],
+      correct_index: 2,
+      explanation: '"الدَّوَاءُ" artinya obat. الْمَرِيضُ = pasien; الْوَصْفَةُ = resep; الْمُسْتَشْفَى = rumah sakit.'
+    }, {
+      type: 'mcq',
+      prompt: 'Kata Arab untuk "demam" adalah…',
+      options: ['صُدَاعٌ', 'سُعَالٌ', 'حُمَّى', 'أَلَمٌ'],
+      correct_index: 2,
+      explanation: '"حُمَّى" artinya demam. صُدَاعٌ = pusing; سُعَالٌ = batuk; أَلَمٌ = nyeri.'
+    }, {
+      type: 'mcq',
+      prompt: 'Apa arti kata "سُعَالٌ"?',
+      arabic_display: 'سُعَالٌ',
+      options: ['Demam', 'Flu / pilek', 'Batuk', 'Diare'],
+      correct_index: 2,
+      explanation: '"سُعَالٌ" artinya Batuk. حُمَّى = demam; زُكَامٌ = flu; إِسْهَالٌ = diare.'
+    }, /* ── Qawaid (5 soal) ── */
+    {
+      type: 'mcq',
+      prompt: "Bentuk fi'il mādhī dari ذَهَبَ untuk pelaku هِيَ adalah…",
+      arabic_display: 'ذَهَبَ',
+      options: ['ذَهَبَ', 'ذَهَبْتُ', 'ذَهَبَتْ', 'ذَهَبُوا'],
+      correct_index: 2,
+      explanation: "Untuk هِيَ (perempuan), fi'il mādhī + تْ → ذَهَبَتْ."
+    }, {
+      type: 'mcq',
+      prompt: "Huruf mudhāra'ah yang digunakan untuk dhamir أَنَا adalah…",
+      options: ['يَ', 'تَ', 'أَ', 'نَ'],
+      correct_index: 2,
+      explanation: "Kaidah أَنَيْتُ: أَ untuk أَنَا → contoh: أَذْهَبُ, أَشْرَبُ."
+    }, {
+      type: 'mcq',
+      prompt: "Ciri utama jumlah fi'liyyah adalah…",
+      options: ["Diawali isim (kata benda)", "Diawali fi'il (kata kerja)", "Selalu terdiri dari 2 kata", "Tidak punya pelaku (fā'il)"],
+      correct_index: 1,
+      explanation: "Jumlah fi'liyyah SELALU diawali fi'il (kata kerja), diikuti fā'il, lalu maf'ūl bila ada."
+    }, {
+      type: 'mcq',
+      prompt: "Fi'il mudhāri' dari شَرِبَ untuk dhamir نَحْنُ adalah…",
+      arabic_display: 'شَرِبَ',
+      options: ['يَشْرَبُ', 'أَشْرَبُ', 'تَشْرَبُ', 'نَشْرَبُ'],
+      correct_index: 3,
+      explanation: "نَحْنُ menggunakan huruf mudhāra'ah نَ → نَشْرَبُ (kita minum)."
+    }, {
+      type: 'mcq',
+      prompt: "Mana susunan jumlah fi'liyyah yang benar untuk 'Dokter perempuan mengambil resep'?",
+      options: ['أَخَذَتْ الطَّبِيبَةُ الْوَصْفَةَ', 'الطَّبِيبَةُ أَخَذَتْ الْوَصْفَةَ', 'أَخَذَ الطَّبِيبُ الْوَصْفَةَ', 'الْوَصْفَةَ أَخَذَتْ الطَّبِيبَةُ'],
+      correct_index: 0,
+      explanation: "fi'il muannats (أَخَذَتْ) + fā'il muannats (الطَّبِيبَةُ) + maf'ūl (الْوَصْفَةَ)."
+    }]
+  },
+  ui: {
+    hero: {
+      title_ar: 'العَرَبِيَّةُ التَّفَاعُلِيَّةُ',
+      badge: 'Belajar Bahasa Arab · Interaktif',
+      subtitle: 'Belajar bahasa Arab dengan cara yang seru dan mudah — dialog, kosakata, dan latihan interaktif.',
+      subtitle_ar: 'تَعَلَّمْ العَرَبِيَّةَ بِسُهُولَةٍ وَمُتْعَةٍ',
+      cta_primary: 'Mulai Belajar',
+      cta_secondary: 'Lihat Materi'
+    },
+    features: [{
+      icon: 'message',
+      title: 'Dialog Interaktif',
+      desc: 'Dengarkan percakapan nyata dengan audio dan terjemahan'
+    }, {
+      icon: 'layers',
+      title: 'Flashcard Kosakata',
+      desc: 'Pelajari kosa kata baru dengan kartu balik yang menyenangkan'
+    }, {
+      icon: 'edit',
+      title: 'Latihan & Ujian',
+      desc: 'Uji pemahamanmu dengan soal interaktif dan feedback langsung'
+    }],
+    feedback: {
+      correct: 'Mantap! Jawaban kamu benar 🎉',
+      wrong: 'Belum tepat, coba pelajari lagi 💪',
+      quiz_complete: 'Latihan Selesai!'
+    },
+    footer: 'العربية التفاعلية · SMA Islam Assyafiiyah 02 · Made for learning, with ❤️'
+  }
+};
+window.DATA = DATA;
