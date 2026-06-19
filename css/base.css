@@ -49,6 +49,12 @@ small, .small { font-size: var(--fs-small); color: var(--color-text-secondary); 
 button { font-family: inherit; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* ── Arabic Typography ── */
 .ar, [lang="ar"] {
   font-family: var(--font-arabic);
@@ -150,8 +156,37 @@ a { color: inherit; text-decoration: none; }
   to   { opacity: 0; transform: translateY(-8px) scale(0.96); }
 }
 
+/* ── Quiz Sidebar Layout ── */
+.quiz-with-sidebar {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 20px; /* gap between progress bar and question area */
+}
+.quiz-main-col { flex: 1; min-width: 0; }
+.quiz-nav-col {
+  width: 186px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 110px;
+}
+.quiz-nav-numbers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.quiz-nav-legend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
+  .quiz-with-sidebar { flex-direction: column; gap: 14px; margin-top: 14px; }
+  .quiz-nav-col { width: 100%; position: static; order: -1; }
+  .quiz-nav-numbers { grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); }
+
   .page { padding: var(--space-md) var(--space-md) 60px; }
   .hero-grid { grid-template-columns: 1fr !important; padding: 28px 24px !important; }
   .chapter-grid { grid-template-columns: 1fr !important; }

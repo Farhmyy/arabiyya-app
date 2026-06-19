@@ -4,6 +4,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
   const { useState, useEffect } = React;
   const [tab, setTab] = useState('ringkasan');
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [wrongSec, setWrongSec] = useState('tadribat_1');
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
 
@@ -17,11 +18,12 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
   }, []);
 
   const SECTIONS = [
-    { id: 'hiwar',      label: 'Hiwar' },
-    { id: 'mufrodat',   label: 'Mufrodat' },
-    { id: 'tadribat_1', label: 'Tadribat 1' },
-    { id: 'qawaid',     label: 'Qawaid' },
-    { id: 'tadribat_2', label: 'Tadribat 2' },
+    { id: 'hiwar',      label: 'Hiwar',      scored: false },
+    { id: 'mufrodat',   label: 'Mufrodat',   scored: false },
+    { id: 'tadribat_1', label: 'Tadribat 1', scored: true  },
+    { id: 'qawaid',     label: 'Qawaid',     scored: false },
+    { id: 'tadribat_2', label: 'Tadribat 2', scored: true  },
+    { id: 'imtihan',    label: 'Imtihan',    scored: true  },
   ];
 
   const getOverall = (student) => {
@@ -48,8 +50,82 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
     { id: 'ringkasan', label: '📊 Ringkasan' },
     { id: 'siswa', label: '👥 Semua Siswa' },
     { id: 'perhatian', label: '⚠️ Perlu Perhatian' },
+    { id: 'analitik', label: '📈 Analitik' },
     { id: 'konten', label: '✏️ Kelola Konten' },
   ];
+
+  /* ── Analytics helpers ─────────────────────────────────────────────────── */
+
+  const exportCSV = () => {
+    const header = ['No','Nama','Email','XP','Streak','Terakhir Aktif',
+      'Hiwar','Mufrodat','Tadribat 1','Qawaid','Tadribat 2','Imtihan','Best Imtihan','% Selesai'];
+    const rows = students.map((s, i) => {
+      const p  = s.progress || {};
+      const ch = p.chapters?.['3'] || {};
+      const fmt = (sec, scored) => scored
+        ? (sec?.completed ? `${sec.score}/${sec.maxScore}` : '-')
+        : (sec?.completed ? 'Selesai' : '-');
+      return [
+        i + 1, s.nickname || '-', s.email || '-',
+        p.xp || 0, p.streak || 0, p.lastActiveDate || '-',
+        fmt(ch.hiwar, false), fmt(ch.mufrodat, false),
+        fmt(ch.tadribat_1, true), fmt(ch.qawaid, false),
+        fmt(ch.tadribat_2, true), fmt(ch.imtihan, true),
+        ch.imtihan?.bestScore ?? '-',
+        getOverall(s) + '%',
+      ];
+    });
+    const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = `arabiyya-siswa-${today}.csv`; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const getDistribution = (sectionId, maxScore) => {
+    const bins = maxScore === 10
+      ? [{ label: '9–10', min: 9 }, { label: '7–8', min: 7 }, { label: '5–6', min: 5 }, { label: '3–4', min: 3 }, { label: '0–2', min: 0 }]
+      : [{ label: '13–15', min: 13 }, { label: '10–12', min: 10 }, { label: '7–9', min: 7 }, { label: '4–6', min: 4 }, { label: '0–3', min: 0 }];
+    return bins.map((bin, i) => ({
+      label: bin.label,
+      count: students.filter(s => {
+        const sec = s.progress?.chapters?.['3']?.[sectionId];
+        if (!sec?.completed) return false;
+        const score    = sec.bestScore ?? sec.score ?? 0;
+        const nextMin  = bins[i - 1]?.min ?? (maxScore + 1);
+        return score >= bin.min && score < nextMin;
+      }).length,
+    }));
+  };
+
+  const WRONG_QUESTIONS = {
+    tadribat_1: DATA.tadribat1?.questions || [],
+    tadribat_2: DATA.tadribat2?.questions || [],
+    imtihan:    DATA.imtihan?.questions   || [],
+  };
+
+  const getWrongStats = (sectionId) => {
+    const qs = WRONG_QUESTIONS[sectionId] || [];
+    const withData = students.filter(s => Array.isArray(s.progress?.chapters?.['3']?.[sectionId]?.lastWrong));
+    if (withData.length === 0 || qs.length === 0) return { stats: [], total: 0 };
+    const stats = qs.map((q, idx) => ({
+      idx,
+      prompt: q.prompt || '',
+      wrongCount: withData.filter(s => s.progress.chapters['3'][sectionId].lastWrong.includes(idx)).length,
+      total: withData.length,
+    })).filter(x => x.wrongCount > 0).sort((a, b) => b.wrongCount - a.wrongCount);
+    return { stats, total: withData.length };
+  };
+
+  const inactiveList = students.filter(s => {
+    const lastDate = s.progress?.lastActiveDate || '2000-01-01';
+    return (new Date(today) - new Date(lastDate)) / 86400000 > 7;
+  }).sort((a, b) => {
+    const da = new Date(a.progress?.lastActiveDate || '2000-01-01');
+    const db = new Date(b.progress?.lastActiveDate || '2000-01-01');
+    return da - db;
+  });
 
   const tabStyle = (id) => ({
     padding: '12px 18px', border: 'none', cursor: 'pointer',
@@ -122,7 +198,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
               {SECTIONS.map(s => {
                 const pct = students.length === 0 ? 0 :
                   Math.round(students.filter(st => st.progress?.chapters?.['3']?.[s.id]?.completed).length / students.length * 100);
-                const colors = { hiwar:'#0f766e', mufrodat:'#14b8a6', tadribat_1:'#f59e0b', qawaid:'#7c3aed', tadribat_2:'#ef4444' };
+                const colors = { hiwar:'#0f766e', mufrodat:'#14b8a6', tadribat_1:'#f59e0b', qawaid:'#7c3aed', tadribat_2:'#ef4444', imtihan:'#d97706' };
                 return (
                   <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                     <div style={{ width: 100, fontSize: 13, color: 'var(--color-text-secondary)', flexShrink: 0 }}>{s.label}</div>
@@ -139,7 +215,24 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
 
         {tab === 'siswa' && (
           <div className="admin-table-wrap">
-            {loadingStudents ? <p style={{ color: 'var(--color-text-secondary)' }}>Memuat data siswa…</p> : (
+            {loadingStudents ? (
+              <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-card)', border: '1px solid var(--color-border)', overflow: 'hidden', boxShadow: 'var(--shadow-card)' }}>
+                {/* Skeleton header */}
+                <div style={{ display: 'flex', gap: 16, padding: '12px 16px', background: 'var(--color-primary-50)', borderBottom: '1px solid var(--color-border)' }}>
+                  {[90, 140, 48, 48, 60, 60, 60, 60, 60, 48].map((w, i) => (
+                    <div key={i} style={{ height: 12, width: w, background: 'var(--color-primary)', borderRadius: 4, opacity: 0.25, flexShrink: 0 }} />
+                  ))}
+                </div>
+                {/* Skeleton rows */}
+                {[1, 0.85, 0.7, 0.55, 0.4].map((opacity, ri) => (
+                  <div key={ri} style={{ display: 'flex', gap: 16, padding: '14px 16px', borderBottom: '1px solid var(--color-border)', background: ri % 2 === 0 ? 'var(--color-surface)' : 'var(--color-bg)', opacity }}>
+                    {[90, 140, 48, 48, 60, 60, 60, 60, 60, 48].map((w, i) => (
+                      <div key={i} style={{ height: 12, width: w, background: 'var(--color-border)', borderRadius: 4, flexShrink: 0 }} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : (
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, background: 'var(--color-surface)', borderRadius: 'var(--radius-card)', overflow: 'hidden', boxShadow: 'var(--shadow-card)' }}>
                 <thead>
                   <tr style={{ background: 'var(--color-primary-50)', color: 'var(--color-primary)' }}>
@@ -162,8 +255,21 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                       <td style={{ padding: '10px 16px', textAlign: 'center', color: 'var(--color-primary)', fontWeight: 700 }}>{s.progress?.xp || 0}</td>
                       <td style={{ padding: '10px 16px', textAlign: 'center' }}>🔥 {s.progress?.streak || 0}</td>
                       {SECTIONS.map(sec => {
-                        const done = s.progress?.chapters?.['3']?.[sec.id]?.completed;
-                        return <td key={sec.id} style={{ padding: '10px 8px', textAlign: 'center' }}>{done ? '✅' : '—'}</td>;
+                        const secData = s.progress?.chapters?.['3']?.[sec.id];
+                        const done = secData?.completed;
+                        if (!done) return <td key={sec.id} style={{ padding: '10px 8px', textAlign: 'center', color: 'var(--color-text-light)' }}>—</td>;
+                        if (!sec.scored) return <td key={sec.id} style={{ padding: '10px 8px', textAlign: 'center' }}>✅</td>;
+                        const best     = secData.bestScore ?? secData.score;
+                        const attempts = secData.attempts ?? 1;
+                        const pct      = secData.maxScore ? Math.round(secData.score / secData.maxScore * 100) : 0;
+                        const color    = pct >= 80 ? 'var(--color-success)' : pct >= 60 ? 'var(--color-primary)' : 'var(--color-error)';
+                        return (
+                          <td key={sec.id} style={{ padding: '8px', textAlign: 'center', verticalAlign: 'middle' }}>
+                            <div style={{ fontWeight: 700, color, fontSize: 13 }}>{secData.score}/{secData.maxScore}</div>
+                            {best !== secData.score && <div style={{ fontSize: 11, color: 'var(--color-accent)', fontWeight: 600 }}>↑{best}</div>}
+                            <div style={{ fontSize: 11, color: 'var(--color-text-light)', marginTop: 1 }}>{attempts}×</div>
+                          </td>
+                        );
                       })}
                       <td style={{ padding: '10px 16px', textAlign: 'center', fontWeight: 700, color: getOverall(s) >= 80 ? 'var(--color-success)' : getOverall(s) >= 40 ? 'var(--color-accent)' : 'var(--color-error)' }}>{getOverall(s)}%</td>
                     </tr>
@@ -200,6 +306,156 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
             }
           </div>
         )}
+
+        {tab === 'analitik' && (() => {
+          const { stats: wrongStats, total: wrongTotal } = getWrongStats(wrongSec);
+          const WRONG_SEC_OPTIONS = [
+            { id: 'tadribat_1', label: 'Tadribat 1' },
+            { id: 'tadribat_2', label: 'Tadribat 2' },
+            { id: 'imtihan',    label: 'Imtihan' },
+          ];
+          return (
+            <div>
+              {/* Export CSV */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 24 }}>
+                <button onClick={exportCSV} style={{
+                  padding: '10px 20px', borderRadius: 10, border: 'none',
+                  background: 'var(--color-primary)', color: '#fff', cursor: 'pointer',
+                  fontWeight: 600, fontSize: 14, fontFamily: 'var(--font-latin)',
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                }}>
+                  ⬇ Export CSV ({students.length} siswa)
+                </button>
+              </div>
+
+              {/* Wrong stats */}
+              <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-card)', padding: 24, border: '1px solid var(--color-border)', marginBottom: 24 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, gap: 16, flexWrap: 'wrap' }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-text-primary)', margin: 0 }}>Soal Paling Banyak Salah</h3>
+                  <select value={wrongSec} onChange={e => setWrongSec(e.target.value)}
+                    style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid var(--color-border)', background: 'var(--color-bg)', color: 'var(--color-text-primary)', fontFamily: 'var(--font-latin)', fontSize: 13, cursor: 'pointer' }}>
+                    {WRONG_SEC_OPTIONS.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
+                  </select>
+                </div>
+
+                {wrongTotal === 0 ? (
+                  <div style={{ padding: '20px 16px', borderRadius: 10, background: 'var(--color-bg)', border: '1px dashed var(--color-border)', textAlign: 'center', color: 'var(--color-text-light)', fontSize: 14 }}>
+                    Belum ada data — siswa perlu mengerjakan ulang setelah update ini untuk memunculkan analitik per-soal.
+                  </div>
+                ) : (
+                  <div>
+                    <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', marginBottom: 12 }}>
+                      Berdasarkan {wrongTotal} siswa yang memiliki data. Menampilkan soal yang pernah salah saja.
+                    </div>
+                    <div className="admin-table-wrap">
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                        <thead>
+                          <tr style={{ background: 'var(--color-primary-50)' }}>
+                            <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--color-primary)', fontWeight: 700, width: 48 }}>#</th>
+                            <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--color-primary)', fontWeight: 700 }}>Pertanyaan</th>
+                            <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--color-primary)', fontWeight: 700, whiteSpace: 'nowrap', width: 100 }}>Salah</th>
+                            <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--color-primary)', fontWeight: 700 }}>Proporsi</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {wrongStats.map((row, ri) => {
+                            const pct = Math.round(row.wrongCount / row.total * 100);
+                            const barColor = pct >= 70 ? 'var(--color-error)' : pct >= 40 ? 'var(--color-accent)' : 'var(--color-primary)';
+                            return (
+                              <tr key={row.idx} style={{ borderTop: '1px solid var(--color-border)', background: ri % 2 === 0 ? 'var(--color-surface)' : 'var(--color-bg)' }}>
+                                <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--color-text-light)', fontSize: 12 }}>#{row.idx + 1}</td>
+                                <td style={{ padding: '10px 12px', color: 'var(--color-text-primary)', maxWidth: 320 }}>
+                                  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={row.prompt}>{row.prompt}</div>
+                                </td>
+                                <td style={{ padding: '10px 12px', textAlign: 'center', fontWeight: 700, color: barColor }}>{row.wrongCount}/{row.total}</td>
+                                <td style={{ padding: '10px 12px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    <div style={{ flex: 1, background: 'var(--color-border)', borderRadius: 4, height: 10, overflow: 'hidden', minWidth: 80 }}>
+                                      <div style={{ background: barColor, height: '100%', width: pct + '%', transition: 'width 600ms' }} />
+                                    </div>
+                                    <div style={{ fontSize: 12, fontWeight: 700, color: barColor, width: 36, textAlign: 'right' }}>{pct}%</div>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Score distribution */}
+              <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-card)', padding: 24, border: '1px solid var(--color-border)', marginBottom: 24 }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-text-primary)', margin: '0 0 20px' }}>Distribusi Skor</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 28 }}>
+                  {[
+                    { id: 'imtihan',    label: 'Imtihan',    max: 15 },
+                    { id: 'tadribat_1', label: 'Tadribat 1', max: 15 },
+                    { id: 'tadribat_2', label: 'Tadribat 2', max: 10 },
+                  ].map(({ id, label, max }) => {
+                    const dist     = getDistribution(id, max);
+                    const maxCount = Math.max(...dist.map(d => d.count), 1);
+                    const total    = dist.reduce((s, d) => s + d.count, 0);
+                    return (
+                      <div key={id}>
+                        <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--color-text-primary)', marginBottom: 12 }}>
+                          {label} <span style={{ fontWeight: 400, color: 'var(--color-text-secondary)', fontSize: 12 }}>maks {max} · {total} siswa</span>
+                        </div>
+                        {dist.map(bin => (
+                          <div key={bin.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                            <div style={{ width: 40, fontSize: 11, textAlign: 'right', color: 'var(--color-text-secondary)', flexShrink: 0 }}>{bin.label}</div>
+                            <div style={{ flex: 1, background: 'var(--color-border)', borderRadius: 4, height: 16, overflow: 'hidden' }}>
+                              <div style={{ background: 'var(--color-primary)', height: '100%', width: (bin.count / maxCount * 100) + '%', transition: 'width 600ms', opacity: bin.count === 0 ? 0.1 : 1 }} />
+                            </div>
+                            <div style={{ width: 20, fontSize: 13, fontWeight: 700, color: bin.count > 0 ? 'var(--color-primary)' : 'var(--color-text-light)', flexShrink: 0 }}>{bin.count}</div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Inactive > 7 days */}
+              <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-card)', padding: 24, border: '1px solid var(--color-border)' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-text-primary)', margin: '0 0 16px' }}>
+                  Siswa Tidak Aktif &gt; 7 Hari
+                  {inactiveList.length > 0 && <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 400, color: 'var(--color-error)' }}>({inactiveList.length} siswa)</span>}
+                </h3>
+                {inactiveList.length === 0
+                  ? <div style={{ padding: '20px 16px', borderRadius: 10, background: 'var(--color-success-50)', border: '1px solid var(--color-success-border)', textAlign: 'center', color: 'var(--color-success-text)', fontSize: 14 }}>
+                      🎉 Semua siswa aktif dalam 7 hari terakhir!
+                    </div>
+                  : <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {inactiveList.map(s => {
+                        const lastDate   = s.progress?.lastActiveDate || null;
+                        const daysSince  = lastDate ? Math.floor((new Date(today) - new Date(lastDate)) / 86400000) : null;
+                        const overall    = getOverall(s);
+                        return (
+                          <div key={s.uid} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '12px 16px', borderRadius: 10, border: '1px solid var(--color-border)', background: 'var(--color-bg)', flexWrap: 'wrap' }}>
+                            <div>
+                              <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{s.nickname || '—'}</div>
+                              <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 2 }}>{s.email}</div>
+                            </div>
+                            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                              <span style={{ background: 'var(--color-error-50)', color: 'var(--color-error-text)', borderRadius: 6, padding: '3px 10px', fontSize: 12, fontWeight: 600, border: '1px solid var(--color-error-border)' }}>
+                                {daysSince === null ? 'Belum pernah aktif' : `${daysSince} hari lalu`}
+                              </span>
+                              <span style={{ background: 'var(--color-primary-50)', color: 'var(--color-primary)', borderRadius: 6, padding: '3px 10px', fontSize: 12, fontWeight: 600 }}>
+                                {overall}% selesai
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                }
+              </div>
+            </div>
+          );
+        })()}
 
         {tab === 'konten' && <AdminCMSPanel />}
       </div>

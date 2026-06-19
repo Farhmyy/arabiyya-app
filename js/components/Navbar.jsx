@@ -167,6 +167,7 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
         {/* XP chip */}
         <div ref={xpRef} style={{ position: 'relative' }}>
           <button onClick={() => setShowXpPopup(v => !v)}
+            aria-label={`${xp} XP — lihat detail`}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 5, borderRadius: 999,
               ...chipStyle, background: floating ? 'var(--color-surface)' : 'var(--color-accent-50)', color: 'var(--color-amber-text)',
@@ -190,6 +191,7 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
         {/* Streak chip */}
         <div ref={strRef} style={{ position: 'relative' }}>
           <button onClick={() => setShowStrPopup(v => !v)}
+            aria-label={`Streak ${streak} hari — lihat detail`}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 5, borderRadius: 999,
               ...chipStyle, background: floating ? 'var(--color-surface)' : 'var(--color-accent-50)', color: 'var(--color-amber-text)',
@@ -225,6 +227,7 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
         {user && nickname && (
           <div ref={nickRef} style={{ position: 'relative' }}>
             <button onClick={() => setShowNickPopup(v => !v)}
+              aria-label={`Profil ${nickname}`}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7,
                 height: floating ? 40 : 36, padding: '0 10px',
@@ -297,7 +300,7 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
   );
 }
 
-function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark, user, nickname, onLogout }) {
+function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark, user, nickname, onLogout, progress }) {
   const m = route.match(/^chapter\/(\d+)(?:\/(.+))?$/);
   if (!m) return null;
   const chapterNum = m[1];
@@ -310,7 +313,22 @@ function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark, user,
     { id: 'tadribat-1', label: 'Tadribat 1',         icon: 'edit',    to: `chapter/${chapterNum}/tadribat-1` },
     { id: 'qawaid',     label: 'Qawaid',             icon: 'book',    to: `chapter/${chapterNum}/qawaid` },
     { id: 'tadribat-2', label: 'Tadribat 2',         icon: 'edit',    to: `chapter/${chapterNum}/tadribat-2` },
+    { id: 'imtihan',    label: 'Imtihan',            icon: 'award',   to: `chapter/${chapterNum}/imtihan` },
   ];
+
+  /* Sequential lock — same logic as ChapterScreen */
+  const SECTION_ORDER = ['hiwar', 'mufrodat', 'tadribat_1', 'qawaid', 'tadribat_2'];
+  const ch = progress?.chapters?.[chapterNum] || {};
+  const isSectionLocked = (id) => {
+    if (id === 'index' || id === 'hiwar') return false;
+    if (id === 'imtihan') {
+      return !SECTION_ORDER.every(s => ch[s]?.completed);
+    }
+    const pk = id.replace('-', '_');
+    const idx = SECTION_ORDER.indexOf(pk);
+    if (idx <= 0) return false;
+    return !ch[SECTION_ORDER[idx - 1]]?.completed;
+  };
 
   return (
     <header style={{
@@ -336,22 +354,26 @@ function ChapterNav({ route, navigate, xp, streak, darkMode, onToggleDark, user,
         }}>
           {sections.map(s => {
             const active = s.id === sectionId;
+            const locked = isSectionLocked(s.id);
             return (
-              <a key={s.id} onClick={() => navigate(s.to)}
+              <a key={s.id}
+                onClick={locked ? undefined : () => navigate(s.to)}
+                title={locked ? 'Selesaikan bagian sebelumnya terlebih dahulu' : undefined}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   height: 40, padding: '0 12px', borderRadius: 10,
                   fontFamily: 'var(--font-latin)', fontSize: 14,
                   fontWeight: active ? 600 : 500,
-                  color: active ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                  color: locked ? 'var(--color-text-light)' : active ? 'var(--color-primary)' : 'var(--color-text-secondary)',
                   background: active ? 'var(--color-primary-50)' : 'transparent',
-                  cursor: 'pointer', whiteSpace: 'nowrap',
-                  transition: 'all 160ms', flexShrink: 0,
+                  cursor: locked ? 'not-allowed' : 'pointer',
+                  opacity: locked ? 0.55 : 1,
+                  whiteSpace: 'nowrap', transition: 'all 160ms', flexShrink: 0,
                 }}
-                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = 'var(--color-bg)'; e.currentTarget.style.color = 'var(--color-primary)'; }}}
-                onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--color-text-secondary)'; }}}
+                onMouseEnter={e => { if (!active && !locked) { e.currentTarget.style.background = 'var(--color-bg)'; e.currentTarget.style.color = 'var(--color-primary)'; }}}
+                onMouseLeave={e => { if (!active && !locked) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--color-text-secondary)'; }}}
               >
-                <Icon name={s.icon} size={16} />
+                <Icon name={locked ? 'lock' : s.icon} size={16} />
                 <span className="nav-section-label">{s.label}</span>
               </a>
             );
@@ -380,9 +402,9 @@ function FloatingTop({ route, navigate, xp, streak, darkMode, onToggleDark, user
   );
 }
 
-function Navbar({ route, navigate, xp = 0, streak = 1, darkMode = false, onToggleDark, user = null, nickname = null, onLogout }) {
+function Navbar({ route, navigate, xp = 0, streak = 1, progress = null, darkMode = false, onToggleDark, user = null, nickname = null, onLogout }) {
   if (route === 'home') return <FloatingTop route={route} navigate={navigate} xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} user={user} nickname={nickname} onLogout={onLogout} />;
-  if (route.startsWith('chapter/')) return <ChapterNav route={route} navigate={navigate} xp={xp} streak={streak} darkMode={darkMode} onToggleDark={onToggleDark} user={user} nickname={nickname} onLogout={onLogout} />;
+  if (route.startsWith('chapter/')) return <ChapterNav route={route} navigate={navigate} xp={xp} streak={streak} progress={progress} darkMode={darkMode} onToggleDark={onToggleDark} user={user} nickname={nickname} onLogout={onLogout} />;
   return null;
 }
 

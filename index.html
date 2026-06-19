@@ -9,6 +9,12 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/dark.css">
   <link rel="icon" href="assets/images/logo-mark.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Arabiyya">
+  <link rel="apple-touch-icon" href="assets/images/logo-mark.svg">
 </head>
 <body>
   <div id="root"></div>
@@ -27,6 +33,9 @@
   <!-- ═══ Speech Recognition Helper ═══ -->
   <script src="js/lib/speechRecognition.js"></script>
 
+  <!-- ═══ Spaced Repetition (SM-2) ═══ -->
+  <script src="js/lib/srs.js"></script>
+
   <!-- ═══ Supabase ═══ -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/lib/supabase.js"></script>
@@ -39,6 +48,7 @@
   <script type="text/babel" src="js/hooks/useAuth.js"></script>
   <script type="text/babel" src="js/hooks/useCloudProgress.js"></script>
   <script type="text/babel" src="js/hooks/useCloudContent.js"></script>
+  <script type="text/babel" src="js/hooks/useQuizTimer.js"></script>
 
   <!-- ═══ UI Primitives (order matters: dependencies first) ═══ -->
   <script type="text/babel" src="js/components/Icon.jsx"></script>
@@ -55,6 +65,7 @@
   <script type="text/babel" src="js/components/ChapterCard.jsx"></script>
   <script type="text/babel" src="js/components/SectionCard.jsx"></script>
   <script type="text/babel" src="js/components/DialogueBubble.jsx"></script>
+  <script type="text/babel" src="js/components/QuizNavigator.jsx"></script>
 
   <!-- ═══ Screens ═══ -->
   <script type="text/babel" src="js/screens/LoginScreen.jsx"></script>
@@ -66,9 +77,20 @@
   <script type="text/babel" src="js/screens/Tadribat1Screen.jsx"></script>
   <script type="text/babel" src="js/screens/QawaidScreen.jsx"></script>
   <script type="text/babel" src="js/screens/Tadribat2Screen.jsx"></script>
+  <script type="text/babel" src="js/screens/ImtihanScreen.jsx"></script>
   <script type="text/babel" src="js/screens/AdminScreen.jsx"></script>
 
   <!-- ═══ App Entry ═══ -->
   <script type="text/babel" src="js/app.jsx"></script>
+
+  <!-- ═══ Service Worker Registration ═══ -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .catch(() => { /* SW not critical — app still works without it */ });
+      });
+    }
+  </script>
 </body>
 </html>

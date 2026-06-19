@@ -211,6 +211,7 @@ function HiwarScreen({ navigate, progress }) {
                       <img
                         src={scene.illustration_ref}
                         alt={scene.label}
+                        loading="lazy"
                         style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 10 }}
                       />
                     </div>

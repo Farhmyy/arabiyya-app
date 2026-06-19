@@ -4,17 +4,24 @@
 
 const STORAGE_KEY = 'arabiyya_progress';
 
+/* Use local date (not UTC) to avoid timezone-based streak miscalculation */
+function localDateStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 const DEFAULT_STATE = {
   xp: 0,
   streak: 1,
-  lastActiveDate: new Date().toISOString().slice(0, 10),
+  lastActiveDate: localDateStr(),
   chapters: {
     '3': {
       hiwar:      { completed: false, score: 0, maxScore: 6 },
       mufrodat:   { completed: false, score: 0, maxScore: 6 },
-      tadribat_1: { completed: false, score: 0, maxScore: 5 },
+      tadribat_1: { completed: false, score: 0, maxScore: 15, bestScore: 0, attempts: 0 },
       qawaid:     { completed: false, score: 0, maxScore: 6 },
-      tadribat_2: { completed: false, score: 0, maxScore: 5 },
+      tadribat_2: { completed: false, score: 0, maxScore: 10, bestScore: 0, attempts: 0 },
+      imtihan:    { completed: false, score: 0, maxScore: 15, bestScore: 0, attempts: 0 },
     },
   },
 };
@@ -28,7 +35,7 @@ function loadState() {
     const saved = JSON.parse(raw);
 
     /* validate streak */
-    const today = new Date().toISOString().slice(0, 10);
+    const today = localDateStr();
     const last  = saved.lastActiveDate || today;
     const diff  = (new Date(today) - new Date(last)) / 86400000;
     if (diff > 1) saved.streak = 0;
@@ -60,7 +67,7 @@ function useProgress() {
 
   const addXP = useCallback((amount = 10) => {
     persist(prev => {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localDateStr();
       const isNewDay = prev.lastActiveDate !== today;
       return {
         ...prev,
@@ -71,15 +78,59 @@ function useProgress() {
     });
   }, [persist]);
 
-  const completeSection = useCallback((chapterId, sectionId, score, maxScore) => {
+  const completeSection = useCallback((chapterId, sectionId, score, maxScore, wrongIndices) => {
     persist(prev => {
       const chapters = { ...prev.chapters };
       if (!chapters[chapterId]) chapters[chapterId] = {};
+      const prev_sec = chapters[chapterId][sectionId] || {};
+      const srsCards = prev_sec.srsCards
+        || (sectionId === 'mufrodat' && window.SRS ? window.SRS.initSrsCards(maxScore) : null);
       chapters[chapterId] = {
         ...chapters[chapterId],
-        [sectionId]: { completed: true, score, maxScore },
+        [sectionId]: {
+          completed: true,
+          score,
+          maxScore,
+          bestScore: Math.max(prev_sec.bestScore ?? prev_sec.score ?? 0, score),
+          attempts: (prev_sec.attempts || 0) + 1,
+          ...(srsCards ? { srsCards } : {}),
+          ...(wrongIndices ? { lastWrong: wrongIndices } : {}),
+        },
       };
       return { ...prev, chapters };
+    });
+  }, [persist]);
+
+  const updateSrsCard = useCallback((chapterId, sectionId, cardIndex, newCardData) => {
+    persist(prev => {
+      const sec = prev.chapters?.[chapterId]?.[sectionId] || {};
+      const srsCards = { ...(sec.srsCards || {}), [cardIndex]: newCardData };
+      return {
+        ...prev,
+        chapters: {
+          ...prev.chapters,
+          [chapterId]: {
+            ...prev.chapters[chapterId],
+            [sectionId]: { ...sec, srsCards },
+          },
+        },
+      };
+    });
+  }, [persist]);
+
+  const setSrsCards = useCallback((chapterId, sectionId, cards) => {
+    persist(prev => {
+      const sec = prev.chapters?.[chapterId]?.[sectionId] || {};
+      return {
+        ...prev,
+        chapters: {
+          ...prev.chapters,
+          [chapterId]: {
+            ...prev.chapters[chapterId],
+            [sectionId]: { ...sec, srsCards: cards },
+          },
+        },
+      };
     });
   }, [persist]);
 
@@ -107,6 +158,8 @@ function useProgress() {
     chapters: state.chapters,
     addXP,
     completeSection,
+    updateSrsCard,
+    setSrsCards,
     chapterProgress,
     sectionStatus,
     resetProgress,

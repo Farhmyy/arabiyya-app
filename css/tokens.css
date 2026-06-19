@@ -118,37 +118,43 @@
 
 /* ── Dark Mode Overrides ── */
 [data-theme="dark"] {
-  --color-bg:               #0F172A;
-  --color-surface:          #1E293B;
-  --color-text-primary:     #E2E8F0;
-  --color-text-secondary:   #94A3B8;
-  --color-text-light:       #64748B;
-  --color-border:           #334155;
-  --color-border-strong:    #475569;
-  --color-primary:          #5EEAD4;
-  --color-primary-hover:    #99F6E4;
-  --color-primary-50:       #134E4A;
-  --color-primary-100:      #0F766E;
-  --color-accent:           #FCD34D;
-  --color-accent-50:        #292524;
-  --color-accent-100:       #3D2B00;
-  --color-success-50:       #14532D;
-  --color-error-50:         #450A0A;
-  --color-accent-50:        #422006;
-  --color-accent-100:       #78350F;
+  /* Surfaces — deep navy, clearly layered */
+  --color-bg:               #080E1C;
+  --color-surface:          #0F1D30;
+
+  /* Text — high contrast for readability */
+  --color-text-primary:     #F0F6FF;
+  --color-text-secondary:   #B8CDE0;
+  --color-text-light:       #8AA8C0;
+
+  /* Borders — visible but subtle */
+  --color-border:           #1E3550;
+  --color-border-strong:    #2E4C6E;
+
+  /* Brand — bright teal readable on dark bg */
   --color-primary:          #2DD4BF;
   --color-primary-hover:    #5EEAD4;
+  --color-primary-50:       #0B3530;
   --color-primary-100:      #0D9488;
 
-  /* Semantic text — inverted for dark bg */
-  --color-success-text:  #4ADE80;
-  --color-error-text:    #F87171;
-  --color-amber-text:    #FCD34D;
-  --color-purple-text:   #A78BFA;
-  --color-success-border: #166534;
-  --color-error-border:   #7F1D1D;
+  /* Accent gold */
+  --color-accent:           #FCD34D;
+  --color-accent-50:        #2D1A04;
+  --color-accent-100:       #78350F;
 
-  --shadow-card:            0 4px 12px rgba(0,0,0,0.3);
-  --shadow-hover:           0 8px 20px rgba(0,0,0,0.4);
-  --shadow-modal:           0 12px 32px rgba(0,0,0,0.5);
+  /* Semantic tints — deep, low-saturation for dark UI */
+  --color-success-50:       #042D18;
+  --color-error-50:         #2C0808;
+
+  /* Semantic text — vivid enough on dark tint backgrounds */
+  --color-success-text:     #4ADE80;
+  --color-error-text:       #F87171;
+  --color-amber-text:       #FCD34D;
+  --color-purple-text:      #A78BFA;
+  --color-success-border:   #0F4A28;
+  --color-error-border:     #5A1A1A;
+
+  --shadow-card:            0 4px 16px rgba(0,0,0,0.45);
+  --shadow-hover:           0 8px 24px rgba(0,0,0,0.55);
+  --shadow-modal:           0 16px 40px rgba(0,0,0,0.65);
 }

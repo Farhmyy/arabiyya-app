@@ -1,0 +1,22 @@
+{
+  "name": "العربية التفاعلية",
+  "short_name": "Arabiyya",
+  "description": "Media pembelajaran bahasa Arab interaktif — Kelas VIII BAB 3",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080E1C",
+  "theme_color": "#14b8a6",
+  "icons": [
+    {
+      "src": "assets/images/logo-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["education"],
+  "prefer_related_applications": false
+}

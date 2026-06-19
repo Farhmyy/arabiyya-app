@@ -122,23 +122,27 @@ function App() {
   }
 
   /* ── Student / guest app ── */
+  const isGuest = !user && guestMode;
+  const onSwitchToLogin = () => { setGuestMode(false); localStorage.removeItem('arabiyya_guest'); };
   const screenProps = { navigate, progress, darkMode };
   const screens = {
-    'home':                  <HomeScreen     {...screenProps} xp={progress.xp} streak={progress.streak} />,
+    'home':                  <HomeScreen     {...screenProps} xp={progress.xp} streak={progress.streak} isGuest={isGuest} onSwitchToLogin={onSwitchToLogin} />,
     'chapter/3':             <ChapterScreen  {...screenProps} />,
     'chapter/3/hiwar':       <HiwarScreen    {...screenProps} />,
     'chapter/3/mufrodat':    <MufrodatScreen {...screenProps} />,
     'chapter/3/tadribat-1':  <Tadribat1Screen {...screenProps} />,
     'chapter/3/qawaid':      <QawaidScreen   {...screenProps} />,
     'chapter/3/tadribat-2':  <Tadribat2Screen {...screenProps} />,
+    'chapter/3/imtihan':     <ImtihanScreen  {...screenProps} />,
   };
-  const screen = screens[route] || <HomeScreen {...screenProps} xp={progress.xp} streak={progress.streak} />;
+  const screen = screens[route] || <HomeScreen {...screenProps} xp={progress.xp} streak={progress.streak} isGuest={isGuest} onSwitchToLogin={onSwitchToLogin} />;
 
   return (
     <ToastProvider>
       <div className="app">
         <Navbar route={route} navigate={navigate}
                 xp={progress.xp} streak={progress.streak}
+                progress={progress}
                 darkMode={darkMode} onToggleDark={() => setDarkMode(d => !d)}
                 user={user} nickname={nickname}
                 onLogout={() => { logout(); setGuestMode(false); localStorage.removeItem('arabiyya_guest'); }} />

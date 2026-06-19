@@ -7,10 +7,14 @@ function SectionCard({ icon, titleAr, titleId, subtitle, status = 'open', accent
     gold:      'linear-gradient(180deg, #F59E0B, #D97706)',
     purple:    'linear-gradient(180deg, #8B5CF6, #7C3AED)',
     teal:      'linear-gradient(180deg, #06B6D4, #0891B2)',
+    neutral:   'linear-gradient(180deg, #94A3B8, #64748B)',
   };
 
+  const locked = status === 'locked';
+
   return (
-    <Card hover onClick={onClick} padding={20}>
+    <Card hover={!locked} onClick={locked ? undefined : onClick} padding={20}
+      style={locked ? { opacity: 0.55, cursor: 'not-allowed', userSelect: 'none' } : {}}>
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
         <div style={{
           width: 56, height: 56, borderRadius: 16,
@@ -19,7 +23,7 @@ function SectionCard({ icon, titleAr, titleId, subtitle, status = 'open', accent
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
         }}>
-          <Icon name={icon} size={26} />
+          <Icon name={locked ? 'lock' : icon} size={26} />
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -28,8 +32,9 @@ function SectionCard({ icon, titleAr, titleId, subtitle, status = 'open', accent
           {subtitle && <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', marginTop: 4 }}>{subtitle}</div>}
         </div>
 
-        {status === 'done' && <Icon name="check-circle" size={22} color="var(--color-success)" />}
-        {status === 'open' && <Icon name="chevron-right" size={22} color="var(--color-text-light)" />}
+        {status === 'done'   && <Icon name="check-circle"  size={22} color="var(--color-success)"    />}
+        {status === 'open'   && <Icon name="chevron-right" size={22} color="var(--color-text-light)"  />}
+        {status === 'locked' && <Icon name="lock"          size={22} color="var(--color-text-light)"  />}
       </div>
     </Card>
   );

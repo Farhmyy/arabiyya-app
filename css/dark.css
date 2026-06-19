@@ -1,9 +1,10 @@
 /* Dark mode surface overrides not covered by tokens */
 [data-theme="dark"] body { background: var(--color-bg); }
 
-/* Navbar backdrop */
+/* Navbar backdrop — matches updated dark bg */
 [data-theme="dark"] header {
-  background: rgba(15,23,42,0.92) !important;
+  background: rgba(8,14,28,0.94) !important;
+  border-bottom-color: var(--color-border) !important;
 }
 
 /* Dropdown menus */
@@ -26,6 +27,26 @@
 /* Cards di dark mode — tambah border tipis agar terlihat */
 [data-theme="dark"] .card {
   border: 1px solid var(--color-border);
+}
+
+/* Fix over-bright gradient banners in dark mode.
+   The chapter banner uses var(--color-primary) which is bright teal (#2DD4BF)
+   in dark mode. White text on bright teal has poor contrast — override to deep teal. */
+[data-theme="dark"] .chapter-banner-section {
+  background: linear-gradient(135deg, #0C4F4A 0%, #083C38 100%) !important;
+}
+
+/* Quiz intro icon circles (80px) that use primary gradient */
+[data-theme="dark"] .quiz-intro-icon {
+  background: linear-gradient(135deg, #0C4F4A 0%, #0A6B5E 100%) !important;
+}
+
+/* Score card tints in results — lighten a touch for readability */
+[data-theme="dark"] .score-card-primary {
+  background: var(--color-primary-50) !important;
+}
+[data-theme="dark"] .score-card-accent {
+  background: var(--color-accent-50) !important;
 }
 
 /* Tombol secondary di dark mode */

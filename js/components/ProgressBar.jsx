@@ -32,9 +32,9 @@ function ProgressBar({ value = 0, max = 100, label, showPct = true, color = 'gra
   );
 }
 
-function StepProgress({ current, total }) {
+function StepProgress({ current, total, style }) {
   return (
-    <div style={{ display: 'flex', gap: 8, width: '100%' }} role="progressbar" aria-valuenow={current} aria-valuemax={total}>
+    <div style={{ display: 'flex', gap: 8, width: '100%', ...style }} role="progressbar" aria-valuenow={current} aria-valuemax={total}>
       {Array.from({ length: total }).map((_, i) => (
         <div key={i} style={{
           flex: 1, height: 6, borderRadius: 999,

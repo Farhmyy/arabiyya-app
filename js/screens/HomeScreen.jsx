@@ -1,6 +1,6 @@
 /* HomeScreen — Landing page */
 
-function HomeScreen({ navigate, xp, streak }) {
+function HomeScreen({ navigate, xp, streak, isGuest, onSwitchToLogin }) {
   const { chapters, ui } = DATA;
   const progress = window._progress || {};
 
@@ -14,6 +14,36 @@ function HomeScreen({ navigate, xp, streak }) {
 
   return (
     <div className="page anim-in" style={{ paddingTop: 96 }}>
+
+      {/* ── Guest mode banner ── */}
+      {isGuest && (
+        <div className="anim-in" style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: 10,
+          padding: '12px 18px', borderRadius: 14, marginBottom: 20,
+          background: 'var(--color-accent-50)', border: '1.5px solid var(--color-accent-100)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 18 }}>👤</span>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--color-amber-text)' }}>
+                Kamu belajar sebagai Tamu
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 1 }}>
+                Progress tersimpan di perangkat ini saja — masuk untuk sync ke semua perangkat.
+              </div>
+            </div>
+          </div>
+          <button onClick={onSwitchToLogin} style={{
+            padding: '7px 16px', borderRadius: 10, border: 'none',
+            background: 'var(--color-accent)', color: '#fff',
+            fontWeight: 700, fontSize: 13, cursor: 'pointer', flexShrink: 0,
+            fontFamily: 'var(--font-latin)',
+          }}>
+            Masuk / Daftar
+          </button>
+        </div>
+      )}
 
       {/* ── HERO ── */}
       <section style={{
@@ -70,7 +100,7 @@ function HomeScreen({ navigate, xp, streak }) {
             boxShadow: '0 24px 56px -12px rgba(15,118,110,.35), 0 4px 16px rgba(0,0,0,.08)',
           }}>
             <div style={{ borderRadius: 24, overflow: 'hidden' }}>
-              <img src="assets/images/illustrasion-hero.png" alt="" className="hero-illustration"
+              <img src="assets/images/illustrasion-hero.webp" alt="" className="hero-illustration"
                 style={{ width: '100%', display: 'block' }} />
             </div>
           </div>

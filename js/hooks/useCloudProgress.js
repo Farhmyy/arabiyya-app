@@ -1,17 +1,23 @@
 /* useCloudProgress — Supabase PostgreSQL progress for logged-in students */
 
+function localDateStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 function useCloudProgress(uid) {
   const { useState, useEffect, useCallback, useRef } = React;
 
   const DEFAULT = {
     xp: 0, streak: 1,
-    lastActiveDate: new Date().toISOString().slice(0, 10),
+    lastActiveDate: localDateStr(),
     chapters: window.DEFAULT_PROGRESS || { '3': {
       hiwar:      { completed: false, score: 0, maxScore: 6 },
       mufrodat:   { completed: false, score: 0, maxScore: 6 },
-      tadribat_1: { completed: false, score: 0, maxScore: 5 },
+      tadribat_1: { completed: false, score: 0, maxScore: 15, bestScore: 0, attempts: 0 },
       qawaid:     { completed: false, score: 0, maxScore: 6 },
-      tadribat_2: { completed: false, score: 0, maxScore: 5 },
+      tadribat_2: { completed: false, score: 0, maxScore: 10, bestScore: 0, attempts: 0 },
+      imtihan:    { completed: false, score: 0, maxScore: 15, bestScore: 0, attempts: 0 },
     }},
   };
 
@@ -20,12 +26,12 @@ function useCloudProgress(uid) {
 
   /* Load from Supabase on mount */
   useEffect(() => {
-    if (!uid) return;
+    if (!uid || typeof sbClient === 'undefined' || !sbClient) return;
     sbClient.from('users').select('progress').eq('id', uid).maybeSingle()
       .then(({ data }) => {
         if (data?.progress && Object.keys(data.progress).length > 0) {
           const saved = data.progress;
-          const today = new Date().toISOString().slice(0, 10);
+          const today = localDateStr();
           const diff = (new Date(today) - new Date(saved.lastActiveDate || today)) / 86400000;
           if (diff > 1) saved.streak = 0;
           setState(saved);
@@ -38,18 +44,21 @@ function useCloudProgress(uid) {
   const persist = useCallback((updater) => {
     setState(prev => {
       const next = updater(prev);
-      clearTimeout(saveTimeout.current);
-      saveTimeout.current = setTimeout(() => {
-        sbClient.from('users').update({ progress: next }).eq('id', uid)
-          .then(({ error }) => { if (error) console.error('[Progress] save failed:', error.message); });
-      }, 500);
+      if (uid && typeof sbClient !== 'undefined' && sbClient) {
+        clearTimeout(saveTimeout.current);
+        saveTimeout.current = setTimeout(() => {
+          sbClient.from('users').update({ progress: next }).eq('id', uid)
+            .then(({ error }) => { if (error) console.error('[Progress] save failed:', error.message); })
+            .catch(() => {});
+        }, 500);
+      }
       return next;
     });
   }, [uid]);
 
   const addXP = useCallback((amount = 10) => {
     persist(prev => {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localDateStr();
       const isNewDay = prev.lastActiveDate !== today;
       return { ...prev, xp: prev.xp + amount,
         streak: isNewDay ? prev.streak + 1 : prev.streak,
@@ -57,12 +66,59 @@ function useCloudProgress(uid) {
     });
   }, [persist]);
 
-  const completeSection = useCallback((chapterId, sectionId, score, maxScore) => {
+  const completeSection = useCallback((chapterId, sectionId, score, maxScore, wrongIndices) => {
     persist(prev => {
       const chapters = { ...prev.chapters };
       if (!chapters[chapterId]) chapters[chapterId] = {};
-      chapters[chapterId] = { ...chapters[chapterId], [sectionId]: { completed: true, score, maxScore } };
+      const prev_sec = chapters[chapterId][sectionId] || {};
+      const srsCards = prev_sec.srsCards
+        || (sectionId === 'mufrodat' && window.SRS ? window.SRS.initSrsCards(maxScore) : null);
+      chapters[chapterId] = {
+        ...chapters[chapterId],
+        [sectionId]: {
+          completed: true,
+          score,
+          maxScore,
+          bestScore: Math.max(prev_sec.bestScore ?? prev_sec.score ?? 0, score),
+          attempts: (prev_sec.attempts || 0) + 1,
+          ...(srsCards ? { srsCards } : {}),
+          ...(wrongIndices ? { lastWrong: wrongIndices } : {}),
+        },
+      };
       return { ...prev, chapters };
+    });
+  }, [persist]);
+
+  const updateSrsCard = useCallback((chapterId, sectionId, cardIndex, newCardData) => {
+    persist(prev => {
+      const sec = prev.chapters?.[chapterId]?.[sectionId] || {};
+      const srsCards = { ...(sec.srsCards || {}), [cardIndex]: newCardData };
+      return {
+        ...prev,
+        chapters: {
+          ...prev.chapters,
+          [chapterId]: {
+            ...prev.chapters[chapterId],
+            [sectionId]: { ...sec, srsCards },
+          },
+        },
+      };
+    });
+  }, [persist]);
+
+  const setSrsCards = useCallback((chapterId, sectionId, cards) => {
+    persist(prev => {
+      const sec = prev.chapters?.[chapterId]?.[sectionId] || {};
+      return {
+        ...prev,
+        chapters: {
+          ...prev.chapters,
+          [chapterId]: {
+            ...prev.chapters[chapterId],
+            [sectionId]: { ...sec, srsCards: cards },
+          },
+        },
+      };
     });
   }, [persist]);
 
@@ -82,7 +138,8 @@ function useCloudProgress(uid) {
   const resetProgress = useCallback(() => persist(() => ({ ...DEFAULT })), [persist]);
 
   return { xp: state.xp, streak: state.streak, chapters: state.chapters,
-    addXP, completeSection, chapterProgress, sectionStatus, resetProgress };
+    addXP, completeSection, updateSrsCard, setSrsCards,
+    chapterProgress, sectionStatus, resetProgress };
 }
 
 window.useCloudProgress = useCloudProgress;

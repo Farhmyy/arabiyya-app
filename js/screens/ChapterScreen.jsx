@@ -1,9 +1,35 @@
-/* ChapterScreen — Chapter 3 overview */
+/* ChapterScreen — Chapter 3 overview with sequential progress lock */
 
 function ChapterScreen({ navigate, progress }) {
   const { chapter3 } = DATA;
 
-  const sectionProgress = progress ? progress.sectionStatus : () => 'open';
+  const ch = progress ? progress.chapters?.['3'] : {};
+
+  /* Sequential unlock: each section requires the previous to be completed.
+     imtihan unlocks only after all 5 learning sections are done. */
+  const SECTION_ORDER = ['hiwar', 'mufrodat', 'tadribat_1', 'qawaid', 'tadribat_2'];
+
+  const getSectionStatus = (id) => {
+    if (!ch) return id === 'hiwar' ? 'open' : 'locked';
+    const data = ch[id];
+    if (data?.completed) return 'done';
+    if (id === 'hiwar') return 'open';
+    if (id === 'imtihan') {
+      const allDone = SECTION_ORDER.every(s => ch[s]?.completed);
+      return allDone ? 'open' : 'locked';
+    }
+    const prevId = SECTION_ORDER[SECTION_ORDER.indexOf(id) - 1];
+    return ch[prevId]?.completed ? 'open' : 'locked';
+  };
+
+  const getScoreBadge = (id) => {
+    if (!ch?.[id]?.completed) return null;
+    const { score, maxScore } = ch[id];
+    if (maxScore && (id === 'tadribat_1' || id === 'tadribat_2' || id === 'imtihan')) {
+      return `${score}/${maxScore}`;
+    }
+    return null;
+  };
 
   const sections = [
     { id: 'hiwar',      icon: 'message', titleAr: 'الْحِوَار',      titleId: 'Hiwar · Dialog',                subtitle: '6 adegan · TTS Audio · toggle terjemahan', accent: 'primary',   route: 'chapter/3/hiwar' },
@@ -11,6 +37,7 @@ function ChapterScreen({ navigate, progress }) {
     { id: 'tadribat_1', icon: 'edit',    titleAr: 'تَدْرِيبَات ١',  titleId: 'Tadribat 1 · Latihan Hiwar & Mufrodat', subtitle: '10 soal · 5 audio + 5 teks · +XP',  accent: 'gold',      route: 'chapter/3/tadribat-1' },
     { id: 'qawaid',     icon: 'book',    titleAr: 'التَّرْكِيب',    titleId: 'Qawaid · Tata Bahasa',           subtitle: "3 topik: mādhī · mudhāri' · jumlah fi'liyyah", accent: 'purple', route: 'chapter/3/qawaid' },
     { id: 'tadribat_2', icon: 'edit',    titleAr: 'تَدْرِيبَات ٢',  titleId: 'Tadribat 2 · Latihan Qawaid',   subtitle: '10 soal interaktif · skor akhir & badge',  accent: 'teal',      route: 'chapter/3/tadribat-2' },
+    { id: 'imtihan',    icon: 'award',   titleAr: 'الامْتِحَان',    titleId: 'Imtihan · Ujian Akhir',          subtitle: '15 soal komprehensif · buka setelah semua selesai', accent: 'gold', route: 'chapter/3/imtihan' },
   ];
 
   const chapterPct = progress ? progress.chapterProgress('3') : 0;
@@ -28,7 +55,6 @@ function ChapterScreen({ navigate, progress }) {
         <div style={{ position: 'absolute', bottom: -40, right: 120, width: 120, height: 120, borderRadius: 999, background: 'rgba(245,158,11,.18)' }} />
 
         <div style={{ position: 'relative' }}>
-          {/* Row 1: back link + badge (left) | nomor bab (right) */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
             <div>
               <a onClick={() => navigate('home')} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 14, color: '#CCFBF1', cursor: 'pointer' }}>
@@ -47,7 +73,6 @@ function ChapterScreen({ navigate, progress }) {
             }}>٣</div>
           </div>
 
-          {/* Arabic title — full width, no competition with the number box */}
           <h1 lang="ar" style={{ fontFamily: 'var(--font-arabic)', color: '#fff', fontSize: 52, fontWeight: 700, direction: 'rtl', textAlign: 'right', lineHeight: 1.4, margin: '0 0 8px' }}>
             {chapter3.title_ar}
           </h1>
@@ -88,18 +113,37 @@ function ChapterScreen({ navigate, progress }) {
       <section>
         <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 16px' }}>Bagian Pembelajaran</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }} className="section-grid">
-          {sections.map(s => (
-            <SectionCard
-              key={s.id}
-              icon={s.icon}
-              titleAr={s.titleAr}
-              titleId={s.titleId}
-              subtitle={s.subtitle}
-              status={sectionProgress('3', s.id)}
-              accent={s.accent}
-              onClick={() => navigate(s.route)}
-            />
-          ))}
+          {sections.map(s => {
+            const status = getSectionStatus(s.id);
+            const locked = status === 'locked';
+            const scoreBadge = getScoreBadge(s.id);
+
+            return (
+              <div key={s.id} style={{ position: 'relative' }}>
+                <SectionCard
+                  icon={s.icon}
+                  titleAr={s.titleAr}
+                  titleId={s.titleId}
+                  subtitle={locked ? 'Selesaikan bagian sebelumnya terlebih dahulu' : s.subtitle}
+                  status={status}
+                  accent={locked ? 'neutral' : s.accent}
+                  onClick={locked ? undefined : () => navigate(s.route)}
+                />
+                {/* Score badge for scored sections */}
+                {scoreBadge && (
+                  <div style={{
+                    position: 'absolute', top: 10, right: 10,
+                    background: 'var(--color-success)', color: '#fff',
+                    borderRadius: 999, padding: '3px 10px',
+                    fontSize: 12, fontWeight: 700,
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                  }}>
+                    {scoreBadge}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </section>
     </div>

@@ -351,6 +351,96 @@ const DATA = {
     ],
   },
 
+  imtihan: {
+    xp_per_correct: 15,
+    questions: [
+      /* ── Hiwar (5 soal) ── */
+      { type: 'mcq', prompt: 'Apa keluhan yang disampaikan Ahmad dalam dialog?',
+        options: ['سُعَالٌ وَزُكَامٌ', 'حُمَّى وَصُدَاعٌ', 'إِسْهَالٌ وَأَلَمٌ', 'حُمَّى وَسُعَالٌ'],
+        correct_index: 1,
+        explanation: 'Ahmad berkata: "عِنْدِي حُمَّى وَصُدَاعٌ" — aku demam dan sakit kepala.' },
+
+      { type: 'mcq', prompt: 'Sudah berapa lama Ahmad merasakan sakit saat ditanya dalam dialog?',
+        options: ['Sejak kemarin', 'Sejak tadi pagi', 'Sejak dua hari lalu', 'Sejak seminggu lalu'],
+        correct_index: 2,
+        explanation: 'Ahmad berkata: "شَعَرْتُ بِالْأَلَمِ مُنْذُ يَوْمَيْنِ" — aku merasakan sakit sejak dua hari lalu.' },
+
+      { type: 'mcq', prompt: 'Apa arti ungkapan "مِمَّ تَشْكُو؟" dalam dialog?',
+        arabic_display: 'مِمَّ تَشْكُو؟',
+        options: ['Bagaimana kabarmu?', 'Sudah ke dokter?', 'Apa keluhanmu?', 'Dari mana kamu?'],
+        correct_index: 2,
+        explanation: '"مِمَّ تَشْكُو؟" artinya "Apa keluhanmu?" — digunakan saat menanyakan gejala/sakit.' },
+
+      { type: 'mcq', prompt: 'Di mana Ahmad mengambil obat setelah ke dokter?',
+        options: ['الْمُسْتَشْفَى (Rumah Sakit)', 'الْعِيَادَة (Klinik)', 'الصَّيْدَلِيَّة (Apotek)', 'الْبَيْت (Rumah)'],
+        correct_index: 2,
+        explanation: 'Ahmad berkata: "أَخَذْتُ الدَّوَاءَ مِنَ الصَّيْدَلِيَّةِ" — aku mengambil obat dari apotek.' },
+
+      { type: 'mcq', prompt: 'Apa doa lengkap yang diucapkan Umar untuk Ahmad dalam dialog?',
+        arabic_display: 'لَا بَأْسَ عَلَيْكَ، شَفَاكَ اللَّهُ شِفَاءً عَاجِلًا',
+        options: ['Semoga Allah merahmatimu', 'Semoga Allah menyembuhkanmu dengan segera', 'Semoga cepat pulih', 'Tidak apa-apa, istirahatlah'],
+        correct_index: 1,
+        explanation: '"شَفَاكَ اللَّهُ شِفَاءً عَاجِلًا" artinya "Semoga Allah menyembuhkanmu dengan segera".' },
+
+      /* ── Mufrodat (5 soal) ── */
+      { type: 'mcq', prompt: 'Apa arti kata "الطَّبِيبُ"?',
+        arabic_display: 'الطَّبِيبُ',
+        options: ['Pasien', 'Dokter', 'Perawat', 'Apotek'],
+        correct_index: 1,
+        explanation: '"الطَّبِيبُ" artinya Dokter — orang yang memeriksa dan mengobati pasien.' },
+
+      { type: 'mcq', prompt: 'Apa arti kata "الصَّيْدَلِيَّةُ"?',
+        arabic_display: 'الصَّيْدَلِيَّةُ',
+        options: ['Rumah sakit', 'Klinik', 'Apotek', 'Resep dokter'],
+        correct_index: 2,
+        explanation: '"الصَّيْدَلِيَّةُ" artinya Apotek — tempat membeli obat dengan atau tanpa resep.' },
+
+      { type: 'mcq', prompt: 'Kata Arab untuk "obat" adalah…',
+        options: ['الْمَرِيضُ', 'الْوَصْفَةُ', 'الدَّوَاءُ', 'الْمُسْتَشْفَى'],
+        correct_index: 2,
+        explanation: '"الدَّوَاءُ" artinya obat. الْمَرِيضُ = pasien; الْوَصْفَةُ = resep; الْمُسْتَشْفَى = rumah sakit.' },
+
+      { type: 'mcq', prompt: 'Kata Arab untuk "demam" adalah…',
+        options: ['صُدَاعٌ', 'سُعَالٌ', 'حُمَّى', 'أَلَمٌ'],
+        correct_index: 2,
+        explanation: '"حُمَّى" artinya demam. صُدَاعٌ = pusing; سُعَالٌ = batuk; أَلَمٌ = nyeri.' },
+
+      { type: 'mcq', prompt: 'Apa arti kata "سُعَالٌ"?',
+        arabic_display: 'سُعَالٌ',
+        options: ['Demam', 'Flu / pilek', 'Batuk', 'Diare'],
+        correct_index: 2,
+        explanation: '"سُعَالٌ" artinya Batuk. حُمَّى = demam; زُكَامٌ = flu; إِسْهَالٌ = diare.' },
+
+      /* ── Qawaid (5 soal) ── */
+      { type: 'mcq', prompt: "Bentuk fi'il mādhī dari ذَهَبَ untuk pelaku هِيَ adalah…",
+        arabic_display: 'ذَهَبَ',
+        options: ['ذَهَبَ', 'ذَهَبْتُ', 'ذَهَبَتْ', 'ذَهَبُوا'],
+        correct_index: 2,
+        explanation: "Untuk هِيَ (perempuan), fi'il mādhī + تْ → ذَهَبَتْ." },
+
+      { type: 'mcq', prompt: "Huruf mudhāra'ah yang digunakan untuk dhamir أَنَا adalah…",
+        options: ['يَ', 'تَ', 'أَ', 'نَ'],
+        correct_index: 2,
+        explanation: "Kaidah أَنَيْتُ: أَ untuk أَنَا → contoh: أَذْهَبُ, أَشْرَبُ." },
+
+      { type: 'mcq', prompt: "Ciri utama jumlah fi'liyyah adalah…",
+        options: ["Diawali isim (kata benda)", "Diawali fi'il (kata kerja)", "Selalu terdiri dari 2 kata", "Tidak punya pelaku (fā'il)"],
+        correct_index: 1,
+        explanation: "Jumlah fi'liyyah SELALU diawali fi'il (kata kerja), diikuti fā'il, lalu maf'ūl bila ada." },
+
+      { type: 'mcq', prompt: "Fi'il mudhāri' dari شَرِبَ untuk dhamir نَحْنُ adalah…",
+        arabic_display: 'شَرِبَ',
+        options: ['يَشْرَبُ', 'أَشْرَبُ', 'تَشْرَبُ', 'نَشْرَبُ'],
+        correct_index: 3,
+        explanation: "نَحْنُ menggunakan huruf mudhāra'ah نَ → نَشْرَبُ (kita minum)." },
+
+      { type: 'mcq', prompt: "Mana susunan jumlah fi'liyyah yang benar untuk 'Dokter perempuan mengambil resep'?",
+        options: ['أَخَذَتْ الطَّبِيبَةُ الْوَصْفَةَ', 'الطَّبِيبَةُ أَخَذَتْ الْوَصْفَةَ', 'أَخَذَ الطَّبِيبُ الْوَصْفَةَ', 'الْوَصْفَةَ أَخَذَتْ الطَّبِيبَةُ'],
+        correct_index: 0,
+        explanation: "fi'il muannats (أَخَذَتْ) + fā'il muannats (الطَّبِيبَةُ) + maf'ūl (الْوَصْفَةَ)." },
+    ],
+  },
+
   ui: {
     hero: {
       title_ar: 'العَرَبِيَّةُ التَّفَاعُلِيَّةُ',
