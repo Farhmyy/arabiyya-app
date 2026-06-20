@@ -39,7 +39,6 @@ function QuizNavigator({ count, currentIdx, answeredMap, onJump, allAnswered, on
             }}>
             {collapsed ? '▼' : '▲'}
           </button>
-        </div>
       </div>
 
       {/* Number buttons */}
