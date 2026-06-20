@@ -33,7 +33,7 @@ function LoginScreen({
     style: {
       flex: 1,
       minHeight: 300,
-      background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
+      background: 'linear-gradient(135deg, var(--color-primary-bg), var(--color-secondary))',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',

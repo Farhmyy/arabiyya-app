@@ -184,7 +184,7 @@ function HomeScreen({
       zIndex: 1,
       padding: 4,
       borderRadius: 28,
-      background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent))',
+      background: 'linear-gradient(135deg, var(--color-primary-bg), var(--color-secondary), var(--color-accent))',
       boxShadow: '0 24px 56px -12px rgba(15,118,110,.35), 0 4px 16px rgba(0,0,0,.08)'
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -225,7 +225,7 @@ function HomeScreen({
       width: 48,
       height: 48,
       borderRadius: 14,
-      background: 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))',
+      background: 'linear-gradient(180deg, var(--color-primary-bg), var(--color-primary-hover))',
       color: '#fff',
       display: 'flex',
       alignItems: 'center',

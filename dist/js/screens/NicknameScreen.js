@@ -128,7 +128,7 @@ function NicknameScreen({
       height: 48,
       borderRadius: 12,
       border: 'none',
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       fontFamily: 'var(--font-latin)',
       fontWeight: 600,

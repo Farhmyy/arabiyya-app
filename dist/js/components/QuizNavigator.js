@@ -56,7 +56,7 @@ function QuizNavigator({
       padding: '5px 14px',
       borderRadius: 999,
       border: 'none',
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       fontSize: 12,
       fontWeight: 700,
@@ -129,7 +129,7 @@ function QuizNavigator({
       width: 10,
       height: 10,
       borderRadius: 3,
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       display: 'inline-block'
     }
   }), " Sedang dikerjakan"), /*#__PURE__*/React.createElement("span", {

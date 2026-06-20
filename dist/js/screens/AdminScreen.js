@@ -308,7 +308,7 @@ function AdminScreen({
   }, "Ya, Keluar")))), /*#__PURE__*/React.createElement("div", {
     className: "admin-header",
     style: {
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       padding: '12px 24px',
       display: 'flex',
@@ -556,7 +556,7 @@ function AdminScreen({
     style: {
       height: 12,
       width: w,
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       borderRadius: 4,
       opacity: 0.25,
       flexShrink: 0
@@ -842,7 +842,7 @@ function AdminScreen({
         padding: '10px 20px',
         borderRadius: 10,
         border: 'none',
-        background: 'var(--color-primary)',
+        background: 'var(--color-primary-bg)',
         color: '#fff',
         cursor: 'pointer',
         fontWeight: 600,
@@ -1104,7 +1104,7 @@ function AdminScreen({
         }
       }, /*#__PURE__*/React.createElement("div", {
         style: {
-          background: 'var(--color-primary)',
+          background: 'var(--color-primary-bg)',
           height: '100%',
           width: bin.count / maxCount * 100 + '%',
           transition: 'width 600ms',
@@ -1332,7 +1332,7 @@ function AdminCMSPanel() {
       padding: '8px 16px',
       borderRadius: 8,
       cursor: 'pointer',
-      background: cmsTab === t.id ? 'var(--color-primary)' : 'var(--color-surface)',
+      background: cmsTab === t.id ? 'var(--color-primary-bg)' : 'var(--color-surface)',
       color: cmsTab === t.id ? '#fff' : 'var(--color-text-secondary)',
       fontFamily: 'var(--font-latin)',
       fontWeight: 600,
@@ -1358,7 +1358,7 @@ function AdminCMSPanel() {
       padding: '10px 20px',
       borderRadius: 10,
       border: 'none',
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       fontWeight: 600,
       cursor: 'pointer',
@@ -1685,7 +1685,7 @@ function WordEditModal({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       height: '100%',
       width: uploadProgress + '%',
       transition: 'width 200ms'
@@ -1715,7 +1715,7 @@ function WordEditModal({
       padding: '10px 20px',
       borderRadius: 10,
       border: 'none',
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       cursor: 'pointer',
       fontWeight: 600,
@@ -1861,7 +1861,7 @@ function TadribatCMSPanel({
       padding: '8px 14px',
       borderRadius: 10,
       border: 'none',
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       fontWeight: 600,
       cursor: 'pointer',
@@ -2327,7 +2327,7 @@ function QuestionEditModal({
       padding: '10px 20px',
       borderRadius: 10,
       border: 'none',
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       cursor: 'pointer',
       fontWeight: 600,

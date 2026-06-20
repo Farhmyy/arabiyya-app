@@ -40,7 +40,7 @@ function ChapterCard({
       width: 64,
       height: 64,
       borderRadius: 16,
-      background: avail ? 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))' : 'var(--color-bg)',
+      background: avail ? 'linear-gradient(180deg, var(--color-primary-bg), var(--color-primary-hover))' : 'var(--color-bg)',
       color: avail ? '#fff' : 'var(--color-text-light)',
       display: 'flex',
       alignItems: 'center',

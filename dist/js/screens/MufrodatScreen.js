@@ -346,7 +346,7 @@ function MufrodatScreen({
         borderRadius: 999,
         cursor: 'pointer',
         border: '1.5px solid var(--color-primary)',
-        background: isPlayingW ? 'var(--color-primary)' : 'transparent',
+        background: isPlayingW ? 'var(--color-primary-bg)' : 'transparent',
         color: isPlayingW ? '#fff' : 'var(--color-primary)',
         display: 'flex',
         alignItems: 'center',
@@ -435,7 +435,7 @@ function MufrodatScreen({
     })), /*#__PURE__*/React.createElement("div", {
       style: {
         padding: '10px 16px',
-        background: 'var(--color-primary)',
+        background: 'var(--color-primary-bg)',
         color: '#fff'
       }
     }, /*#__PURE__*/React.createElement("div", {
@@ -492,7 +492,7 @@ function MufrodatScreen({
         cursor: 'pointer',
         flexShrink: 0,
         border: '1.5px solid var(--color-text-secondary)',
-        background: isPlayingEx ? 'var(--color-primary)' : 'transparent',
+        background: isPlayingEx ? 'var(--color-primary-bg)' : 'transparent',
         color: isPlayingEx ? '#fff' : 'var(--color-text-secondary)',
         display: 'flex',
         alignItems: 'center',
@@ -777,7 +777,7 @@ function MufrodatScreen({
         borderRadius: 999,
         cursor: 'pointer',
         border: '1.5px solid var(--color-primary)',
-        background: isPlayingW ? 'var(--color-primary)' : 'transparent',
+        background: isPlayingW ? 'var(--color-primary-bg)' : 'transparent',
         color: isPlayingW ? '#fff' : 'var(--color-primary)',
         display: 'flex',
         alignItems: 'center',
@@ -869,7 +869,7 @@ function MufrodatScreen({
     })), /*#__PURE__*/React.createElement("div", {
       style: {
         padding: '10px 14px',
-        background: 'var(--color-primary)',
+        background: 'var(--color-primary-bg)',
         color: '#fff'
       }
     }, /*#__PURE__*/React.createElement("div", {
@@ -932,7 +932,7 @@ function MufrodatScreen({
         cursor: 'pointer',
         flexShrink: 0,
         border: '1.5px solid var(--color-text-secondary)',
-        background: isPlayingEx ? 'var(--color-primary)' : 'transparent',
+        background: isPlayingEx ? 'var(--color-primary-bg)' : 'transparent',
         color: isPlayingEx ? '#fff' : 'var(--color-text-secondary)',
         display: 'flex',
         alignItems: 'center',

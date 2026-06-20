@@ -1,6 +1,6 @@
 /* SpeakButton — Mic button for Arabic pronunciation practice.
-   Shows feedback (correct/wrong) after user speaks the expected word.
-   Returns null silently if SpeechRecognition is not supported by the browser. */
+  Shows feedback (correct/wrong) after user speaks the expected word.
+  Returns null silently if SpeechRecognition is not supported by the browser. */
 
 function SpeakButton({
   expectedText,

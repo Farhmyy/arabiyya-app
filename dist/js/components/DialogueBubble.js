@@ -35,7 +35,7 @@ function DialogueBubble({
     }
   }, speaker), /*#__PURE__*/React.createElement("div", {
     style: {
-      background: isLeft ? 'var(--color-surface)' : 'var(--color-primary)',
+      background: isLeft ? 'var(--color-surface)' : 'var(--color-primary-bg)',
       color: isLeft ? 'var(--color-text-primary)' : '#fff',
       border: isLeft ? '1px solid var(--color-border)' : 'none',
       borderRadius: isLeft ? '18px 18px 18px 4px' : '18px 18px 4px 18px',

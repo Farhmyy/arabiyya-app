@@ -90,7 +90,7 @@ function ChapterScreen({
   }, /*#__PURE__*/React.createElement("section", {
     className: "chapter-banner-section",
     style: {
-      background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%)',
+      background: 'linear-gradient(135deg, var(--color-primary-bg) 0%, var(--color-primary-hover) 100%)',
       borderRadius: 24,
       padding: '32px 32px',
       color: '#fff',

@@ -87,7 +87,7 @@ function StepProgress({
       flex: 1,
       height: 6,
       borderRadius: 999,
-      background: i < current ? 'var(--color-primary)' : i === current ? 'var(--color-secondary)' : 'var(--color-border)',
+      background: i < current ? 'var(--color-primary-bg)' : i === current ? 'var(--color-secondary)' : 'var(--color-border)',
       transition: 'background var(--dur-med) var(--ease-out)'
     }
   })));

@@ -382,7 +382,7 @@ function Tadribat2Screen({
         width: 80,
         height: 80,
         borderRadius: 999,
-        background: perfectScore ? 'var(--color-accent)' : passing ? 'var(--color-primary)' : 'var(--color-error)',
+        background: perfectScore ? 'var(--color-accent)' : passing ? 'var(--color-primary-bg)' : 'var(--color-error)',
         color: '#fff',
         margin: '0 auto 18px',
         display: 'flex',

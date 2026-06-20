@@ -40,7 +40,7 @@ function Button({
   };
   const variants = {
     primary: {
-      background: 'var(--color-primary)',
+      background: 'var(--color-primary-bg)',
       color: '#fff',
       boxShadow: '0 4px 12px rgba(15,118,110,.22)'
     },
@@ -64,7 +64,7 @@ function Button({
     }
   };
   const hoverBg = {
-    primary: 'var(--color-primary-hover)',
+    primary: 'var(--color-primary-bg-hover)',
     gold: '#D97706',
     danger: '#DC2626'
   };
