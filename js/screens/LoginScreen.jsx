@@ -1,4 +1,4 @@
-/* LoginScreen — Hero (left) + Panel (right) layout */
+﻿/* LoginScreen — Hero (left) + Panel (right) layout */
 
 function LoginScreen({ onLogin, onGuest }) {
   const { useState } = React;
@@ -25,7 +25,7 @@ function LoginScreen({ onLogin, onGuest }) {
       {/* Hero side */}
       <div className="login-hero" style={{
         flex: 1, minHeight: 300,
-        background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
+        background: 'linear-gradient(135deg, var(--color-primary-bg), var(--color-secondary))',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
         padding: '48px 40px', color: '#fff', textAlign: 'center',

@@ -1,4 +1,4 @@
-/* Button — Primary / Secondary / Ghost / Gold / Danger */
+﻿/* Button — Primary / Secondary / Ghost / Gold / Danger */
 
 function Button({ variant = 'primary', size = 'md', children, icon, iconRight, onClick, disabled, style, type = 'button' }) {
   const btnBase = {
@@ -17,14 +17,14 @@ function Button({ variant = 'primary', size = 'md', children, icon, iconRight, o
   };
 
   const variants = {
-    primary:   { background: 'var(--color-primary)',  color: '#fff', boxShadow: '0 4px 12px rgba(15,118,110,.22)' },
+    primary:   { background: 'var(--color-primary-bg)',  color: '#fff', boxShadow: '0 4px 12px rgba(15,118,110,.22)' },
     secondary: { background: 'var(--color-surface)',  color: 'var(--color-primary)', border: '2px solid var(--color-secondary)' },
     ghost:     { background: 'transparent',           color: 'var(--color-primary)' },
     gold:      { background: 'var(--color-accent)',   color: '#fff', boxShadow: '0 4px 12px rgba(245,158,11,.25)' },
     danger:    { background: 'var(--color-error)',    color: '#fff' },
   };
 
-  const hoverBg = { primary: 'var(--color-primary-hover)', gold: '#D97706', danger: '#DC2626' };
+  const hoverBg = { primary: 'var(--color-primary-bg-hover)', gold: '#D97706', danger: '#DC2626' };
   const iconSize = size === 'lg' ? 20 : 18;
 
   return (

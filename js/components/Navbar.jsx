@@ -1,4 +1,4 @@
-/* Navbar — Adaptive top navigation */
+﻿/* Navbar — Adaptive top navigation */
 
 function LogoMenu({ navigate, route, variant = 'inline' }) {
   const { useState, useEffect, useRef } = React;
@@ -88,7 +88,7 @@ function LogoMenu({ navigate, route, variant = 'inline' }) {
               >
                 <div style={{
                   width: 36, height: 36, borderRadius: 10,
-                  background: active ? 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))' : 'var(--color-bg)',
+                  background: active ? 'linear-gradient(180deg, var(--color-primary-bg), var(--color-primary-hover))' : 'var(--color-bg)',
                   color: active ? '#fff' : 'var(--color-text-light)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 18, flexShrink: 0,
@@ -273,7 +273,7 @@ function StatChips({ xp, streak, floating = false, darkMode = false, onToggleDar
                 display: 'inline-flex', alignItems: 'center', gap: 6,
                 height: floating ? 40 : 36, padding: '0 12px',
                 borderRadius: 999, border: '1px solid var(--color-primary)',
-                background: 'var(--color-primary)', cursor: 'pointer',
+                background: 'var(--color-primary-bg)', cursor: 'pointer',
                 fontFamily: 'var(--font-latin)', fontWeight: 600,
                 fontSize: floating ? 13 : 12, color: '#fff',
               }}>

@@ -1,4 +1,4 @@
-/* ChapterCard — Big tile for the homepage chapter list */
+﻿/* ChapterCard — Big tile for the homepage chapter list */
 
 function ChapterCard({ num, status, titleAr, titleId, summary, progress = 0, onClick }) {
   const numAr = ['١', '٢', '٣', '٤', '٥', '٦'][num - 1] || num;
@@ -13,7 +13,7 @@ function ChapterCard({ num, status, titleAr, titleId, summary, progress = 0, onC
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div style={{
             width: 64, height: 64, borderRadius: 16,
-            background: avail ? 'linear-gradient(180deg, var(--color-primary), var(--color-primary-hover))' : 'var(--color-bg)',
+            background: avail ? 'linear-gradient(180deg, var(--color-primary-bg), var(--color-primary-hover))' : 'var(--color-bg)',
             color: avail ? '#fff' : 'var(--color-text-light)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'var(--font-arabic)', fontSize: 36, fontWeight: 700,

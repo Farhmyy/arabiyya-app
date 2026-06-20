@@ -1,4 +1,4 @@
-/* ProgressBar + StepProgress */
+﻿/* ProgressBar + StepProgress */
 
 function ProgressBar({ value = 0, max = 100, label, showPct = true, color = 'gradient', size = 'md' }) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
@@ -38,7 +38,7 @@ function StepProgress({ current, total, style }) {
       {Array.from({ length: total }).map((_, i) => (
         <div key={i} style={{
           flex: 1, height: 6, borderRadius: 999,
-          background: i < current ? 'var(--color-primary)'
+          background: i < current ? 'var(--color-primary-bg)'
                     : i === current ? 'var(--color-secondary)'
                     : 'var(--color-border)',
           transition: 'background var(--dur-med) var(--ease-out)',

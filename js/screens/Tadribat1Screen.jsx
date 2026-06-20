@@ -1,4 +1,4 @@
-/* Tadribat1Screen — Practice: Hiwar & Mufrodat */
+﻿/* Tadribat1Screen — Practice: Hiwar & Mufrodat */
 
 function useTadribat1Content() {
   const local = DATA.tadribat1.questions;
@@ -259,7 +259,7 @@ function Tadribat1Screen({ navigate, progress }) {
           <Icon name="chevron-left" size={16} /> Bab 3 — Menjenguk Orang Sakit
         </a>
         <Card padding={40} style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-          <div className="quiz-intro-icon" style={{ width: 80, height: 80, borderRadius: 999, background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)', color: '#fff', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="quiz-intro-icon" style={{ width: 80, height: 80, borderRadius: 999, background: 'linear-gradient(135deg, var(--color-primary-bg) 0%, var(--color-secondary) 100%)', color: '#fff', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="book-open" size={40} />
           </div>
           <Badge tone="gold" style={{ marginBottom: 12 }}>التَّدْرِيبَاتُ ١ · Latihan 1</Badge>
@@ -423,7 +423,7 @@ function Tadribat1Screen({ navigate, progress }) {
             <div style={{ textAlign: 'center', marginBottom: 24 }}>
               <div style={{ background: 'var(--color-primary-50)', borderRadius: 20, padding: '28px 20px', border: '2px dashed var(--color-secondary)' }}>
                 <button onClick={speakQuestion}
-                  style={{ width: 80, height: 80, borderRadius: 999, border: 'none', cursor: 'pointer', background: playing ? 'var(--color-primary)' : 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 20px rgba(15,118,110,.4)', transition: 'all var(--dur-fast)' }}>
+                  style={{ width: 80, height: 80, borderRadius: 999, border: 'none', cursor: 'pointer', background: playing ? 'var(--color-primary-bg)' : 'linear-gradient(135deg, var(--color-primary-bg), var(--color-secondary))', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 20px rgba(15,118,110,.4)', transition: 'all var(--dur-fast)' }}>
                   <Icon name={playing ? 'pause' : 'volume-2'} size={36} />
                 </button>
                 <div style={{ marginTop: 12, fontSize: 14, color: 'var(--color-text-secondary)', fontWeight: 600 }}>
@@ -460,7 +460,7 @@ function Tadribat1Screen({ navigate, progress }) {
                 <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontSize: 56, fontWeight: 700, color: 'var(--color-primary)', direction: 'rtl', lineHeight: 1.5 }}>{q.arabic_display}</div>
                 {q.transliteration && <div style={{ fontSize: 14, color: 'var(--color-text-secondary)', fontStyle: 'italic', marginTop: 4 }}>{q.transliteration}</div>}
                 <button onClick={() => playContoh(q.audio_text, q.audio_ref)}
-                  style={{ marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 16px', borderRadius: 999, cursor: 'pointer', border: '1.5px solid var(--color-primary)', background: contohPlaying ? 'var(--color-primary)' : 'transparent', color: contohPlaying ? '#fff' : 'var(--color-primary)', fontSize: 13, fontWeight: 600, transition: 'all var(--dur-fast)' }}>
+                  style={{ marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 16px', borderRadius: 999, cursor: 'pointer', border: '1.5px solid var(--color-primary)', background: contohPlaying ? 'var(--color-primary-bg)' : 'transparent', color: contohPlaying ? '#fff' : 'var(--color-primary)', fontSize: 13, fontWeight: 600, transition: 'all var(--dur-fast)' }}>
                   <Icon name={contohPlaying ? 'pause' : 'volume-2'} size={14} color={contohPlaying ? '#fff' : 'var(--color-primary)'} />
                   {contohPlaying ? 'Memutar…' : 'Dengar contoh'}
                 </button>

@@ -1,4 +1,4 @@
-/* SectionCard — Navigation tile for chapter sections */
+﻿/* SectionCard — Navigation tile for chapter sections */
 
 function SectionCard({ icon, titleAr, titleId, subtitle, status = 'open', accent = 'primary', onClick }) {
   const gradients = {

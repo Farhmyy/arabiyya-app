@@ -1,4 +1,4 @@
-/* Badge — Status / category chip */
+﻿/* Badge — Status / category chip */
 
 function Badge({ tone = 'neutral', children, icon, style }) {
   const palettes = {

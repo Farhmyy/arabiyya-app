@@ -1,4 +1,4 @@
-/* QuizNavigator — right-sidebar question number panel */
+﻿/* QuizNavigator — right-sidebar question number panel */
 
 function QuizNavigator({ count, currentIdx, answeredMap, onJump, allAnswered, onFinish }) {
   const { useState } = React;
@@ -27,7 +27,7 @@ function QuizNavigator({ count, currentIdx, answeredMap, onJump, allAnswered, on
           {allAnswered && onFinish && (
             <button onClick={onFinish} style={{
               padding: '5px 14px', borderRadius: 999, border: 'none',
-              background: 'var(--color-primary)', color: '#fff',
+              background: 'var(--color-primary-bg)', color: '#fff',
               fontSize: 12, fontWeight: 700, cursor: 'pointer',
               display: 'inline-flex', alignItems: 'center', gap: 4,
             }}>
@@ -93,7 +93,7 @@ function QuizNavigator({ count, currentIdx, answeredMap, onJump, allAnswered, on
       {!collapsed && (
         <div className="quiz-nav-legend" style={{ marginTop: 8, fontSize: 11, color: 'var(--color-text-light)' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <span style={{ width: 10, height: 10, borderRadius: 3, background: 'var(--color-primary)', display: 'inline-block' }} /> Sedang dikerjakan
+            <span style={{ width: 10, height: 10, borderRadius: 3, background: 'var(--color-primary-bg)', display: 'inline-block' }} /> Sedang dikerjakan
           </span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <span style={{ width: 10, height: 10, borderRadius: 3, background: 'var(--color-success)', display: 'inline-block' }} /> Benar

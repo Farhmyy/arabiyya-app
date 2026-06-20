@@ -1,4 +1,4 @@
-/* AdminScreen — 4-tab admin dashboard + CMS */
+﻿/* AdminScreen — 4-tab admin dashboard + CMS */
 
 function AdminScreen({ user, logout, darkMode, onToggleDark }) {
   const { useState, useEffect, useCallback } = React;
@@ -188,7 +188,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
         </div>
       )}
 
-      <div className="admin-header" style={{ background: 'var(--color-primary)', color: '#fff', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="admin-header" style={{ background: 'var(--color-primary-bg)', color: '#fff', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img src="assets/images/logo-mark.svg" width="36" height="36" alt="" style={{ borderRadius: 10 }} />
           <div>
@@ -265,7 +265,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                 {/* Skeleton header */}
                 <div style={{ display: 'flex', gap: 16, padding: '12px 16px', background: 'var(--color-primary-50)', borderBottom: '1px solid var(--color-border)' }}>
                   {[90, 140, 48, 48, 60, 60, 60, 60, 60, 48].map((w, i) => (
-                    <div key={i} style={{ height: 12, width: w, background: 'var(--color-primary)', borderRadius: 4, opacity: 0.25, flexShrink: 0 }} />
+                    <div key={i} style={{ height: 12, width: w, background: 'var(--color-primary-bg)', borderRadius: 4, opacity: 0.25, flexShrink: 0 }} />
                   ))}
                 </div>
                 {/* Skeleton rows */}
@@ -379,7 +379,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 24 }}>
                 <button onClick={exportCSV} style={{
                   padding: '10px 20px', borderRadius: 10, border: 'none',
-                  background: 'var(--color-primary)', color: '#fff', cursor: 'pointer',
+                  background: 'var(--color-primary-bg)', color: '#fff', cursor: 'pointer',
                   fontWeight: 600, fontSize: 14, fontFamily: 'var(--font-latin)',
                   display: 'inline-flex', alignItems: 'center', gap: 8,
                 }}>
@@ -466,7 +466,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
                           <div key={bin.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                             <div style={{ width: 40, fontSize: 11, textAlign: 'right', color: 'var(--color-text-secondary)', flexShrink: 0 }}>{bin.label}</div>
                             <div style={{ flex: 1, background: 'var(--color-border)', borderRadius: 4, height: 16, overflow: 'hidden' }}>
-                              <div style={{ background: 'var(--color-primary)', height: '100%', width: (bin.count / maxCount * 100) + '%', transition: 'width 600ms', opacity: bin.count === 0 ? 0.1 : 1 }} />
+                              <div style={{ background: 'var(--color-primary-bg)', height: '100%', width: (bin.count / maxCount * 100) + '%', transition: 'width 600ms', opacity: bin.count === 0 ? 0.1 : 1 }} />
                             </div>
                             <div style={{ width: 20, fontSize: 13, fontWeight: 700, color: bin.count > 0 ? 'var(--color-primary)' : 'var(--color-text-light)', flexShrink: 0 }}>{bin.count}</div>
                           </div>
@@ -605,7 +605,7 @@ function AdminCMSPanel() {
           <button key={t.id} onClick={() => setCmsTab(t.id)}
             style={{
               padding: '8px 16px', borderRadius: 8, cursor: 'pointer',
-              background: cmsTab === t.id ? 'var(--color-primary)' : 'var(--color-surface)',
+              background: cmsTab === t.id ? 'var(--color-primary-bg)' : 'var(--color-surface)',
               color: cmsTab === t.id ? '#fff' : 'var(--color-text-secondary)',
               fontFamily: 'var(--font-latin)', fontWeight: 600, fontSize: 13,
               border: cmsTab !== t.id ? '1px solid var(--color-border)' : 'none',
@@ -619,7 +619,7 @@ function AdminCMSPanel() {
         <div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
             <button onClick={() => setEditWord({ id: null, arabic: '', meaning: '', example: '', example_id: '', image_url: null })}
-              style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)' }}>
+              style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary-bg)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)' }}>
               + Tambah Kosakata
             </button>
           </div>
@@ -717,7 +717,7 @@ function WordEditModal({ word, saving, uploadProgress, onSave, onClose }) {
             style={{ fontSize: 13, color: 'var(--color-text-primary)' }} />
           {uploadProgress !== null && (
             <div style={{ marginTop: 6, background: 'var(--color-border)', borderRadius: 4, height: 6, overflow: 'hidden' }}>
-              <div style={{ background: 'var(--color-primary)', height: '100%', width: uploadProgress + '%', transition: 'width 200ms' }} />
+              <div style={{ background: 'var(--color-primary-bg)', height: '100%', width: uploadProgress + '%', transition: 'width 200ms' }} />
             </div>
           )}
         </div>
@@ -727,7 +727,7 @@ function WordEditModal({ word, saving, uploadProgress, onSave, onClose }) {
             Batal
           </button>
           <button onClick={() => onSave(form)} disabled={saving || !form.arabic || !form.meaning}
-            style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary)', color: '#fff', cursor: 'pointer', fontWeight: 600, opacity: saving ? 0.6 : 1 }}>
+            style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary-bg)', color: '#fff', cursor: 'pointer', fontWeight: 600, opacity: saving ? 0.6 : 1 }}>
             {saving ? 'Menyimpan…' : 'Simpan'}
           </button>
         </div>
@@ -821,7 +821,7 @@ function TadribatCMSPanel({ collectionId, title }) {
             ↺ Sinkronkan dari data.js
           </button>
           <button onClick={() => setEditQ({ _isNew: true, type: 'mcq', prompt: '', arabic_display: null, options: ['','','',''], correct_index: 0, explanation: '' })}
-            style={{ padding: '8px 14px', borderRadius: 10, border: 'none', background: 'var(--color-primary)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)', fontSize: 13 }}>
+            style={{ padding: '8px 14px', borderRadius: 10, border: 'none', background: 'var(--color-primary-bg)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-latin)', fontSize: 13 }}>
             + Tambah Soal
           </button>
         </div>
@@ -956,7 +956,7 @@ function QuestionEditModal({ q, saving, onSave, onClose }) {
           <button onClick={onClose} disabled={saving}
             style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid var(--color-border)', background: 'transparent', cursor: 'pointer', fontWeight: 600, color: 'var(--color-text-secondary)' }}>Batal</button>
           <button onClick={() => onSave(form)} disabled={saving || !form.prompt}
-            style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary)', color: '#fff', cursor: 'pointer', fontWeight: 600, opacity: saving ? 0.6 : 1 }}>
+            style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: 'var(--color-primary-bg)', color: '#fff', cursor: 'pointer', fontWeight: 600, opacity: saving ? 0.6 : 1 }}>
             {saving ? 'Menyimpan…' : 'Simpan'}
           </button>
         </div>

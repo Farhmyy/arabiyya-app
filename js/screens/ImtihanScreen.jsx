@@ -1,4 +1,4 @@
-/* ImtihanScreen — Ujian Akhir BAB 3 (Comprehensive Final Exam) */
+﻿/* ImtihanScreen — Ujian Akhir BAB 3 (Comprehensive Final Exam) */
 
 const IMTIHAN_KEY      = 'arabiyya_quiz_imtihan';
 const IMTIHAN_DURATION = 1800; // 30 minutes
@@ -136,7 +136,7 @@ function ImtihanScreen({ navigate, progress }) {
         </a>
 
         <Card padding={40} style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ width: 88, height: 88, borderRadius: 999, background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%)', color: '#fff', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 88, height: 88, borderRadius: 999, background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary-bg) 100%)', color: '#fff', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="award" size={44} />
           </div>
 
@@ -217,7 +217,7 @@ function ImtihanScreen({ navigate, progress }) {
           <Icon name="chevron-left" size={16} /> Bab 3
         </a>
         <Card padding={36} style={{ maxWidth: 580, margin: '0 auto', textAlign: 'center' }}>
-          <div className="pulse" style={{ width: 80, height: 80, borderRadius: 999, background: perfectScore ? 'var(--color-accent)' : passing ? 'var(--color-primary)' : 'var(--color-error)', color: '#fff', margin: '0 auto 18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="pulse" style={{ width: 80, height: 80, borderRadius: 999, background: perfectScore ? 'var(--color-accent)' : passing ? 'var(--color-primary-bg)' : 'var(--color-error)', color: '#fff', margin: '0 auto 18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon name={perfectScore ? 'trophy' : passing ? 'award' : 'star'} size={40} />
           </div>
 

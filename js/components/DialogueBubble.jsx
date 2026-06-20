@@ -1,4 +1,4 @@
-/* DialogueBubble — WhatsApp-style hiwar bubble */
+﻿/* DialogueBubble — WhatsApp-style hiwar bubble */
 
 function DialogueBubble({ side = 'left', speaker, ar, id, playing, highlighted, onPlay, showTranslation }) {
   const isLeft = side === 'left';
@@ -20,7 +20,7 @@ function DialogueBubble({ side = 'left', speaker, ar, id, playing, highlighted, 
       </div>
 
       <div style={{
-        background: isLeft ? 'var(--color-surface)' : 'var(--color-primary)',
+        background: isLeft ? 'var(--color-surface)' : 'var(--color-primary-bg)',
         color: isLeft ? 'var(--color-text-primary)' : '#fff',
         border: isLeft ? '1px solid var(--color-border)' : 'none',
         borderRadius: isLeft ? '18px 18px 18px 4px' : '18px 18px 4px 18px',

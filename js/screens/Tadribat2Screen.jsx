@@ -1,4 +1,4 @@
-/* Tadribat2Screen — Practice: Qawaid */
+﻿/* Tadribat2Screen — Practice: Qawaid */
 
 function useTadribat2Content() {
   const local = DATA.tadribat2.questions;
@@ -211,7 +211,7 @@ function Tadribat2Screen({ navigate, progress }) {
           <Icon name="chevron-left" size={16} /> Bab 3
         </a>
         <Card padding={36} style={{ maxWidth: 580, margin: '0 auto', textAlign: 'center' }}>
-          <div className="pulse" style={{ width: 80, height: 80, borderRadius: 999, background: perfectScore ? 'var(--color-accent)' : passing ? 'var(--color-primary)' : 'var(--color-error)', color: '#fff', margin: '0 auto 18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="pulse" style={{ width: 80, height: 80, borderRadius: 999, background: perfectScore ? 'var(--color-accent)' : passing ? 'var(--color-primary-bg)' : 'var(--color-error)', color: '#fff', margin: '0 auto 18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon name={perfectScore ? 'trophy' : 'award'} size={40} />
           </div>
 

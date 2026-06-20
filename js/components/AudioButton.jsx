@@ -1,4 +1,4 @@
-/* AudioButton — Circular play/pause toggle */
+﻿/* AudioButton — Circular play/pause toggle */
 
 function AudioButton({ playing = false, onClick, size = 'md', variant = 'primary' }) {
   const dims = { sm: 36, md: 48, lg: 64 }[size] || 48;

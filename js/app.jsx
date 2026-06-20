@@ -1,4 +1,4 @@
-/* App — Root shell: auth + router + dark mode + progress */
+﻿/* App — Root shell: auth + router + dark mode + progress */
 
 function App() {
   const { useState, useEffect } = React;
@@ -131,7 +131,7 @@ function App() {
         {swUpdate && (
           <div style={{
             position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
-            background: 'var(--color-primary)', color: '#fff',
+            background: 'var(--color-primary-bg)', color: '#fff',
             padding: '10px 16px', display: 'flex', alignItems: 'center',
             justifyContent: 'space-between', gap: 12,
             fontFamily: 'var(--font-latin)', fontSize: 14, fontWeight: 500,
@@ -176,7 +176,7 @@ function App() {
       {swUpdate && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
-          background: 'var(--color-primary)', color: '#fff',
+          background: 'var(--color-primary-bg)', color: '#fff',
           padding: '10px 16px', display: 'flex', alignItems: 'center',
           justifyContent: 'space-between', gap: 12,
           fontFamily: 'var(--font-latin)', fontSize: 14, fontWeight: 500,

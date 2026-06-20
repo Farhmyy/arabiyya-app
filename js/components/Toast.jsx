@@ -1,4 +1,4 @@
-/* Toast — Global feedback notification */
+﻿/* Toast — Global feedback notification */
 
 const ToastContext = React.createContext();
 

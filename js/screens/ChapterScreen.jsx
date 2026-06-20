@@ -1,4 +1,4 @@
-/* ChapterScreen — Chapter 3 overview with sequential progress lock */
+﻿/* ChapterScreen — Chapter 3 overview with sequential progress lock */
 
 function ChapterScreen({ navigate, progress }) {
   const { chapter3 } = DATA;
@@ -47,7 +47,7 @@ function ChapterScreen({ navigate, progress }) {
 
       {/* ── BANNER ── */}
       <section className="chapter-banner-section" style={{
-        background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%)',
+        background: 'linear-gradient(135deg, var(--color-primary-bg) 0%, var(--color-primary-hover) 100%)',
         borderRadius: 24, padding: '32px 32px', color: '#fff',
         position: 'relative', overflow: 'hidden', marginBottom: 32,
       }}>

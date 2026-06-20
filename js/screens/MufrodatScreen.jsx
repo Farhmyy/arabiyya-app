@@ -1,4 +1,4 @@
-/* MufrodatScreen — Vocabulary grid (الْمُفْرَدَات) */
+﻿/* MufrodatScreen — Vocabulary grid (الْمُفْرَدَات) */
 
 function useMufrodatContent() {
   const transform = (raw) => (raw.words || []).map(w => {
@@ -190,7 +190,7 @@ function MufrodatScreen({ navigate, progress }) {
                     style={{
                       width: 38, height: 38, borderRadius: 999, cursor: 'pointer',
                       border: '1.5px solid var(--color-primary)',
-                      background: isPlayingW ? 'var(--color-primary)' : 'transparent',
+                      background: isPlayingW ? 'var(--color-primary-bg)' : 'transparent',
                       color: isPlayingW ? '#fff' : 'var(--color-primary)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
@@ -236,7 +236,7 @@ function MufrodatScreen({ navigate, progress }) {
                   />
                 </div>
                 {/* Meaning bar */}
-                <div style={{ padding: '10px 16px', background: 'var(--color-primary)', color: '#fff' }}>
+                <div style={{ padding: '10px 16px', background: 'var(--color-primary-bg)', color: '#fff' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 22, direction: 'rtl' }}>{card.ar}</div>
                     <div style={{ fontWeight: 600, fontSize: 15 }}>{card.meaning_id}</div>
@@ -253,7 +253,7 @@ function MufrodatScreen({ navigate, progress }) {
                       style={{
                         width: 28, height: 28, borderRadius: 999, cursor: 'pointer', flexShrink: 0,
                         border: '1.5px solid var(--color-text-secondary)',
-                        background: isPlayingEx ? 'var(--color-primary)' : 'transparent',
+                        background: isPlayingEx ? 'var(--color-primary-bg)' : 'transparent',
                         color: isPlayingEx ? '#fff' : 'var(--color-text-secondary)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
@@ -396,7 +396,7 @@ function MufrodatScreen({ navigate, progress }) {
                         style={{
                           width: 36, height: 36, borderRadius: 999, cursor: 'pointer',
                           border: '1.5px solid var(--color-primary)',
-                          background: isPlayingW ? 'var(--color-primary)' : 'transparent',
+                          background: isPlayingW ? 'var(--color-primary-bg)' : 'transparent',
                           color: isPlayingW ? '#fff' : 'var(--color-primary)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
@@ -436,7 +436,7 @@ function MufrodatScreen({ navigate, progress }) {
                       }}
                     />
                   </div>
-                  <div style={{ padding: '10px 14px', background: 'var(--color-primary)', color: '#fff' }}>
+                  <div style={{ padding: '10px 14px', background: 'var(--color-primary-bg)', color: '#fff' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div lang="ar" style={{ fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 20, direction: 'rtl' }}>{card.ar}</div>
                       <div style={{ fontWeight: 600, fontSize: 14 }}>{card.meaning_id}</div>
@@ -453,7 +453,7 @@ function MufrodatScreen({ navigate, progress }) {
                         style={{
                           width: 28, height: 28, borderRadius: 999, cursor: 'pointer', flexShrink: 0,
                           border: '1.5px solid var(--color-text-secondary)',
-                          background: isPlayingEx ? 'var(--color-primary)' : 'transparent',
+                          background: isPlayingEx ? 'var(--color-primary-bg)' : 'transparent',
                           color: isPlayingEx ? '#fff' : 'var(--color-text-secondary)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>

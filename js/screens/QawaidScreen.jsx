@@ -1,4 +1,4 @@
-/* QawaidScreen — Grammar lesson (التَّرْكِيب) — 3 topics */
+﻿/* QawaidScreen — Grammar lesson (التَّرْكِيب) — 3 topics */
 
 /* ── Shared display area for both explorers ── */
 function ExplorerDisplay({ form, badges, hint }) {
@@ -81,7 +81,7 @@ function ConjugationExplorer({ topic }) {
             <button key={i} onClick={() => setDhoIdx(i)}
               style={{
                 padding: '8px 16px', borderRadius: 999, cursor: 'pointer', fontWeight: 700,
-                background: dhoIdx === i ? 'var(--color-primary)' : 'var(--color-surface)',
+                background: dhoIdx === i ? 'var(--color-primary-bg)' : 'var(--color-surface)',
                 color: dhoIdx === i ? '#fff' : 'var(--color-primary)',
                 border: `1.5px solid ${dhoIdx === i ? 'var(--color-primary)' : 'var(--color-primary-100)'}`,
                 fontFamily: 'var(--font-arabic)', fontSize: 18, transition: 'all var(--dur-fast)',
@@ -162,7 +162,7 @@ function MudhariExplorer({ topic }) {
             <button key={i} onClick={() => setDhoIdx(i)}
               style={{
                 padding: '8px 16px', borderRadius: 999, cursor: 'pointer', fontWeight: 700,
-                background: dhoIdx === i ? 'var(--color-primary)' : 'var(--color-surface)',
+                background: dhoIdx === i ? 'var(--color-primary-bg)' : 'var(--color-surface)',
                 color: dhoIdx === i ? '#fff' : 'var(--color-primary)',
                 border: `1.5px solid ${dhoIdx === i ? 'var(--color-primary)' : 'var(--color-primary-100)'}`,
                 fontFamily: 'var(--font-arabic)', fontSize: 18,
@@ -316,7 +316,7 @@ function SentenceBuilder({ topic }) {
         <button onClick={check} disabled={placed.length < buildSet.tokens.length}
           style={{
             flex: 1, padding: '10px 14px', borderRadius: 12, border: 'none',
-            background: placed.length < buildSet.tokens.length ? 'var(--color-border)' : 'var(--color-primary)',
+            background: placed.length < buildSet.tokens.length ? 'var(--color-border)' : 'var(--color-primary-bg)',
             color: placed.length < buildSet.tokens.length ? 'var(--color-text-light)' : '#fff',
             fontWeight: 700, fontSize: 14, cursor: placed.length < buildSet.tokens.length ? 'not-allowed' : 'pointer',
           }}>

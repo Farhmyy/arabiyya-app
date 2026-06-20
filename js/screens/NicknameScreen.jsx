@@ -1,4 +1,4 @@
-/* NicknameScreen — first-time nickname setup after login */
+﻿/* NicknameScreen — first-time nickname setup after login */
 
 function NicknameScreen({ user, onComplete }) {
   const { useState } = React;
@@ -74,7 +74,7 @@ function NicknameScreen({ user, onComplete }) {
           <button type="submit" disabled={saving || nickname.trim().length < 2}
             style={{
               width: '100%', height: 48, borderRadius: 12, border: 'none',
-              background: 'var(--color-primary)', color: '#fff',
+              background: 'var(--color-primary-bg)', color: '#fff',
               fontFamily: 'var(--font-latin)', fontWeight: 600, fontSize: 15,
               cursor: (saving || nickname.trim().length < 2) ? 'not-allowed' : 'pointer',
               opacity: (saving || nickname.trim().length < 2) ? 0.6 : 1,

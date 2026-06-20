@@ -1,4 +1,4 @@
-/* Card — Signature surface (white, 20px radius, soft shadow) */
+﻿/* Card — Signature surface (white, 20px radius, soft shadow) */
 
 function Card({ children, padding = 24, radius = 20, hover = false, accent, onClick, style }) {
   const accentColors = {

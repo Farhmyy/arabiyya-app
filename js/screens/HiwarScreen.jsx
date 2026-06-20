@@ -1,4 +1,4 @@
-/* HiwarScreen — Dialog / Conversation (الْحِوَار) */
+﻿/* HiwarScreen — Dialog / Conversation (الْحِوَار) */
 
 function HiwarScreen({ navigate, progress }) {
   const { useState, useEffect, useRef } = React;
@@ -236,7 +236,7 @@ function HiwarScreen({ navigate, progress }) {
                             {/* Speaker avatar */}
                             <div style={{
                               width: 36, height: 36, borderRadius: 999, flexShrink: 0,
-                              background: isRight ? 'var(--color-primary)' : 'var(--color-accent)',
+                              background: isRight ? 'var(--color-primary-bg)' : 'var(--color-accent)',
                               color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
                               fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 16,
                               marginTop: 4,
@@ -270,7 +270,7 @@ function HiwarScreen({ navigate, progress }) {
                               style={{
                                 width: 34, height: 34, borderRadius: 999, flexShrink: 0,
                                 border: 'none', cursor: 'pointer',
-                                background: isPlaying ? 'var(--color-primary)' : 'transparent',
+                                background: isPlaying ? 'var(--color-primary-bg)' : 'transparent',
                                 color: isPlaying ? '#fff' : 'var(--color-primary)',
                                 border: isPlaying ? 'none' : '1.5px solid var(--color-primary)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -307,7 +307,7 @@ function HiwarScreen({ navigate, progress }) {
                 >
                   <div style={{
                     width: 24, height: 24, borderRadius: 999,
-                    background: activeScene === si ? 'var(--color-primary)' : 'var(--color-border)',
+                    background: activeScene === si ? 'var(--color-primary-bg)' : 'var(--color-border)',
                     color: activeScene === si ? '#fff' : 'var(--color-text-light)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontWeight: 700, fontSize: 12, flexShrink: 0,
@@ -371,7 +371,7 @@ function HiwarScreen({ navigate, progress }) {
               <button key={si} onClick={() => scrollToScene(si)}
                 style={{
                   padding: '8px 14px', borderRadius: 999, border: 'none', cursor: 'pointer',
-                  background: activeScene === si ? 'var(--color-primary)' : 'var(--color-border)',
+                  background: activeScene === si ? 'var(--color-primary-bg)' : 'var(--color-border)',
                   color: activeScene === si ? '#fff' : 'var(--color-text-secondary)',
                   fontWeight: activeScene === si ? 700 : 500, fontSize: 13,
                 }}>
