@@ -3,8 +3,15 @@
 function QuizNavigator({ count, currentIdx, answeredMap, onJump, allAnswered, onFinish }) {
   const { useState } = React;
   const [collapsed, setCollapsed] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   const answeredCount = Object.keys(answeredMap).length;
+  const unanswered = count - answeredCount;
+
+  const handleFinishClick = () => {
+    if (allAnswered) { onFinish(); return; }
+    setConfirming(true);
+  };
 
   return (
     <div style={{
@@ -24,14 +31,15 @@ function QuizNavigator({ count, currentIdx, answeredMap, onJump, allAnswered, on
           </span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {allAnswered && onFinish && (
-            <button onClick={onFinish} style={{
+          {onFinish && (
+            <button onClick={handleFinishClick} style={{
               padding: '5px 14px', borderRadius: 999, border: 'none',
-              background: 'var(--color-primary-bg)', color: '#fff',
+              background: allAnswered ? 'var(--color-primary-bg)' : 'var(--color-border)',
+              color: allAnswered ? '#fff' : 'var(--color-text-secondary)',
               fontSize: 12, fontWeight: 700, cursor: 'pointer',
               display: 'inline-flex', alignItems: 'center', gap: 4,
             }}>
-              Lihat Hasil <Icon name="chevron-right" size={12} />
+              {allAnswered ? 'Lihat Hasil' : 'Selesai'} <Icon name="chevron-right" size={12} />
             </button>
           )}
           <button
@@ -45,6 +53,32 @@ function QuizNavigator({ count, currentIdx, answeredMap, onJump, allAnswered, on
           </button>
         </div>
       </div>
+
+      {/* Inline confirmation */}
+      {confirming && (
+        <div style={{
+          background: 'var(--color-warning)', borderRadius: 10,
+          padding: '10px 12px', marginBottom: 10,
+          fontSize: 12, color: '#fff',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6 }}>
+            ⚠ {unanswered} soal belum dijawab
+          </div>
+          <div style={{ marginBottom: 8, opacity: 0.9 }}>
+            Soal yang belum dijawab dihitung salah.
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={() => setConfirming(false)} style={{
+              flex: 1, padding: '5px 0', borderRadius: 8, border: '1.5px solid rgba(255,255,255,0.5)',
+              background: 'transparent', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>Batal</button>
+            <button onClick={() => { setConfirming(false); onFinish(); }} style={{
+              flex: 1, padding: '5px 0', borderRadius: 8, border: 'none',
+              background: '#fff', color: 'var(--color-warning)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>Ya, Selesai</button>
+          </div>
+        </div>
+      )}
 
       {/* Number buttons */}
       {!collapsed && (
