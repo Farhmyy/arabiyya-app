@@ -9,7 +9,7 @@ function Badge({
   const palettes = {
     neutral: {
       bg: 'var(--color-border)',
-      fg: '#475569'
+      fg: 'var(--color-text-secondary)'
     },
     primary: {
       bg: 'var(--color-primary-100)',
