@@ -131,9 +131,9 @@
   --color-border:           #1E3550;
   --color-border-strong:    #2E4C6E;
 
-  /* Brand — bright teal readable on dark bg */
-  --color-primary:          #2DD4BF;
-  --color-primary-hover:    #5EEAD4;
+  /* Brand — muted dark teal on dark bg, consistent with chapter banner */
+  --color-primary:          #0D9488;
+  --color-primary-hover:    #0F766E;
   --color-primary-50:       #0B3530;
   --color-primary-100:      #0D9488;
 
