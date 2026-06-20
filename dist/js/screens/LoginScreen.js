@@ -2,7 +2,9 @@
 
 function LoginScreen({
   onLogin,
-  onGuest
+  onGuest,
+  darkMode = false,
+  onToggleDark
 }) {
   const {
     useState
@@ -28,7 +30,28 @@ function LoginScreen({
       background: 'var(--color-bg)',
       overflowX: 'hidden'
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, onToggleDark && /*#__PURE__*/React.createElement("button", {
+    onClick: onToggleDark,
+    "aria-label": "Toggle dark mode",
+    style: {
+      position: 'fixed',
+      top: 16,
+      right: 16,
+      zIndex: 50,
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 40,
+      height: 40,
+      borderRadius: 999,
+      border: '1px solid var(--color-border)',
+      background: 'var(--color-surface)',
+      cursor: 'pointer',
+      fontSize: 18,
+      color: 'var(--color-text-secondary)',
+      boxShadow: 'var(--shadow-card)'
+    }
+  }, darkMode ? '☀️' : '🌙'), /*#__PURE__*/React.createElement("div", {
     className: "login-hero",
     style: {
       flex: 1,

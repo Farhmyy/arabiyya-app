@@ -1,6 +1,6 @@
 ﻿/* LoginScreen — Hero (left) + Panel (right) layout */
 
-function LoginScreen({ onLogin, onGuest }) {
+function LoginScreen({ onLogin, onGuest, darkMode = false, onToggleDark }) {
   const { useState } = React;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -22,6 +22,21 @@ function LoginScreen({ onLogin, onGuest }) {
       minHeight: '100vh', display: 'flex',
       background: 'var(--color-bg)', overflowX: 'hidden',
     }}>
+      {onToggleDark && (
+        <button onClick={onToggleDark} aria-label="Toggle dark mode"
+          style={{
+            position: 'fixed', top: 16, right: 16, zIndex: 50,
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: 40, height: 40, borderRadius: 999,
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
+            cursor: 'pointer', fontSize: 18,
+            color: 'var(--color-text-secondary)',
+            boxShadow: 'var(--shadow-card)',
+          }}>
+          {darkMode ? '☀️' : '🌙'}
+        </button>
+      )}
       {/* Hero side */}
       <div className="login-hero" style={{
         flex: 1, minHeight: 300,

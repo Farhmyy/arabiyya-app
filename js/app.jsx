@@ -110,6 +110,8 @@ function App() {
       <LoginScreen
         onLogin={async () => { await loginWithGoogle(); }}
         onGuest={() => { localStorage.setItem('arabiyya_guest', 'true'); setGuestMode(true); }}
+        darkMode={darkMode}
+        onToggleDark={() => setDarkMode(d => !d)}
       />
     );
   }
