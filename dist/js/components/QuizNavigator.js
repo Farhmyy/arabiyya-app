@@ -53,31 +53,7 @@ function QuizNavigator({
       fontSize: 12,
       color: 'var(--color-text-light)'
     }
-  }, answeredCount, "/", count, " dijawab")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 8,
-      alignItems: 'center'
-    }
-  }, onFinish && /*#__PURE__*/React.createElement("button", {
-    onClick: handleFinishClick,
-    style: {
-      padding: '5px 14px',
-      borderRadius: 999,
-      border: 'none',
-      background: allAnswered ? 'var(--color-primary-bg)' : 'var(--color-border)',
-      color: allAnswered ? '#fff' : 'var(--color-text-secondary)',
-      fontSize: 12,
-      fontWeight: 700,
-      cursor: 'pointer',
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 4
-    }
-  }, allAnswered ? 'Lihat Hasil' : 'Selesai', " ", /*#__PURE__*/React.createElement(Icon, {
-    name: "chevron-right",
-    size: 12
-  })), /*#__PURE__*/React.createElement("button", {
+  }, answeredCount, "/", count, " dijawab")), /*#__PURE__*/React.createElement("button", {
     onClick: () => setCollapsed(c => !c),
     style: {
       background: 'none',
@@ -88,60 +64,7 @@ function QuizNavigator({
       fontSize: 11,
       fontWeight: 600
     }
-  }, collapsed ? '▼' : '▲'))), confirming && /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: 'var(--color-warning)',
-      borderRadius: 10,
-      padding: '10px 12px',
-      marginBottom: 10,
-      fontSize: 12,
-      color: '#fff'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontWeight: 700,
-      marginBottom: 6
-    }
-  }, "\u26A0 ", unanswered, " soal belum dijawab"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 8,
-      opacity: 0.9
-    }
-  }, "Soal yang belum dijawab dihitung salah."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setConfirming(false),
-    style: {
-      flex: 1,
-      padding: '5px 0',
-      borderRadius: 8,
-      border: '1.5px solid rgba(255,255,255,0.5)',
-      background: 'transparent',
-      color: '#fff',
-      fontSize: 12,
-      fontWeight: 700,
-      cursor: 'pointer'
-    }
-  }, "Batal"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => {
-      setConfirming(false);
-      onFinish();
-    },
-    style: {
-      flex: 1,
-      padding: '5px 0',
-      borderRadius: 8,
-      border: 'none',
-      background: '#fff',
-      color: 'var(--color-warning)',
-      fontSize: 12,
-      fontWeight: 700,
-      cursor: 'pointer'
-    }
-  }, "Ya, Selesai"))), !collapsed && /*#__PURE__*/React.createElement("div", {
+  }, collapsed ? '▼' : '▲')), !collapsed && /*#__PURE__*/React.createElement("div", {
     className: "quiz-nav-numbers"
   }, Array.from({
     length: count
@@ -237,6 +160,82 @@ function QuizNavigator({
       background: 'var(--color-bg)',
       display: 'inline-block'
     }
-  }), " Belum dijawab")));
+  }), " Belum dijawab")), !collapsed && onFinish && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 10
+    }
+  }, confirming ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-warning)',
+      borderRadius: 10,
+      padding: '10px 12px',
+      fontSize: 12,
+      color: '#fff'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      marginBottom: 4
+    }
+  }, "\u26A0 ", unanswered, " soal belum dijawab"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 8,
+      opacity: 0.9
+    }
+  }, "Soal yang belum dijawab dihitung salah."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setConfirming(false),
+    style: {
+      flex: 1,
+      padding: '5px 0',
+      borderRadius: 8,
+      border: '1.5px solid rgba(255,255,255,0.5)',
+      background: 'transparent',
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: 700,
+      cursor: 'pointer'
+    }
+  }, "Batal"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      setConfirming(false);
+      onFinish();
+    },
+    style: {
+      flex: 1,
+      padding: '5px 0',
+      borderRadius: 8,
+      border: 'none',
+      background: '#fff',
+      color: 'var(--color-warning)',
+      fontSize: 12,
+      fontWeight: 700,
+      cursor: 'pointer'
+    }
+  }, "Ya, Selesai"))) : /*#__PURE__*/React.createElement("button", {
+    onClick: handleFinishClick,
+    style: {
+      width: '100%',
+      padding: '7px 0',
+      borderRadius: 10,
+      border: 'none',
+      background: allAnswered ? 'var(--color-primary-bg)' : 'var(--color-border)',
+      color: allAnswered ? '#fff' : 'var(--color-text-secondary)',
+      fontSize: 12,
+      fontWeight: 700,
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 4
+    }
+  }, allAnswered ? 'Lihat Hasil' : 'Selesai', " ", /*#__PURE__*/React.createElement(Icon, {
+    name: "chevron-right",
+    size: 12
+  }))));
 }
 window.QuizNavigator = QuizNavigator;
