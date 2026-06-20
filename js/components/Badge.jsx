@@ -2,7 +2,7 @@
 
 function Badge({ tone = 'neutral', children, icon, style }) {
   const palettes = {
-    neutral: { bg: 'var(--color-border)', fg: '#475569' },
+    neutral: { bg: 'var(--color-border)', fg: 'var(--color-text-secondary)' },
     primary: { bg: 'var(--color-primary-100)', fg: 'var(--color-primary)' },
     gold:    { bg: 'var(--color-accent-100)', fg: 'var(--color-amber-text)' },
     success: { bg: 'var(--color-success)', fg: '#fff' },
