@@ -85,7 +85,7 @@ function ImtihanScreen({ navigate, progress }) {
   const check = () => {
     if (tempSelected == null || !q || revealed) return;
     const correct = tempSelected === q.correct_index;
-    if (correct && progress?.addXP) progress.addXP(imtihan.xp_per_correct);
+    if (correct && attemptsUsed === 0 && progress?.addXP) progress.addXP(imtihan.xp_per_correct);
     window.showToast && window.showToast(correct ? ui.feedback.correct : ui.feedback.wrong, correct ? 'success' : 'error');
     setAnsweredMap(prev => ({ ...prev, [currentIdx]: { selected: tempSelected, isCorrect: correct } }));
   };
@@ -231,7 +231,7 @@ function ImtihanScreen({ navigate, progress }) {
             <div style={{ background: 'var(--color-primary-50)', borderRadius: 14, padding: '16px 12px' }}>
               <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Skor Ini</div>
               <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--color-primary)' }}>{score}<span style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-text-light)' }}>/{questions.length}</span></div>
-              <div style={{ fontSize: 11, color: 'var(--color-text-light)', marginTop: 2 }}>+{score * imtihan.xp_per_correct} XP</div>
+              {attemptsUsed === 0 && <div style={{ fontSize: 11, color: 'var(--color-text-light)', marginTop: 2 }}>+{score * imtihan.xp_per_correct} XP</div>}
             </div>
             <div style={{ background: 'var(--color-accent-50)', borderRadius: 14, padding: '16px 12px' }}>
               <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Skor Terbaik</div>
@@ -364,7 +364,7 @@ function ImtihanScreen({ navigate, progress }) {
                 <div>{isCorrect ? ui.feedback.correct : ui.feedback.wrong}</div>
                 <div style={{ fontSize: 13, fontWeight: 400, marginTop: 4, opacity: 0.85 }}>{q.explanation}</div>
               </div>
-              {isCorrect && <span style={{ background: 'var(--color-accent)', color: '#fff', padding: '4px 10px', borderRadius: 999, fontSize: 13, flexShrink: 0 }}>+{imtihan.xp_per_correct} XP</span>}
+              {isCorrect && attemptsUsed === 0 && <span style={{ background: 'var(--color-accent)', color: '#fff', padding: '4px 10px', borderRadius: 999, fontSize: 13, flexShrink: 0 }}>+{imtihan.xp_per_correct} XP</span>}
             </div>
           )}
 

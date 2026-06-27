@@ -15,7 +15,15 @@ function ChapterScreen({ navigate, progress }) {
     if (data?.completed) return 'done';
     if (id === 'hiwar') return 'open';
     if (id === 'imtihan') {
-      const allDone = SECTION_ORDER.every(s => ch[s]?.completed);
+      const MIN_RATIO = 0.4;
+      const allDone = SECTION_ORDER.every(s => {
+        const sec = ch[s];
+        if (!sec?.completed) return false;
+        if (s === 'tadribat_1' || s === 'tadribat_2') {
+          return (sec.bestScore ?? sec.score ?? 0) >= Math.ceil((sec.maxScore ?? 1) * MIN_RATIO);
+        }
+        return true;
+      });
       return allDone ? 'open' : 'locked';
     }
     const prevId = SECTION_ORDER[SECTION_ORDER.indexOf(id) - 1];
@@ -37,7 +45,7 @@ function ChapterScreen({ navigate, progress }) {
     { id: 'tadribat_1', icon: 'edit',    titleAr: 'تَدْرِيبَات ١',  titleId: 'Tadribat 1 · Latihan Hiwar & Mufrodat', subtitle: '10 soal · 5 audio + 5 teks · +XP',  accent: 'gold',      route: 'chapter/3/tadribat-1' },
     { id: 'qawaid',     icon: 'book',    titleAr: 'التَّرْكِيب',    titleId: 'Qawaid · Tata Bahasa',           subtitle: "3 topik: mādhī · mudhāri' · jumlah fi'liyyah", accent: 'purple', route: 'chapter/3/qawaid' },
     { id: 'tadribat_2', icon: 'edit',    titleAr: 'تَدْرِيبَات ٢',  titleId: 'Tadribat 2 · Latihan Qawaid',   subtitle: '10 soal interaktif · skor akhir & badge',  accent: 'teal',      route: 'chapter/3/tadribat-2' },
-    { id: 'imtihan',    icon: 'award',   titleAr: 'الامْتِحَان',    titleId: 'Imtihan · Ujian Akhir',          subtitle: '15 soal komprehensif · buka setelah semua selesai', accent: 'gold', route: 'chapter/3/imtihan' },
+    { id: 'imtihan',    icon: 'award',   titleAr: 'الامْتِحَان',    titleId: 'Imtihan · Ujian Akhir',          subtitle: '15 soal komprehensif · perlu ≥ 40% di Tadribat 1 & 2', accent: 'gold', route: 'chapter/3/imtihan' },
   ];
 
   const chapterPct = progress ? progress.chapterProgress('3') : 0;
@@ -124,7 +132,11 @@ function ChapterScreen({ navigate, progress }) {
                   icon={s.icon}
                   titleAr={s.titleAr}
                   titleId={s.titleId}
-                  subtitle={locked ? 'Selesaikan bagian sebelumnya terlebih dahulu' : s.subtitle}
+                  subtitle={locked
+                    ? (s.id === 'imtihan' && SECTION_ORDER.every(s2 => ch?.[s2]?.completed)
+                        ? 'Tingkatkan skor Tadribat 1 & 2 minimal 40% untuk membuka Imtihan'
+                        : 'Selesaikan bagian sebelumnya terlebih dahulu')
+                    : s.subtitle}
                   status={status}
                   accent={locked ? 'neutral' : s.accent}
                   onClick={locked ? undefined : () => navigate(s.route)}

@@ -694,7 +694,15 @@ function ChapterNav({
   const isSectionLocked = id => {
     if (id === 'index' || id === 'hiwar') return false;
     if (id === 'imtihan') {
-      return !SECTION_ORDER.every(s => ch[s]?.completed);
+      const MIN_RATIO = 0.4;
+      return !SECTION_ORDER.every(s => {
+        const sec = ch[s];
+        if (!sec?.completed) return false;
+        if (s === 'tadribat_1' || s === 'tadribat_2') {
+          return (sec.bestScore ?? sec.score ?? 0) >= Math.ceil((sec.maxScore ?? 1) * MIN_RATIO);
+        }
+        return true;
+      });
     }
     const pk = id.replace('-', '_');
     const idx = SECTION_ORDER.indexOf(pk);

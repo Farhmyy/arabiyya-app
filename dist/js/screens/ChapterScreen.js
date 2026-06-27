@@ -18,7 +18,15 @@ function ChapterScreen({
     if (data?.completed) return 'done';
     if (id === 'hiwar') return 'open';
     if (id === 'imtihan') {
-      const allDone = SECTION_ORDER.every(s => ch[s]?.completed);
+      const MIN_RATIO = 0.4;
+      const allDone = SECTION_ORDER.every(s => {
+        const sec = ch[s];
+        if (!sec?.completed) return false;
+        if (s === 'tadribat_1' || s === 'tadribat_2') {
+          return (sec.bestScore ?? sec.score ?? 0) >= Math.ceil((sec.maxScore ?? 1) * MIN_RATIO);
+        }
+        return true;
+      });
       return allDone ? 'open' : 'locked';
     }
     const prevId = SECTION_ORDER[SECTION_ORDER.indexOf(id) - 1];
@@ -80,7 +88,7 @@ function ChapterScreen({
     icon: 'award',
     titleAr: 'الامْتِحَان',
     titleId: 'Imtihan · Ujian Akhir',
-    subtitle: '15 soal komprehensif · buka setelah semua selesai',
+    subtitle: '15 soal komprehensif · perlu ≥ 40% di Tadribat 1 & 2',
     accent: 'gold',
     route: 'chapter/3/imtihan'
   }];
@@ -287,7 +295,7 @@ function ChapterScreen({
       icon: s.icon,
       titleAr: s.titleAr,
       titleId: s.titleId,
-      subtitle: locked ? 'Selesaikan bagian sebelumnya terlebih dahulu' : s.subtitle,
+      subtitle: locked ? s.id === 'imtihan' && SECTION_ORDER.every(s2 => ch?.[s2]?.completed) ? 'Tingkatkan skor Tadribat 1 & 2 minimal 40% untuk membuka Imtihan' : 'Selesaikan bagian sebelumnya terlebih dahulu' : s.subtitle,
       status: status,
       accent: locked ? 'neutral' : s.accent,
       onClick: locked ? undefined : () => navigate(s.route)

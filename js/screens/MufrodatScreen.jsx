@@ -44,8 +44,6 @@ function MufrodatScreen({ navigate, progress }) {
     if (!window.SRS || !mufrodat.length || !mufrodatProgress?.completed) return;
     if (mufrodatProgress.srsCards) return;
     const cards = window.SRS.initSrsCards(mufrodat.length);
-    const today = window.SRS.localDateStr();
-    Object.values(cards).forEach(c => { c.nextReview = today; });
     progress?.setSrsCards?.('3', 'mufrodat', cards);
   }, [mufrodat.length, mufrodatProgress?.completed, mufrodatProgress?.srsCards]);
 

@@ -111,7 +111,7 @@ function ImtihanScreen({
   const check = () => {
     if (tempSelected == null || !q || revealed) return;
     const correct = tempSelected === q.correct_index;
-    if (correct && progress?.addXP) progress.addXP(imtihan.xp_per_correct);
+    if (correct && attemptsUsed === 0 && progress?.addXP) progress.addXP(imtihan.xp_per_correct);
     window.showToast && window.showToast(correct ? ui.feedback.correct : ui.feedback.wrong, correct ? 'success' : 'error');
     setAnsweredMap(prev => ({
       ...prev,
@@ -426,7 +426,7 @@ function ImtihanScreen({
         fontWeight: 600,
         color: 'var(--color-text-light)'
       }
-    }, "/", questions.length)), /*#__PURE__*/React.createElement("div", {
+    }, "/", questions.length)), attemptsUsed === 0 && /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 11,
         color: 'var(--color-text-light)',
@@ -746,7 +746,7 @@ function ImtihanScreen({
       marginTop: 4,
       opacity: 0.85
     }
-  }, q.explanation)), isCorrect && /*#__PURE__*/React.createElement("span", {
+  }, q.explanation)), isCorrect && attemptsUsed === 0 && /*#__PURE__*/React.createElement("span", {
     style: {
       background: 'var(--color-accent)',
       color: '#fff',
