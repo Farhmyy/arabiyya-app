@@ -334,7 +334,7 @@ function AdminScreen({
       fontWeight: 700,
       fontSize: 16
     }
-  }, "\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0627\u0644\u062A\u0641\u0627\u0639\u0644\u064A\u0629"), /*#__PURE__*/React.createElement("div", {
+  }, "\u0627\u0644\u0639\u0631\u0628\u064A\u0629"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12,
       opacity: 0.8
