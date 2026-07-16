@@ -1,5 +1,5 @@
 /* ==========================================================================
-   العربية التفاعلية — All Learning Content (BAB 3)
+   العربية — All Learning Content (BAB 3)
    Single source of truth. Pages read from here, never hardcode content.
    ========================================================================== */
 
@@ -19,11 +19,10 @@ const DATA = {
     title_ar: 'عِيَادَةُ الْمَرِيضِ', title_id: 'Menjenguk Orang Sakit',
     description: "Belajar percakapan, kosakata, dan doa pendek saat menjenguk yang sakit, serta tata bahasa fi'il mādhī, fi'il mudhāri', dan jumlah fi'liyyah.",
     objectives: [
-      'Mengenali kosakata penyakit, gejala, dan kegiatan menjenguk orang sakit',
-      'Memahami struktur dialog menjenguk: salam, menanyakan kabar, keluhan, doa, dan pamit',
-      'Mempraktikkan ungkapan مِمَّ تَشْكُو؟ / لَا بَأْسَ عَلَيْكَ / شَفَاكَ اللَّهُ sesuai konteks dialog',
-      "Membedakan fi'il mādhī dan fi'il mudhāri' serta perubahannya untuk 6 dhamir",
-      "Menyusun jumlah fi'liyyah sederhana (fi'il + fā'il + maf'ūl) bertema kesehatan",
+      'Memahami fungsi sosial, struktur teks, dan unsur kebahasaan (bunyi, kata, dan makna) dari teks sederhana yang berkaitan dengan tema عِيَادَةُ الْمَرِيضِ yang melibatkan tindak tutur mendoakan orang sakit dengan memperhatikan susunan gramatikal الْفِعْلُ الْمَاضِي وَالْجُمْلَةُ الْفِعْلِيَّة',
+      'Menganalisis gagasan dari teks sederhana yang berkaitan dengan tema عِيَادَةُ الْمَرِيضِ dengan memperhatikan bentuk, makna, dan fungsi dari susunan gramatikal الْفِعْلُ الْمَاضِي وَالْجُمْلَةُ الْفِعْلِيَّة',
+      'Mendemonstrasikan tindak tutur mendoakan orang sakit dengan memperhatikan bentuk, makna, dan fungsi dari susunan gramatikal الْفِعْلُ الْمَاضِي وَالْجُمْلَةُ الْفِعْلِيَّة baik secara lisan maupun tulisan',
+      'Menyajikan hasil analisis gagasan dari teks sederhana yang berkaitan dengan tema عِيَادَةُ الْمَرِيضِ dengan memperhatikan bentuk, makna, dan fungsi dari susunan gramatikal الْفِعْلُ الْمَاضِي وَالْجُمْلَةُ الْفِعْلِيَّة',
     ],
   },
 
@@ -459,7 +458,7 @@ const DATA = {
       wrong: 'Belum tepat, coba pelajari lagi 💪',
       quiz_complete: 'Latihan Selesai!',
     },
-    footer: 'العربية التفاعلية · SMA Islam Assyafiiyah 02 · Made for learning, with ❤️',
+    footer: 'العربية · SMA Islam Assyafiiyah 02 · Made for learning, with ❤️',
   },
 };
 

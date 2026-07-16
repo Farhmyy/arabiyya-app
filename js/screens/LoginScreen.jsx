@@ -48,7 +48,7 @@ function LoginScreen({ onLogin, onGuest, darkMode = false, onToggleDark }) {
         <img src="assets/images/logo-mark.svg" width="72" height="72" alt=""
           style={{ marginBottom: 24, borderRadius: 18, background: 'rgba(255,255,255,0.15)', padding: 8 }} />
         <div style={{ fontFamily: 'var(--font-arabic)', fontSize: 'var(--fs-arabic-title)', fontWeight: 700, lineHeight: 1.4, marginBottom: 8 }}>
-          العربية التفاعلية
+          العربية
         </div>
         <div style={{ fontSize: 14, opacity: 0.85, marginBottom: 32 }}>
           Media Pembelajaran Bahasa Arab Interaktif

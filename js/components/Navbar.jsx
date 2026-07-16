@@ -37,7 +37,7 @@ function LogoMenu({ navigate, route, variant = 'inline' }) {
       >
         <img src="assets/images/logo-mark.svg" width="40" height="40" alt="" style={{ display: 'block', borderRadius: 10 }} />
         <span className="nav-logo-text" style={{ fontFamily: 'var(--font-arabic)', fontWeight: 700, fontSize: 19, color: 'var(--color-primary)', lineHeight: 1 }}>
-          العربية التفاعلية
+          العربية
         </span>
         <Icon name="chevron-right" size={16} color="var(--color-text-light)" style={{ transform: open ? 'rotate(270deg)' : 'rotate(90deg)', transition: 'transform 200ms' }} />
       </button>

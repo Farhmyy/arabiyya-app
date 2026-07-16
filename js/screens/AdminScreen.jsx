@@ -192,7 +192,7 @@ function AdminScreen({ user, logout, darkMode, onToggleDark }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img src="assets/images/logo-mark.svg" width="36" height="36" alt="" style={{ borderRadius: 10 }} />
           <div>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>العربية التفاعلية</div>
+            <div style={{ fontWeight: 700, fontSize: 16 }}>العربية</div>
             <div style={{ fontSize: 12, opacity: 0.8 }}>Admin · Dashboard Guru</div>
           </div>
         </div>
